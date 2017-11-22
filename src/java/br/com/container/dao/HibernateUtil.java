@@ -5,7 +5,10 @@
  */
 package br.com.container.dao;
 
+import br.com.container.modelo.DiaDaSemana;
 import br.com.container.modelo.Perfil;
+import br.com.container.modelo.Periodo;
+import br.com.container.modelo.Reserva;
 import br.com.container.modelo.Sala;
 import br.com.container.modelo.Usuario;
 import org.hibernate.Session;
@@ -27,6 +30,9 @@ public class HibernateUtil {
             cfg.addAnnotatedClass(Perfil.class);
             cfg.addAnnotatedClass(Usuario.class);
             cfg.addAnnotatedClass(Sala.class);
+            cfg.addAnnotatedClass(Periodo.class);
+            cfg.addAnnotatedClass(DiaDaSemana.class);
+            cfg.addAnnotatedClass(Reserva.class);
 
             cfg.configure("/br/com/container/dao/hibernate.cfg.xml");
 

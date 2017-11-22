@@ -3,6 +3,9 @@
   <persistence-unit name="ContainerPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <class>br.com.container.modelo.Sala</class>
+    <class>br.com.container.modelo.Reserva</class>
+    <class>br.com.container.modelo.Periodo</class>
+    <class>br.com.container.modelo.DiaDaSemana</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/senac_neb"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
