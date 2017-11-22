@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <f:facet name="first">
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <h:outputStylesheet library="css" name="style.css" />
+            <h:outputStylesheet library="css" name="layout.css" />
+            <h:outputStylesheet library="css" name="componentes.css" />
+
+            <!--Incluí para formatar layout dashboard com o tema do Admin LTE - Rodrigo M. 05/09/2016 15:10 --> 
+            <h:outputStylesheet library="dist/css" name="AdminLTE.min.css" />
+            <!--<h:outputStylesheet library="dist/css/skins" name="_all-skins.min.css" />-->
+            <link rel="stylesheet" type="text/css"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"/>
+            <!--Fim-->
+
+            <h:outputScript target="body" library="primefaces" name="jquery/jquery.js"/>
+            <h:outputScript target="body" library="js" name="apps.js"/>
+            <h:outputScript target="body" library="js" name="relogio.js"/>
+
+        </f:facet>
+        <title>Senac-NEB</title>
+    </h:head>
+    <h:body>
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"  />
+
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <p:graphicImage name="aguarde.gif" library="imagem"/>
+        </p:dialog>
+        <header class="jr-top">
+<!--            <h:graphicImage library="imagem" name="logo.jpg" styleClass="logoTitulo"/>-->
+            <span class="titulo">Senac-NEB</span>
+            <a href="#" class="jr-toggle js-toggle" style="margin-top: 2vh;" ><i class="fa fw-fw fa-arrows-alt" onclick="toggleFullScreen()"></i></a>
+            <a href="#" class="jr-toggle js-toggle" style="margin-top: 2vh;" ><i class="fa fa-bars"></i></a>
+        </header>
+
+        <aside class="jr-barra_lateral js-barra_lateral">
+            <nav class="jr-menu">
+                <ul>
+                    <li >
+                        <h:link outcome="/logado/dashboard"><i class="fa fw-fw fa-home"> - Home</i></h:link>
+                    </li>
+<!--                    <li>
+                        <h:link outcome="/atendente/pedido">
+                            <i class="fa fw-fw fa-file-text-o"> - Pedido</i>
+                        </h:link>
+                    </li>-->
+<!--                    <h:panelGroup rendered="# {request.isUserInRole('ROLE_CAIXA') or request.isUserInRole('ROLE_ADMIN')}" >
+                        <li>
+                            <h:link outcome="/caixa/fechamentoPedido" >
+                                <i class="fa fw-fw fa-dollar"> - Fechar Pedido</i></h:link>
+                        </li>
+                    </h:panelGroup>-->
+
+                    <h:panelGroup rendered="#{request.isUserInRole('ROLE_ADMIN')}" >
+                        <!--<li class="is-selected"  >-->
+                        
+                        <li>
+                            <h:link outcome="/administrador/usuario" >
+                                <i class="fa fw-fw fa-users"> - Usuários</i></h:link>
+                        </li>
+                        
+                        <li>
+                            <h:link outcome="/administrador/sala" >
+                                <i class="fa fw-fw fa-users"> - Sala</i></h:link>
+                        </li>
+                    </h:panelGroup>
+                    
+                    <li>
+                        <!--                        <h:link outcome="/atendente/alterausuario">
+                                                    <i class="fa fw-fw fa-user"> Editar Perfil</i></h:link>-->
+                        <h:form>
+                            <h:commandLink action="#{usuarioLogadoC.chamaEdicaoPerfil}" >
+                                <i class="fa fw-fw fa-user"> - Editar Perfil</i></h:commandLink>
+                        </h:form>
+                    </li>
+                    <li><a href="#{request.contextPath}/login.faces"><i class="fa fw-fw fa-sign-out icon-signout"></i> - Sair</a></li>
+
+                </ul>
+            </nav>
+        </aside>
+
+        <section class="jr-conteudo js-conteudo">
+            <ui:insert name="conteudo" />
+        </section>    
+
+
+    </h:body>
+</html>

@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--<h:outputStylesheet library="css" name="font-awesome.css"/>-->
+        <h:outputStylesheet library="css" name="bootstrap.min.css"/>
+        <!--<h:outputStylesheet library="css" name="bootstrap-theme.min.css"/>-->
+        <h:outputStylesheet library="css" name="styleLogin.css"/> 
+        <h:outputScript library="js" name="bootstrap.min.js"/>
+        <title>.: Container Burguer  :.</title>
+        <style>
+            input{
+                margin-bottom: 10px;
+            }
+            img {
+                max-width:100%;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-md-offset-3 text-center">
+
+                <p:fieldset style="margin: 5vh auto; width: 100%; height: auto" styleClass="field_logo">
+                    <p:graphicImage library="imagem" name="logo.jpg" style="width: auto; height: 30vh; margin: 2vh auto !important;"/>
+                    <div class="container droppedHover" style="width: auto !important">
+                        <form class="form-signin" role="form" action="j_spring_security_check" method="POST">
+                            <h2 class="form-signin-heading" contenteditable="false">Acesso ao Sistema!</h2>
+
+                            <p:outputLabel value="Dados incorretos!" rendered="#{param.erro}" style="color: red" />
+                            <p:outputLabel value="Sem permissão de acesso!" rendered="#{param.negado}" style="color: darkred" />
+
+
+                            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+                                <input type="text" name="j_username" class="form-control" placeholder="Seu e-mail" 
+                                       required="" autofocus="" contenteditable="false" />
+
+                                <input type="password" name="j_password" class="form-control" placeholder="Sua senha" 
+                                       required="" contenteditable="false" />
+
+                                <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+                            </div>
+                        </form>
+
+
+
+                    </div>
+                </p:fieldset>
+
+
+
+            </div>
+        </div>
+
+        <!--END PAGE CONTENT -->
+    </h:body>
+</html>

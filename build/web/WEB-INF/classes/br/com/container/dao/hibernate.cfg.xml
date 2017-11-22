@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    
+<!--   servidor local-->
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/senac_neb?autoReconnect=true</property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password"></property>
+    
+    <!--servidor web-->
+<!--    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/containe_system?autoReconnect=true</property>
+    <property name="hibernate.connection.username">containe_d3nh1</property>
+    <property name="hibernate.connection.password">r2n1t4d3nh1</property>   -->
+    
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+    
+        <!--  Usando as configurações do C3PO para pool de conexões -->
+        <property name="hibernate.c3p0.acquire_increment">1</property>
+        <property name="hibernate.c3po.min_size">5</property>  
+        <property name="hibernate.c3po.max_size">30</property>  
+        <property name="hibernate.c3po.timeout">1800</property> 
+        <property name="hibernate.c3po.max_statements">50</property>  
+        <property name="hibernate.c3po.idle_test_period">300</property>
+        <property name="hibernate.c3p0.testConnectionOnCheckout">true</property>
+        <property name="hibernate.c3p0.acquireRetryAttempts">5</property>
+        <property name="hibernate.c3p0.breakAfterAcquireFailure">false</property>
+        <property name="hibernate.c3p0.maxIdleTimeExcessConnections">30</property>
+        <property name="hibernate.c3p0.numHelperThreads">3</property>
+        <property name="hibernate.c3p0.unreturnedConnectionTimeout">0</property>
+        <property name="hibernate.c3p0.validate">true</property>
+        <property name="hibernate.c3p0.preferredTestQuery">select 1;</property>
+        <!--  Usando as configurações do C3PO para pool de conexões --> 
+        <property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+        <!--  Usando as configurações do C3PO para pool de conexões -->
+        
+    </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns="http://www.springframework.org/schema/security"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:b="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/security
+                            http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+ 
+    <http auto-config="true" use-expressions="true" access-denied-page="/login.faces?negado=true" >
+        <intercept-url pattern="/administrador/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/logado/**" access="hasAnyRole('ROLE_ADMIN, ROLE_LOGADO, ROLE_CAIXA, ROLE_ATENDENTE, ROLE_IMPR_BEBIDA, ROLE_IMPR_LANCHE')"/>
+        <intercept-url pattern="/atendente/**" access="hasAnyRole('ROLE_ADMIN, ROLE_CAIXA, ROLE_ATENDENTE')"/>
+        <intercept-url pattern="/caixa/**" access="hasAnyRole('ROLE_ADMIN, ROLE_CAIXA')"/>
+        <!--<intercept-url pattern="/relatorio/**" access="hasRole('ROLE_ADMIN')"/>-->
+        
+        <form-login login-page="/login.faces" authentication-failure-url="/login.faces?erro=true"/>
+        <!--<logout logout-success-url="/login.faces" logout-url="/logout" />-->
+        <logout invalidate-session="true" logout-success-url="/login.faces" logout-url="/j_spring_security_logout" delete-cookies="JSESSIONID"/>
+        
+        <!--Controle de sessão Numero de sessoes abertas pelo mesmo user - Rodrigo M. 01/09/2016 --> 
+<!--         <session-management invalid-session-url="/login.faces?ulogado=true"> 
+        <session-management invalid-session-url="/login.faces" session-fixation-protection="migrateSession"> 
+            <concurrency-control max-sessions="1" expired-url="/login.faces" error-if-maximum-exceeded="true" /> 
+       </session-management>
+        <session-management> 
+            <concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
+        </session-management>
+         ......  .-->
+        
+    </http>
+     
+    <authentication-manager>
+        <authentication-provider>
+            <jdbc-user-service data-source-ref="dataSource"
+               users-by-username-query="SELECT login, senha, enable FROM usuario WHERE login = ?"
+               authorities-by-username-query="SELECT login, tipo FROM usuario u join perfil p on u.idPerfil = p.id WHERE login = ?"
+            />
+        </authentication-provider>
+    </authentication-manager>
+ 
+    <!--local-->
+    <b:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+        <b:property name="url" value="jdbc:mysql://localhost:3306/senac_neb" />
+        <b:property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <b:property name="username" value="root" />
+        <b:property name="password" value="" />
+    </b:bean>
+ 
+    <!--servidor web-->
+<!--    <b:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+        <b:property name="url" value="jdbc:mysql://localhost:3306/senac_neb" />
+        <b:property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <b:property name="username" value="containe_d3nh1" />
+        <b:property name="password" value="r2n1t4d3nh1" />
+    </b:bean>-->
+ 
+</b:beans>

@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../logado/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="conteudo">
+        <h1 class="jr-titulo1">Sala</h1>
+
+        <h:form id="form_pesquisa">
+
+            <!--mostra a toolbar se mostra_toolbar == true-->
+            <p:toolbar styleClass="toolbar" rendered="#{!salaC.mostra_toolbar}"  >
+                <p:toolbarGroup  >
+                    <p:commandButton value="Pesquisar" actionListener="#{salaC.pesquisar()}"
+                                     update="dadosSala" process="@this panelGridPesq" />
+                    <p:separator></p:separator>
+                    <p:commandButton value="Novo" actionListener="#{salaC.novo}" update="@form" global="false"  />
+                </p:toolbarGroup>
+            </p:toolbar>
+            <!--mostra a toolbar se mostra_toolbar == false-->
+            <p:toolbar id="toolbar_pesquisa" styleClass="toolbar" rendered="#{salaC.mostra_toolbar}">
+
+                <p:toolbarGroup  >
+                    <p:commandButton value="Salvar" action="#{salaC.salvar()}" update="panelGrop" />
+                    <p:separator></p:separator>
+                    <p:commandButton value="Cancelar" actionListener="#{salaC.novaPesquisa}" immediate="true"
+                                     update="@form" global="false" />
+                </p:toolbarGroup>
+
+            </p:toolbar>
+
+
+            <p:messages id="mens"  autoUpdate="true" />
+
+            <!--inicio da tela de pesquisa-->
+            <h:panelGroup id="aba1" rendered="#{!salaC.mostra_toolbar}" >
+                <p:panelGrid id="panelGridPesq" columns="2" layout="grid" columnClasses="ui-grid-col-1, ui-grid-col-2, 
+                             ui-grid-col-8" styleClass="painel_grid_noborder" >
+
+                    <p:outputLabel for="sala_pesquisa" value="Sala:" />
+                    <p:inputText id="sala_pesquisa" value="#{salaC.sala.nome}"  />
+                    <p:spacer />
+
+                </p:panelGrid>
+
+                <p:dataTable id="dadosSala" value="#{salaC.modelSalas}" var="sala" reflow="true" paginator="true"
+                             style="margin-top: 20px;"  emptyMessage="Nenhum adicional encontrado" rows="10" paginatorPosition="bottom"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="[ {currentPage} de {totalPages}  ]"
+                             rowsPerPageTemplate="5,10,15">
+                    <p:column headerText="Sala">
+                        <h:outputText value="#{sala.nome}" />
+                    </p:column>
+                    <p:column headerText="Descrição">
+                        <h:outputText value="#{sala.observacao}" />
+                    </p:column>
+
+
+                    <p:column headerText="Alterar" class="centralizado tabela_botao_usuario"  >
+                        <p:commandButton icon="ui-icon-pencil" title="Alterar"
+                                         process="@this" update="@form" actionListener="#{salaC.preparaAlterar()}">
+                            <f:setPropertyActionListener target="#{salaC.sala}" value="#{sala}"   />          
+                        </p:commandButton>
+
+                        <p:commandButton icon="ui-icon-trash" actionListener="#{salaC.excluir()}"
+                                         update="dadosAdicional" title="Excluir">
+                            <p:confirm header="Confirmação" message="Tem certeza exclusão?" 
+                                       icon="ui-icon-alert" />
+                            <f:setPropertyActionListener target="#{salaC.sala}" value="#{sala}"   />
+                        </p:commandButton>
+
+
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGroup> 
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" 
+                                 icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" 
+                                 icon="ui-icon-close" />
+            </p:confirmDialog>
+            <!--fim da tela de pesquisa-->
+
+
+            <!--inicio da tela de cadastro (salvar e alterar)-->
+            <h:panelGroup id="panelGrop" rendered="#{salaC.mostra_toolbar}" >
+                <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-4" 
+                             styleClass="painel_grid_noborder" >
+
+                    <p:outputLabel for="sala" value="Sala :" />
+                    <p:inputText id="sala" value="#{salaC.sala.nome}" required="true" size="40" style="width: 100%; max-width: 600px;"/>
+
+                    <p:outputLabel for="descricao" value="Descrição :" />
+                    <p:inputTextarea id="descricao" value="#{salaC.sala.observacao}"  cols="40" style="width: 100%; max-width: 600px;"/>
+
+
+                </p:panelGrid>
+            </h:panelGroup>
+            <!--fim da tela de cadastro-->
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

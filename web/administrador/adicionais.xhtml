@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../logado/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="conteudo">
+        <h:outputScript library="js" name="maskMoney.js" />
+        <h1 class="jr-titulo1">Adicional</h1>
+
+        <h:form id="form_pesquisa">
+
+            <!--mostra a toolbar se mostra_toolbar == true-->
+            <p:toolbar styleClass="toolbar" rendered="#{!adicionalC.mostra_toolbar}"  >
+                <p:toolbarGroup  >
+                    <p:commandButton value="Pesquisar" actionListener="#{adicionalC.pesquisar()}"
+                                     update="dadosAdicional" process="@this panelGridPesq" />
+                    <p:separator></p:separator>
+                    <p:commandButton value="Novo" actionListener="#{adicionalC.novo}" update="@form" global="false"  />
+                </p:toolbarGroup>
+            </p:toolbar>
+            <!--mostra a toolbar se mostra_toolbar == false-->
+            <p:toolbar id="toolbar_pesquisa" styleClass="toolbar" rendered="#{adicionalC.mostra_toolbar}">
+
+                <p:toolbarGroup  >
+                    <p:commandButton value="Salvar" action="#{adicionalC.salvar()}" update="panelGrop" />
+                    <p:separator></p:separator>
+                    <p:commandButton value="Cancelar" actionListener="#{adicionalC.novaPesquisa}" immediate="true"
+                                     update="@form" global="false" />
+                </p:toolbarGroup>
+
+            </p:toolbar>
+
+
+            <p:messages id="mens"  autoUpdate="true" />
+
+            <!--inicio da tela de pesquisa-->
+            <h:panelGroup id="aba1" rendered="#{!adicionalC.mostra_toolbar}" >
+                <p:panelGrid id="panelGridPesq" columns="2" layout="grid" columnClasses="ui-grid-col-1, ui-grid-col-2, 
+                             ui-grid-col-8" styleClass="painel_grid_noborder" >
+
+                    <p:outputLabel for="mesa_pesquisa" value="Adicional :" />
+                    <p:inputText id="mesa_pesquisa" value="#{adicionalC.adicional.nome}"  />
+                    <p:spacer />
+
+                </p:panelGrid>
+
+                <p:dataTable id="dadosAdicional" value="#{adicionalC.modelAdicionais}" var="adicional" reflow="true" paginator="true"
+                             style="margin-top: 20px;"  emptyMessage="Nenhum adicional encontrado" rows="10" paginatorPosition="bottom"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="[ {currentPage} de {totalPages}  ]"
+                             rowsPerPageTemplate="5,10,15">
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{adicional.nome}" />
+                    </p:column>
+                    <p:column headerText="Preço">
+                        <h:outputText value="#{adicional.preco}" />
+                    </p:column>
+                    <p:column headerText="Descrição">
+                        <h:outputText value="#{adicional.descricao}" />
+                    </p:column>
+
+
+                    <p:column headerText="Alterar" class="centralizado tabela_botao_usuario"  >
+                        <p:commandButton icon="ui-icon-pencil" title="Alterar"
+                                         process="@this" update="@form" actionListener="#{adicionalC.preparaAlterar()}">
+                            <f:setPropertyActionListener target="#{adicionalC.adicional}" value="#{adicional}"   />          
+                        </p:commandButton>
+
+                        <p:commandButton icon="ui-icon-trash" actionListener="#{adicionalC.excluir()}"
+                                         update="dadosAdicional" title="Excluir">
+                            <p:confirm header="Confirmação" message="Tem certeza exclusão?" 
+                                       icon="ui-icon-alert" />
+                            <f:setPropertyActionListener target="#{adicionalC.adicional}" value="#{adicional}"   />
+                        </p:commandButton>
+
+
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGroup> 
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" 
+                                 icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" 
+                                 icon="ui-icon-close" />
+            </p:confirmDialog>
+            <!--fim da tela de pesquisa-->
+
+
+            <!--inicio da tela de cadastro (salvar e alterar)-->
+            <h:panelGroup id="panelGrop" rendered="#{adicionalC.mostra_toolbar}" >
+                <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-4" 
+                             styleClass="painel_grid_noborder" >
+
+                    <p:outputLabel for="adicional" value="Adicional :" />
+                    <p:inputText id="adicional" value="#{adicionalC.adicional.nome}" required="true" size="40" style="width: 100%; max-width: 600px;"/>
+
+                    <p:outputLabel for="preco" value="Preço :" />
+                    <p:inputText id="preco" value="#{adicionalC.adicional.preco}" required="true" 
+                                 size="12"  requiredMessage="preço é obrigatório" styleClass="dinheiro" >
+                        <f:convertNumber minFractionDigits="2" />
+                    </p:inputText>
+
+                    <p:outputLabel for="descricao" value="Descrição :" />
+                    <p:inputTextarea id="descricao" value="#{adicionalC.adicional.descricao}"  cols="40" style="width: 100%; max-width: 600px;"/>
+
+
+                </p:panelGrid>
+            </h:panelGroup>
+            <!--fim da tela de cadastro-->
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $(".dinheiro").maskMoney({showSymbol: true, symbol: "R$", decimal: ",", thousands: "."});
+                });
+            </script>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,102 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 26/05/2016, 15:48:28
+    Author     : silvio
+*/
+
+/*barra do topo*/
+
+.jr-top{
+    min-height: 50px;
+    position: fixed;
+    top:0px;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background-color: #1e94d2;
+}
+
+.jr-top > img{
+    margin: 8px; 
+}
+
+
+/*barra lateral esquerda*/
+
+.jr-barra_lateral{
+    position: fixed;
+    top:50px;
+    left: 0;
+    width: 210px;
+    margin-left: -211px;
+    transition: margin-left 0.5s;
+    bottom: 0;
+    z-index: 9998;    
+    background-color: #f6f6f6;
+    border-right: 1px solid #aeaeae;
+}
+
+.jr-barra_lateral.is-toggle{
+    margin-left: 0px;
+}
+
+/*reponsivo*/
+@media(min-width: 960px){
+    .jr-barra_lateral{
+        margin-left: 0px;
+    }
+    .jr-barra_lateral.is-toggle{
+        margin-left: -211px;
+    }
+
+}
+
+
+/*conteudo*/
+.jr-conteudo{
+    padding: 5px 15px;
+    margin-top: 50px;
+    transition: margin-left 0.5s;
+}
+
+
+/*reponsivo*/
+@media(min-width: 960px){
+    .jr-conteudo{
+        margin-left: 210px;
+    }
+    
+    .jr-conteudo.is-toggle{
+        margin-left: 0px;
+    }
+}
+
+/*tabViwer*/
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a{
+    color: #555;
+}
+
+@media(max-width: 640px){
+    .ui-tabs.ui-tabs-top > .ui-tabs-nav li {
+        width: 100%;
+    }
+}
+
+.inputTabela input {
+    width: 98%;
+}
+
+.ui-autocomplete {
+    width: 98% !important;
+}
+
+
+
+
+
+
+

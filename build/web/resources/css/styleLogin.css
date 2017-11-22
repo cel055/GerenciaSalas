@@ -1,0 +1,122 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 17/08/2016, 23:05:08
+    Author     : Gabriel
+*/
+/*////// IDs ///////*/
+body{
+    background-color: #999999;
+}
+#sectionRelogio{
+    position: fixed;
+    top:0px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#sectionCabecalho{
+    background-image: url("#{resource['imagem/assets/img04.jpg']}");
+    background-size : contain;
+    height          : 4vh;
+}
+#sectionTitulo{
+    background-image: url("#{resource['imagem/assets/img04.jpg']}");
+    background-size : contain;
+    height          : 8vh;
+    padding-top: 1vh;
+    transition: margin-left 0.8s;
+}
+#data, #hora, #diaSemana{
+    /*border: 0.05vw solid black;*/
+    margin-top: 1vh;
+    padding: 0px;
+    height: 6.5vw;    
+}
+.txtRelogio{
+    font-size       : 2vh;
+    text-shadow: 0.12vw 0.09vw 0.15vw #777777;
+}
+.txtTitulo{
+    font-size       : 4vh;
+    text-shadow: 0.12vw 0.09vw 0.15vw #777777;
+}
+.txtRelogio2{
+    font-size       : 0vh;
+    text-shadow: 0.12vw 0.09vw 0.15vw #777777;
+}
+#sectionLogo{
+
+    height          : 70vh;
+    width           : auto; 
+    padding-top: 5vh;
+}
+
+#sectionLogin{
+    background-image: url("#{resource['imagem/assets/img00.jpg']}");
+    background-size : contain;
+    height          : 75vh;
+}
+.cadeado{
+    width: auto;
+    height: 20vh;
+    margin: auto;
+}
+.logo{
+    width: auto;
+    height: 20vh;
+    margin: 5vh auto;
+}
+.inputLogin, .btn > .inputLogin{
+    width           : 100%;
+    padding-top     : 0px;
+}
+
+.marginTop{
+    margin-top: 1.5vh;
+}
+
+@media(min-width: 768px){
+
+    .marginTop{
+        margin-top: 3vh;
+    }
+
+    #sectionCabecalho{
+        background-image: url("#{resource['imagem/assets/img04.jpg']}");
+        background-size : contain;
+        height          : 4vh;
+    }
+    #data, #hora, #diaSemana{
+        /*border: 0.05vw solid black;*/
+        margin: 0px;
+        padding: 0px;
+        height: 2.5vh;
+    }
+    .txtRelogio{
+        font-size       : 2vh;
+        text-shadow: 0.12vw 0.09vw 0.15vw #777777;
+    }
+    .txtRelogio2{
+        font-size       : 2vh;
+        text-shadow: 0.12vw 0.09vw 0.15vw #777777;
+    }
+    
+}
+
+
+.noMarginAndPadding{
+    margin          : 0px;
+    padding         : 0px;
+    width           : 100%
+}
+#sectionRodape{
+    background-image: url("#{resource['imagem/assets/img04.jpg']}");
+    background-size : contain;
+    height          : 3vh;
+
+}

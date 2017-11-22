@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../logado/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="conteudo">
+        <h1 class="jr-titulo1">Usuário</h1>
+
+        <h:form id="form_pesquisa">
+
+            <!--mostra a toolbar se mostra_toolbar == true-->
+            <p:toolbar styleClass="toolbar" rendered="#{!usuarioC.mostra_toolbar}">
+                <p:toolbarGroup  >
+                    <p:commandButton value="Pesquisar" actionListener="#{usuarioC.pesquisar()}"
+                                     update="dadosUsuario" process="@this panelGridPesq" />
+                    <p:separator></p:separator>
+                    <p:commandButton value="Novo" actionListener="#{usuarioC.novo}" update="@form" global="false"  />
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <!--mostra a toolbar se mostra_toolbar == false-->
+            <p:toolbar id="toolbar_pesquisa" styleClass="toolbar" rendered="#{usuarioC.mostra_toolbar}">
+                <p:toolbarGroup  >
+                    <p:commandButton value="Salvar" action="#{usuarioC.salvar()}" update="panelGrop" />
+                    <p:separator></p:separator>
+                    <p:commandButton value="Cancelar" actionListener="#{usuarioC.novaPesquisa}" immediate="true"
+                                     update="@form" global="false" />
+                </p:toolbarGroup>
+
+                <p:toolbarGroup align="right">
+
+
+                </p:toolbarGroup>
+
+            </p:toolbar>
+
+            <p:messages id="mens" autoUpdate="true" />
+
+            <!--inicio da tela de pesquisa-->
+            <h:panelGroup id="aba1" rendered="#{!usuarioC.mostra_toolbar}" >
+                <p:panelGrid id="panelGridPesq" columns="2" layout="grid" columnClasses="ui-grid-col-1, ui-grid-col-5" styleClass="painel_grid_noborder" >
+
+                    <p:outputLabel for="nome_pesquisa" value="Nome :" />
+                    <p:inputText id="nome_pesquisa" value="#{usuarioC.usuario.nome}" style="width: 100%" />
+                    <p:spacer />
+
+                </p:panelGrid>
+
+                <p:dataTable id="dadosUsuario" value="#{usuarioC.modelUsuarios}" var="usuario" reflow="true"
+                             style="margin-top: 20px;"  emptyMessage="Nenhum usuário encontrado">
+                    <p:column headerText="Nome" priority="1">
+                        <h:outputText value="#{usuario.nome}" />
+                    </p:column>
+                    <p:column headerText="Login" priority="1">
+                        <h:outputText value="#{usuario.login}" />
+                    </p:column>
+                    <p:column headerText="Perfil" priority="2">
+                        <h:outputText value="#{usuario.perfil.nome}" />
+                    </p:column>
+                    <p:column headerText="Situação" priority="2">
+                        <h:outputText value="#{usuario.enable == true ? 'Ativo' : 'Inativo'}" />
+                    </p:column>
+
+                    <p:column headerText="Alterar" class="centralizado tabela_botao_usuario" priority="1" >
+                        <p:commandButton icon="ui-icon-pencil" title="Alterar"
+                                         process="@this" update="@form" actionListener="#{usuarioC.carregarParaAlterar()}">
+                            <f:setPropertyActionListener target="#{usuarioC.usuario}" value="#{usuario}"   />          
+                        </p:commandButton>
+
+                        <p:commandButton icon="ui-icon-trash" actionListener="#{usuarioC.excluir()}"
+                                         update="dadosUsuario" title="Excluir" >
+                            <p:confirm header="Confirmação" message="Tem certeza exclusão?" 
+                                       icon="ui-icon-alert" />
+                            <f:setPropertyActionListener target="#{usuarioC.usuario}" value="#{usuario}"   />
+                        </p:commandButton>
+
+                        <p:commandButton icon="ui-icon-power" title="Ativar/Inativar"
+                                         update="dadosUsuario" action="#{usuarioC.alteraStatus()}" >
+                            <p:confirm header="Confirmação" message="Deseja mudar status?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGroup> 
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" 
+                                 icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" 
+                                 icon="ui-icon-close" />
+            </p:confirmDialog>
+            <!--fim da tela de pesquisa-->
+
+            <!--inicio da tela de cadastro (salvar e alterar)-->
+            <h:panelGroup id="panelGrop" rendered="#{usuarioC.mostra_toolbar}" >
+                <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-4" 
+                             styleClass="painel_grid_noborder" >
+
+
+                    <p:outputLabel for="nome" value="Usuário :" />
+                    <p:inputText id="nome" value="#{usuarioC.usuario.nome}" required="true" style="width: 100%; max-width: 600px;"/>
+
+                    <p:outputLabel for="login" value="E-mail :" />
+                    <p:inputText id="login" value="#{usuarioC.usuario.login}" required="true" style="width: 100%; max-width: 600px;"/>
+
+                    <h:outputLabel for="perfil" value="Perfil " />
+                    <p:selectOneMenu styleClass="form-control" id="perfil" value="#{usuarioC.perfil.id}" style="width: 90%; max-width: 580px;" required="true" 
+                                     requiredMessage="Campo perfil é obrigatório"  >
+                        <f:selectItem itemLabel="Selecione um Perfil" itemValue="" />
+                        <f:selectItems value="#{usuarioC.perfis}" />
+                    </p:selectOneMenu>
+
+                </p:panelGrid>
+            </h:panelGroup>
+            <!--fim da tela de cadastro-->
+
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

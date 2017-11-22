@@ -1,0 +1,138 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 26/05/2016, 00:31:26
+    Author     : silvio
+*/
+
+body{
+    margin: 0px;
+    font-size: 13px;
+    font-family: "Helvetica Neue", "Helvetica", "Arial";
+}
+.conteudo{
+    width: 60%;
+    height: 100px;
+    background-color: red;
+    float: left;
+}
+
+.menu{
+    width: 20%;
+    height: 100px;
+    background-color: blue;
+    float: left;
+}
+
+.jr-menu{
+    font-size: 1.2em;
+}
+
+.jr-menu > ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.jr-menu > ul a{
+    display: block;
+    padding: 10px 15px;
+    
+    text-decoration: none;
+    font-weight: 800;
+    color: #373737;
+}
+
+.jr-menu ul i {
+    margin-right: 6px;
+}
+
+.jr-menu ul a:hover, .jr-menu ul a:focus {
+    background-color: #dfdfdf;
+}
+
+.jr-menu ul .is-selected {
+    border-left: 3px solid #1e94d2;
+    background-color: #fff;
+}
+
+.jr-menu ul .is-selected a {
+    color: #1e94d2;
+    margin-left: -3px;
+}
+
+.anuncio
+    width: 20%;
+    height: 100px;
+    background-color: green;
+    float: left;
+}
+
+.jr-titulo1{
+    font-size: 1.5em;
+}
+
+
+/*==========  Mobile First Method  ==========*/
+
+    /* Custom, iPhone Retina */ 
+    @media only screen and (min-width : 320px) {
+        
+    }
+
+    /* Extra Small Devices, Phones */ 
+    @media only screen and (min-width : 480px) {
+
+    }
+
+    /* Small Devices, Tablets */
+    @media only screen and (min-width : 768px) {
+
+    }
+
+    /* Medium Devices, Desktops */
+    @media only screen and (min-width : 992px) {
+
+    }
+
+    /* Large Devices, Wide Screens */
+    @media only screen and (min-width : 1200px) {
+
+    }
+
+    /*==========  Non-Mobile First Method  ==========*/
+
+    /* Large Devices, Wide Screens */
+    @media only screen and (max-width : 1200px) {
+
+    }
+
+    /* Medium Devices, Desktops */
+    @media only screen and (max-width : 992px) {
+
+    }
+
+    /* Small Devices, Tablets */
+    @media only screen and (max-width : 768px) {
+        
+    }
+
+    /* Extra Small Devices, Phones */ 
+    @media only screen and (max-width : 480px) {
+         .conteudo, .menu{
+            width: 50%;
+        }
+        .anuncio{
+            width: 100%;
+        }
+    }
+
+    /* Custom, iPhone Retina */ 
+    @media only screen and (max-width : 320px) {
+        .conteudo, .anuncio, .menu{
+            width: 100%;
+        }
+    }

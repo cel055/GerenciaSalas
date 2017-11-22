@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../logado/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="conteudo">
+        
+        <p:panel id="pSessaoExpirada">
+
+            <h1 class="jr-titulo1">Sessão Expirada</h1>
+            <p:panelGrid columns="1" layout="grid"> 
+                <p:column>
+                    <div class="info-box">
+                        <p>Sua sessão na aplicação expirou e um novo login precisa ser feito. Sua sessão pode ter expirado por duas razôes:</p>
+                        <p>1. Você passou mais do que 30 minutos sem interagir com a aplicação;</p>
+                        <p>2. Você utilizou algumas vezes o botão "voltar" do seu browser.</p>
+                        <p>Clique <a href="#{facesContext.externalContext.requestContextPath}">aqui</a> para ser redirecionado à página de login.</p>
+                        <!--<p>Você será automaticamente redirecionado para um novo login em 15 segundos ou, se preferir, clique <a href="# facesContext.externalContext.requestContextPath}">aqui</a> para ser redirecionado agora.</p>-->
+                    </div>
+                </p:column>
+            </p:panelGrid>
+        </p:panel>
+        
+    </ui:define>
+
+</ui:composition>
