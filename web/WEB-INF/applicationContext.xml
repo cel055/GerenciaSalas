@@ -9,9 +9,7 @@
  
     <http auto-config="true" use-expressions="true" access-denied-page="/login.faces?negado=true" >
         <intercept-url pattern="/administrador/**" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/logado/**" access="hasAnyRole('ROLE_ADMIN, ROLE_LOGADO, ROLE_CAIXA, ROLE_ATENDENTE, ROLE_IMPR_BEBIDA, ROLE_IMPR_LANCHE')"/>
-        <intercept-url pattern="/atendente/**" access="hasAnyRole('ROLE_ADMIN, ROLE_CAIXA, ROLE_ATENDENTE')"/>
-        <intercept-url pattern="/caixa/**" access="hasAnyRole('ROLE_ADMIN, ROLE_CAIXA')"/>
+        <intercept-url pattern="/logado/**" access="hasAnyRole('ROLE_ADMIN, ROLE_LOGADO')"/>
         <!--<intercept-url pattern="/relatorio/**" access="hasRole('ROLE_ADMIN')"/>-->
         
         <form-login login-page="/login.faces" authentication-failure-url="/login.faces?erro=true"/>
@@ -44,7 +42,8 @@
         <b:property name="url" value="jdbc:mysql://localhost:3306/senac_neb" />
         <b:property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <b:property name="username" value="root" />
-        <b:property name="password" value="" />
+        <!--<b:property name="password" value="" />-->
+        <b:property name="password" value="root" />
     </b:bean>
  
     <!--servidor web-->
