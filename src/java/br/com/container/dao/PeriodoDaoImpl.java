@@ -29,7 +29,7 @@ public class PeriodoDaoImpl extends BaseDaoImpl<Periodo, Long> implements Period
 
     @Override
     public List<Periodo> pesquisaPorNome(String nome, Session session) throws HibernateException {
-        throw new UnsupportedOperationException("Método pesquisaPorNome não implementado para o periodo");
+        throw new UnsupportedOperationException("Método pesquisaPorNome não implementado para o Periodo");
     }
     
 }
