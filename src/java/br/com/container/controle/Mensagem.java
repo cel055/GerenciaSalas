@@ -8,7 +8,6 @@ package br.com.container.controle;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
-
 /**
  *
  * @author Senac PLC
