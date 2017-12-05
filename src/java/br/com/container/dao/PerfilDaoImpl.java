@@ -18,7 +18,7 @@ public class PerfilDaoImpl implements PerfilDao{
 
     @Override
     public List<Perfil> todosPerfis(Session session) throws HibernateException {
-        return session.createQuery("from Perfil p where p.tipo <> 'ROLE_ADMIN' ").list();
+        return session.createQuery("from Perfil p").list();
     }
     
 }
