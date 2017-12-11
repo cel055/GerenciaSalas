@@ -16,7 +16,7 @@ import javax.persistence.Table;
  *
  * @author maodeobra
  */
-@Entity
+//@Entity
 @Table(name = "dia_da_semana")
 public class DiaDaSemana implements Serializable {
     private static final long serialVersionUID = 1L;

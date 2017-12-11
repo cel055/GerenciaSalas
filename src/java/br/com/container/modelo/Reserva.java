@@ -7,14 +7,11 @@ package br.com.container.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -40,18 +37,24 @@ public class Reserva implements Serializable {
     private Date fim;
     
     @ManyToOne
-    @JoinColumn(name = "idUsuario", nullable = false)
+    @JoinColumn(name = "idUsuario")
     private Usuario usuario;
     
     @ManyToOne
-    @JoinColumn(name = "idPeriodo", nullable = false)
-    private Periodo periodo;
+    @JoinColumn(name = "idSala")
+    private Sala sala;
     
-    @ManyToMany
-    @JoinTable(name = "reserva_dias_da_semana", 
-            joinColumns = {@JoinColumn(name = "reserva_id")}, 
-            inverseJoinColumns = {@JoinColumn(name = "dia_da_semana_id")})
-    private List<DiaDaSemana> diasDaSemana;
+//    @ManyToOne
+//    @JoinColumn(name = "idPeriodo", nullable = false)
+//    private Periodo periodo;
+    
+    private String periodo; //matutino, vespertino e noturno
+    
+//    @ManyToMany
+//    @JoinTable(name = "reserva_dias_da_semana", 
+//            joinColumns = {@JoinColumn(name = "reserva_id")}, 
+//            inverseJoinColumns = {@JoinColumn(name = "dia_da_semana_id")})
+//    private List<DiaDaSemana> diasDaSemana;
 
     public Long getId() {
         return id;
@@ -93,21 +96,37 @@ public class Reserva implements Serializable {
         this.usuario = usuario;
     }
 
-    public Periodo getPeriodo() {
+    public String getPeriodo() {
         return periodo;
     }
 
-    public void setPeriodo(Periodo periodo) {
+    public void setPeriodo(String periodo) {
         this.periodo = periodo;
     }
 
-    public List<DiaDaSemana> getDiasDaSemana() {
-        return diasDaSemana;
+    public Sala getSala() {
+        return sala;
     }
 
-    public void setDiasDaSemana(List<DiaDaSemana> diasDaSemana) {
-        this.diasDaSemana = diasDaSemana;
+    public void setSala(Sala sala) {
+        this.sala = sala;
     }
+
+//    public Periodo getPeriodo() {
+//        return periodo;
+//    }
+//
+//    public void setPeriodo(Periodo periodo) {
+//        this.periodo = periodo;
+//    }
+//
+//    public List<DiaDaSemana> getDiasDaSemana() {
+//        return diasDaSemana;
+//    }
+//
+//    public void setDiasDaSemana(List<DiaDaSemana> diasDaSemana) {
+//        this.diasDaSemana = diasDaSemana;
+//    }
 
     @Override
     public int hashCode() {

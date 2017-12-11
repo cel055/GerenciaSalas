@@ -26,6 +26,44 @@
 
         </f:facet>
         <title>Senac-NEB</title>
+        <style>
+            .corVerde{
+                background: #009933;
+            }
+            .corAmarela{
+                background: #ffff00;
+            }
+
+
+        </style>
+        <script>
+            PrimeFaces.locales['pt'] = {
+                closeText: 'Fechar',
+                prevText: 'Anterior',
+                nextText: 'Próximo',
+                currentText: 'Hoje',
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+                weekHeader: 'Semana',
+                firstDay: 0,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Só Horas',
+                timeText: 'Tempo',
+                hourText: 'Hora',
+                minuteText: 'Minuto',
+                secondText: 'Segundo',
+                ampm: false,
+                month: 'Mês',
+                week: 'Semana',
+                day: 'Dia',
+                allDayText: 'Todo o Dia'
+            };
+        </script>
     </h:head>
     <h:body>
         <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"  />
@@ -34,7 +72,7 @@
             <p:graphicImage name="aguarde.gif" library="imagem"/>
         </p:dialog>
         <header class="jr-top">
-<!--            <h:graphicImage library="imagem" name="logo.jpg" styleClass="logoTitulo"/>-->
+            <!--            <h:graphicImage library="imagem" name="logo.jpg" styleClass="logoTitulo"/>-->
             <span class="titulo">Senac-NEB</span>
             <a href="#" class="jr-toggle js-toggle" style="margin-top: 2vh;" ><i class="fa fw-fw fa-arrows-alt" onclick="toggleFullScreen()"></i></a>
             <a href="#" class="jr-toggle js-toggle" style="margin-top: 2vh;" ><i class="fa fa-bars"></i></a>
@@ -46,32 +84,37 @@
                     <li >
                         <h:link outcome="/logado/dashboard"><i class="fa fw-fw fa-home"> - Home</i></h:link>
                     </li>
-<!--                    <li>
-                        <h:link outcome="/atendente/pedido">
-                            <i class="fa fw-fw fa-file-text-o"> - Pedido</i>
-                        </h:link>
-                    </li>-->
-<!--                    <h:panelGroup rendered="# {request.isUserInRole('ROLE_CAIXA') or request.isUserInRole('ROLE_ADMIN')}" >
-                        <li>
-                            <h:link outcome="/caixa/fechamentoPedido" >
-                                <i class="fa fw-fw fa-dollar"> - Fechar Pedido</i></h:link>
-                        </li>
-                    </h:panelGroup>-->
+                    <!--                    <li>
+                                            <h:link outcome="/atendente/pedido">
+                                                <i class="fa fw-fw fa-file-text-o"> - Pedido</i>
+                                            </h:link>
+                                        </li>-->
+                    <!--                    <h:panelGroup rendered="# {request.isUserInRole('ROLE_CAIXA') or request.isUserInRole('ROLE_ADMIN')}" >
+                                            <li>
+                                                <h:link outcome="/caixa/fechamentoPedido" >
+                                                    <i class="fa fw-fw fa-dollar"> - Fechar Pedido</i></h:link>
+                                            </li>
+                                        </h:panelGroup>-->
 
                     <h:panelGroup rendered="#{request.isUserInRole('ROLE_ADMIN')}" >
                         <!--<li class="is-selected"  >-->
-                        
+
                         <li>
                             <h:link outcome="/administrador/usuario" >
                                 <i class="fa fw-fw fa-users"> - Usuários</i></h:link>
                         </li>
-                        
+
                         <li>
                             <h:link outcome="/administrador/sala" >
                                 <i class="fa fw-fw fa-users"> - Sala</i></h:link>
                         </li>
+
+                        <li>
+                            <h:link outcome="/administrador/agendamento" >
+                                <i class="fa fw-fw fa-users"> - Agendamentos</i></h:link>
+                        </li>
                     </h:panelGroup>
-                    
+
                     <li>
                         <!--                        <h:link outcome="/atendente/alterausuario">
                                                     <i class="fa fw-fw fa-user"> Editar Perfil</i></h:link>-->

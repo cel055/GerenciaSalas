@@ -17,7 +17,7 @@ import javax.persistence.Table;
  *
  * @author maodeobra
  */
-@Entity
+//@Entity
 @Table(name = "periodo")
 public class Periodo implements Serializable {
     private static final long serialVersionUID = 1L;
