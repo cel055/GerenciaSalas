@@ -7,11 +7,14 @@ package br.com.container.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -23,6 +26,10 @@ import javax.persistence.Temporal;
 @Entity
 @Table(name = "reserva")
 public class Reserva implements Serializable {
+    //Criei estas para que não ocorra erro de digitação já qu isto será usado na pesquisa do banco
+    public static final String MANHA = "Matutino";
+    public static final String TARDE = "Vespertino";
+    public static final String NOITE = "Noturno";
     
     private static final long serialVersionUID = 1L;
     @Id
@@ -50,11 +57,11 @@ public class Reserva implements Serializable {
     
     private String periodo; //matutino, vespertino e noturno
     
-//    @ManyToMany
-//    @JoinTable(name = "reserva_dias_da_semana", 
-//            joinColumns = {@JoinColumn(name = "reserva_id")}, 
-//            inverseJoinColumns = {@JoinColumn(name = "dia_da_semana_id")})
-//    private List<DiaDaSemana> diasDaSemana;
+    @ManyToMany
+    @JoinTable(name = "reserva_dias_da_semana", 
+            joinColumns = {@JoinColumn(name = "reserva_id")}, 
+            inverseJoinColumns = {@JoinColumn(name = "dia_da_semana_id")})
+    private List<DiaDaSemana> diasDaSemana;
 
     public Long getId() {
         return id;
@@ -120,13 +127,13 @@ public class Reserva implements Serializable {
 //        this.periodo = periodo;
 //    }
 //
-//    public List<DiaDaSemana> getDiasDaSemana() {
-//        return diasDaSemana;
-//    }
-//
-//    public void setDiasDaSemana(List<DiaDaSemana> diasDaSemana) {
-//        this.diasDaSemana = diasDaSemana;
-//    }
+    public List<DiaDaSemana> getDiasDaSemana() {
+        return diasDaSemana;
+    }
+
+    public void setDiasDaSemana(List<DiaDaSemana> diasDaSemana) {
+        this.diasDaSemana = diasDaSemana;
+    }
 
     @Override
     public int hashCode() {

@@ -31,7 +31,7 @@ public class HibernateUtil {
             cfg.addAnnotatedClass(Usuario.class);
             cfg.addAnnotatedClass(Sala.class);
 //            cfg.addAnnotatedClass(Periodo.class);
-//            cfg.addAnnotatedClass(DiaDaSemana.class);
+            cfg.addAnnotatedClass(DiaDaSemana.class);
             cfg.addAnnotatedClass(Reserva.class);
 
             cfg.configure("/br/com/container/dao/hibernate.cfg.xml");

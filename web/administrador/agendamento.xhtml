@@ -68,9 +68,9 @@
                             <p:calendar id="fim" value="#{eventoControle.evento.fim}" pattern="dd/MM/yyyy" />
                             <p:outputLabel for="periodo" value="Período:" />
                             <p:selectOneRadio id="periodo" value="#{eventoControle.evento.periodo}">
-                                <f:selectItem itemLabel="Matutino" itemValue="Matutino" />
-                                <f:selectItem itemLabel="Vespertino" itemValue="Vespertino" />
-                                <f:selectItem itemLabel="Noturno" itemValue="Noturno" />
+                                <f:selectItem itemLabel="#{Constantes.MANHA}" itemValue="#{Constantes.MANHA}" />
+                                <f:selectItem itemLabel="#{Constantes.TARDE}" itemValue="#{Constantes.TARDE}" />
+                                <f:selectItem itemLabel="#{Constantes.NOITE}" itemValue="#{Constantes.NOITE}" />
                             </p:selectOneRadio>
 
                             <p:outputLabel  value="Persistir em:" />

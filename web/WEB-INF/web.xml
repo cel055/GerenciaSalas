@@ -66,4 +66,9 @@
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/sessaoExpirada.xhtml</location>
     </error-page>
+    <listener>
+        <listener-class>
+            br.com.container.util.InicializadorProjeto
+        </listener-class>
+    </listener>
 </web-app>
