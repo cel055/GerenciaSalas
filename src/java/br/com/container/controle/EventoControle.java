@@ -5,11 +5,14 @@
  */
 package br.com.container.controle;
 
+import br.com.container.dao.DiaDaSemanaDao;
+import br.com.container.dao.DiaDaSemanaDaoImpl;
 import br.com.container.dao.HibernateUtil;
 import br.com.container.dao.ReservaDao;
 import br.com.container.dao.ReservaDaoImpl;
 import br.com.container.dao.SalaDao;
 import br.com.container.dao.SalaDaoImpl;
+import br.com.container.modelo.DiaDaSemana;
 import br.com.container.modelo.Reserva;
 import br.com.container.modelo.Sala;
 import br.com.container.modelo.Usuario;
@@ -57,11 +60,14 @@ public class EventoControle implements Serializable {
 
     private String[] semanas;
     private List<String> diasSemana;
+    private List<DiaDaSemana> diasDaSemana;
 
     @PostConstruct
     public void inicializar() {
         session = HibernateUtil.abreSessao();
         salaDao = new SalaDaoImpl();
+        DiaDaSemanaDao diaDaSemanaDao = new DiaDaSemanaDaoImpl();
+        diasDaSemana = diaDaSemanaDao.listaTodos(session);
         salas = salaDao.listaTodos(session);
         session.close();
 
@@ -74,6 +80,7 @@ public class EventoControle implements Serializable {
         eventoDao = new ReservaDaoImpl();
         eventoModel = new DefaultScheduleModel();
         evento = new Reserva();
+        evento.setDiasDaSemana(new ArrayList<>());
         try {
             eventos = eventoDao.pesquisarReservaPorSala("001", session);
             session.close();
@@ -272,6 +279,7 @@ public class EventoControle implements Serializable {
         }
     }
 
+    //Getters e Setters
     public Reserva getEvento() {
         if (evento == null) {
             evento = new Reserva();
@@ -334,4 +342,8 @@ public class EventoControle implements Serializable {
         this.sala = sala;
     }
 
+    public List<DiaDaSemana> getDiasDaSemana() {
+        return diasDaSemana;
+    }
+    
 }

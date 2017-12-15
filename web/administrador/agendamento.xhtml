@@ -74,9 +74,9 @@
                             </p:selectOneRadio>
 
                             <p:outputLabel  value="Persistir em:" />
-                            <p:selectManyCheckbox id="diaSemana" value="#{eventoControle.semanas}" layout="responsive" 
+                            <p:selectManyCheckbox id="diaSemana" value="#{eventoControle.evento.diasDaSemana}" layout="responsive" converter="conversorDiaDaSemana"
                                                   columns="3">
-                                <f:selectItems value="#{eventoControle.diasSemana}" var="semana" itemLabel="#{semana}" itemValue="#{semana}" />
+                                <f:selectItems value="#{eventoControle.diasDaSemana}" var="semana" itemLabel="#{semana.nomeDoDia}" itemValue="#{semana}" />
                             </p:selectManyCheckbox>
 
                         </p:panelGrid>
