@@ -80,5 +80,13 @@ public class Mensagem {
                                 FacesMessage.SEVERITY_ERROR,
                                doubleValue + " é menor que o total do pedido!", ""));
     }
+    
+    public static void mensagemError(String msg) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(
+                                FacesMessage.SEVERITY_ERROR,
+                                msg, "")
+                );
+    } 
 
 }

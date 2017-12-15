@@ -67,7 +67,7 @@ public class OcupacaoControle implements Serializable{
         SalaDao salaDao = new SalaDaoImpl();
         salasParaPesquisa = salaDao.listaTodos(session);
         reservaDao = new ReservaDaoImpl();
-        reservas = reservaDao.listaTodos(session);
+//        reservas = reservaDao.listaTodos(session);
         session.close();
         
         //inicia a timeline
@@ -98,6 +98,15 @@ public class OcupacaoControle implements Serializable{
 //            timelineEvent = new TimelineEvent(null, null, null, false, s.getNome(), null);
 //            timeline.add(timelineEvent);
         }
+    }
+    
+    public void pesquisa(){
+        if(salasSelecionadas.isEmpty()){
+            Mensagem.mensagemError("Selecione pelo menos uma sala");
+            return;
+        }
+        session = HibernateUtil.abreSessao();
+        reservaDao = new ReservaDaoImpl();
     }
     
     //Getters e Setters
