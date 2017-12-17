@@ -14,40 +14,34 @@
         <h:form id="formBtn">
             <p:panel id="pDashboardCaixa" rendered="#{request.isUserInRole('ROLE_CAIXA') or request.isUserInRole('ROLE_ADMIN') }"> 
 
-                <h1 class="jr-titulo1">Caixa</h1>
+                <h1 class="jr-titulo1">Senac</h1>
                 <!--<p:panelGrid columns="1" layout="grid">-->            
                 <p:panelGrid columns="2" layout="grid">            
                     <p:column>
                         <div class="info-box">
                             <span class="info-box-icon bg-green"><i class="fa fa-r fa-money"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">Cancelamentos:</span>                            
-                                <span class="info-box-number">Valor total R$ <h:outputText value="#{dashboardC.totalDoDia}"/></span>                            
-                                <span class="info-box-number">Pedidos cancelados: <h:outputText value="#{dashboardC.totalPCanceladosDia}"/></span>                                                        
+                                <span class="info-box-text">Salas</span>                            
+                                <span class="info-box-number">Total <h:outputText value=""/></span>                            
+                                <span class="info-box-number">Em uso: <h:outputText value=""/></span>                                                        
                             </div>
                         </div>
                     </p:column>
                     <p:column>
                         <div class="info-box">
-                            <!--<span class="info-box-icon bg-aqua"><i class="fa fa-money"></i></span>-->
-                            <p:commandButton value="Pedidos abertos" action="/atendente/pedido" styleClass="btn-r btn-block-r btn-info-r btn-lg-r" ajax="false"></p:commandButton>
-                            <p:commandButton value="Fechamendo do caixa" action="/caixa/fechamentoCaixa" styleClass="btn-r btn-block-r btn-warning-r btn-lg-r" ajax="false"></p:commandButton>
                         </div>
                     </p:column>
                 </p:panelGrid>
 
             </p:panel><!-- Fim Caixa -->
 
-            <p:panel id="pDashboardAtendente" rendered="#{request.isUserInRole('ROLE_ATENDENTE')}">
+            <p:panel id="pDashboardAtendente" >
 
-                <h1 class="jr-titulo1">Atendimento</h1>
+                <h1 class="jr-titulo1">Dados de cadastro</h1>
                 <p:panelGrid columns="1" layout="grid"> 
                     <p:column>
                         <div class="info-box">
-                            <!--<span class="info-box-icon bg-aqua"><i class="fa fa-money"></i></span>-->                                                    
-                            <p:commandButton value="Pedidos abertos" action="/atendente/pedido" styleClass="btn-r btn-block-r btn-info-r btn-lg-r" ajax="false"></p:commandButton>
-                            <!--<p:commandButton value="Alterar Cadastro" action="/atendente/alterausuario" styleClass="btn-r btn-block-r btn-warning-r btn-lg-r" ajax="false"></p:commandButton>-->
-                            <p:commandButton value="Alterar Cadastro" action="#{usuarioLogadoC.chamaEdicaoPerfil}" styleClass="btn-r btn-block-r btn-warning-r btn-lg-r" ajax="false"></p:commandButton>                            
+                            <p:commandButton value="Alterar Senha" action="#{usuarioLogadoC.chamaEdicaoPerfil}" styleClass="btn-r btn-block-r btn-warning-r btn-lg-r" ajax="false"></p:commandButton>                            
                         </div>
                     </p:column>
                 </p:panelGrid>

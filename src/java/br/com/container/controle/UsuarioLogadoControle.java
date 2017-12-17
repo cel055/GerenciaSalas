@@ -95,7 +95,7 @@ public class UsuarioLogadoControle implements Serializable {
         limpaSenhas();
         usuarioAtual();
         FacesContext ctx = FacesContext.getCurrentInstance();
-        String url = ctx.getExternalContext().encodeResourceURL("../atendente/alterausuario.faces");
+        String url = ctx.getExternalContext().encodeResourceURL("../logado/alterausuario.faces");
         ctx.getExternalContext().redirect(url);
     }
 

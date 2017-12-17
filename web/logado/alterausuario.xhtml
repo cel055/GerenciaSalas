@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../logado/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="conteudo">
+        <h1 class="jr-titulo1">Usuário - Alterar senha</h1>
+
+        <h:form id="form_pesquisa">
+
+            <!--mostra a toolbar se mostra_toolbar == true-->
+            <p:toolbar styleClass="toolbar" rendered="#{!usuarioC.mostra_toolbar}">
+                <p:toolbarGroup align="left" >                    
+                    <!--<p:commandButton update="matchGrid" value="Salvar" action="# {usuarioLogadoC.salvar()}" ajax="false"/>-->
+                    <p:commandButton  value="Salvar" action="#{usuarioLogadoC.salvar()}" ajax="false">
+                        <p:ajax update="matchGrid" resetValues="true" />
+                    </p:commandButton>
+ 
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <p:messages id="mens"  autoUpdate="true" />
+
+            <!--inicio da tela alteração de senha-->
+            <h:panelGroup id="panelGrop" rendered="true" >
+                <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-4" 
+                             styleClass="painel_grid_noborder" id="matchGrid" >
+
+                    <p:outputLabel for="nome" value="Nome :" />
+                    <p:inputText id="nome" value="#{usuarioLogadoC.usuario.nome}" disabled="true"/>
+
+                    <p:outputLabel for="login" value="Login :" />
+                    <p:inputText id="login" value="#{usuarioLogadoC.usuario.login}" disabled="true"/>
+
+                    <p:outputLabel for="senhaA" value="Senha atual :" />
+                    <p:password id="senhaA" value="#{usuarioLogadoC.senhaAtual}" required="true" redisplay="true" >
+                        <p:ajax event="blur" listener="#{usuarioLogadoC.verificaSenhaAtual}" process="@this" update="matchGrid" />
+                    </p:password>                    
+
+                    <p:outputLabel for="senhaN" value="Nova senha :" />
+                    <p:password id="senhaN" value="#{usuarioLogadoC.senhaNova}" match="senhaC" 
+                                validatorMessage="As senhas não são iguais! "  required="true"
+                                requiredMessage="Senha nova é obrigatória! " redisplay="true" >
+                    </p:password>                    
+                    <p:outputLabel for="senhaC" value="Confirme a nova senha :" />                    
+                    <p:password id="senhaC" value="#{usuarioLogadoC.senhaNova}" required="true" />
+
+                </p:panelGrid>
+            </h:panelGroup>
+            <!--fim da tela alteração de senha-->
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
