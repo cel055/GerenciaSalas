@@ -12,7 +12,7 @@
 
         <h:form id="form_pesquisa">
             <p:messages id="mens" autoUpdate="true" />
-            
+
             <p:toolbar styleClass="toolbar">
                 <p:toolbarGroup style="margin-right: 5px">
                     <p:selectCheckboxMenu id="salasParaPesquisa" value="#{ocupacaoControle.salasSelecionadas}" label="Salas" filter="false" converter="conversorSala" panelStyle="width:250px">
@@ -35,7 +35,7 @@
                 </p:toolbarGroup>
                 <p:separator></p:separator>
                 <p:toolbarGroup>
-                    <p:commandButton value="Novo"/>
+                    <p:commandButton value="Novo" actionListener="#{ocupacaoControle.iniciaSalvamento()}" update="form_salvar" oncomplete="PF('caixaDialogo').show();"/>
                 </p:toolbarGroup>
             </p:toolbar>
 
@@ -44,6 +44,53 @@
                         zoomMin="#{ocupacaoControle.zoomMin}" zoomMax="#{ocupacaoControle.zoomMax}" 
                         eventMargin="10" eventMarginAxis="0" showNavigation="true" showButtonNew="false" 
                         axisOnTop="true"/>
+        </h:form>
+
+        <h:form id="form_salvar">
+            <p:dialog id="dialogoSalvar" widgetVar="caixaDialogo"  header="Reserva de Sala" resizable="false" modal="true"
+                      showEffect="clip">
+                <p:outputPanel id="eventoDetalhe">
+                    <p:panelGrid columns="2">  
+                        <p:outputLabel  value="Informação" />
+                        <p:inputTextarea value="#{ocupacaoControle.reserva.informacao}"  />
+
+                        <p:outputLabel for="inicio" value="Ínicio" />
+                        <p:calendar id="inicio" value="#{ocupacaoControle.reserva.inicio}" pattern="dd/MM/yyyy">
+                            <p:ajax event="dateSelect" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" update="listaDeClassesDisponiveis"/>
+                        </p:calendar>
+
+                        <p:outputLabel for="fim" value="Fim" />
+                        <p:calendar id="fim" value="#{ocupacaoControle.reserva.fim}" pattern="dd/MM/yyyy">
+                            <p:ajax event="dateSelect" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" update="listaDeClassesDisponiveis"/>
+                        </p:calendar>
+
+                        <p:outputLabel for="periodo" value="Período:" />
+                        <p:selectOneRadio id="periodo" value="#{ocupacaoControle.reserva.periodo}">
+                            <f:selectItem itemLabel="#{Constantes.MANHA}" itemValue="#{Constantes.MANHA}" />
+                            <f:selectItem itemLabel="#{Constantes.TARDE}" itemValue="#{Constantes.TARDE}" />
+                            <f:selectItem itemLabel="#{Constantes.NOITE}" itemValue="#{Constantes.NOITE}" />
+                            <p:ajax event="change" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" update="listaDeClassesDisponiveis"/>
+                        </p:selectOneRadio>
+
+                        <p:outputLabel  value="Persistir em:" />
+                        <p:selectManyCheckbox id="diaSemana" value="#{ocupacaoControle.reserva.diasDaSemana}" layout="responsive" converter="conversorDiaDaSemana"
+                                              columns="3">
+                            <f:selectItems value="#{ocupacaoControle.diasDaSemana}" var="semana" itemLabel="#{semana.nomeDoDia}" itemValue="#{semana}" />
+                            <p:ajax event="change" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" update="listaDeClassesDisponiveis"/>
+                        </p:selectManyCheckbox>
+                        
+                        <p:outputLabel value="Salas Disponiveis" for="listaDeClassesDisponiveis"/>
+                        <p:selectOneMenu id="listaDeClassesDisponiveis" value="#{ocupacaoControle.reserva.sala}" 
+                                         label="Salas" filter="false" style="width: 250px" 
+                                         converter="conversorSala" disabled="#{ocupacaoControle.salasParaPesquisa.isEmpty()}">
+                            <f:selectItems value="#{ocupacaoControle.salasParaPesquisa}" var="salaPesquisa" itemLabel="#{salaPesquisa.nome}" itemValue="#{salaPesquisa}"/>
+                            <p:ajax event="change" process="@this,listaDeClassesDisponiveis"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:separator />
+                    <p:commandButton value="Salvar" actionListener="#{ocupacaoControle.salvar()}" oncomplete="PF('caixaDialogo').hide();" />
+                </p:outputPanel>
+            </p:dialog>
         </h:form>
     </ui:define>
 

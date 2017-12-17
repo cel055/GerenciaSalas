@@ -48,7 +48,6 @@ public class OcupacaoControle implements Serializable{
     
     private Reserva reserva;
     private Sala sala;
-    private UsuarioLogado usuarioLogado;
     
     private List<Reserva> reservas;
     private List<Sala> salasParaPesquisa;
@@ -74,6 +73,7 @@ public class OcupacaoControle implements Serializable{
         iniciaTimeline();
     }
     
+    //métodos da pesquisa inicial
     public void iniciaTimeline(){
         timeline = new TimelineModel();
         //este é a data inicial e final vista na timeline na primeira vez, depois o usuario pode mudar
@@ -107,6 +107,42 @@ public class OcupacaoControle implements Serializable{
         }
         session = HibernateUtil.abreSessao();
         reservaDao = new ReservaDaoImpl();
+        session.close();
+    }
+    
+    //métodos para o salvaento de uma reserva
+    public void iniciaSalvamento(){
+        reserva = new Reserva();
+        salasParaPesquisa = new ArrayList<>();
+        reserva.setDiasDaSemana(new ArrayList<>());
+        if(session == null || !session.isOpen()){
+            session = HibernateUtil.abreSessao();
+        }
+        reserva.setUsuario(new UsuarioLogado().usuarioLogadoSpring(session));
+    }
+    
+    public void pesquisaSalaParaSalvar(){
+        if(reserva.getInicio() == null || reserva.getFim() == null || reserva.getDiasDaSemana().isEmpty() || reserva.getPeriodo() == null || reserva.getPeriodo().equals("")){
+            salasParaPesquisa = new ArrayList<>();
+            return;
+        }
+        System.out.println("Pesq");
+        if(session == null || !session.isOpen()){
+            session = HibernateUtil.abreSessao();
+        }
+        SalaDao salaDao = new SalaDaoImpl();
+        salasParaPesquisa = salaDao.pesquisaSalaSemReserva(reserva, session);
+    }
+    
+    public void salvar(){
+        if(reserva.getSala() != null){
+            reservaDao = new ReservaDaoImpl();
+            if(session == null || !session.isOpen()){
+                session = HibernateUtil.abreSessao();
+            }
+            reservaDao.salvarOuAlterar(reserva, session);
+            session.close();
+        }
     }
     
     //Getters e Setters

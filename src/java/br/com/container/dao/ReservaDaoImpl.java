@@ -64,7 +64,7 @@ public class ReservaDaoImpl extends BaseDaoImpl<Reserva, Long> implements Reserv
         for (Sala sala : salas) {
             ids.add(sala.getId());
         }
-        Query consulta = session.createQuery("from Reserva r where r.sala.id in (:idSala)");
+        Query consulta = session.createQuery("select r from Reserva r join r.diasDaSemana where r.sala.id in (:idSala)");
         consulta.setParameterList("idSala", ids);
         return consulta.list();
     }

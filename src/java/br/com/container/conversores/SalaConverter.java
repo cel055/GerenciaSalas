@@ -27,7 +27,9 @@ public class SalaConverter implements Converter{
         if(value != null && !value.trim().equals("")){
             Session session = HibernateUtil.abreSessao();
             SalaDao dao = new SalaDaoImpl();
-            return dao.pesquisaEntidadeId(Long.parseLong(value), session);
+            Sala sala = dao.pesquisaEntidadeId(Long.parseLong(value), session);
+            session.close();
+            return sala;
         }
         return null;
     }

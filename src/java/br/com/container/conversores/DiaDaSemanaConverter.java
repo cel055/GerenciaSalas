@@ -28,6 +28,7 @@ public class DiaDaSemanaConverter implements Converter{
             Session session = HibernateUtil.abreSessao();
             DiaDaSemanaDao dao = new DiaDaSemanaDaoImpl();
             DiaDaSemana diaDaSemana = dao.pesquisaEntidadeId(Long.parseLong(value), session);
+            session.close();
             return diaDaSemana;
         }
         return null;
