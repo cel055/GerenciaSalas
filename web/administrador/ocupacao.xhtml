@@ -20,18 +20,18 @@
                     </p:selectCheckboxMenu>
                 </p:toolbarGroup>
                 <p:separator></p:separator>
-                <p:toolbarGroup style="margin-right: 5px">
+<!--                <p:toolbarGroup style="margin-right: 5px">
                     <p:outputLabel for="dataInicioPesq" value="Data Inicio:"/>
-                    <p:calendar id="dataInicioPesq" value="#{ocupacaoControle.dataInicioPesquisa}" locale="pt" navigator="true" pattern="dd-MM-yyyy"/>
+                    <p:calendar id="dataInicioPesq" value="# {ocupacaoControle.dataInicioPesquisa}" locale="pt" navigator="true" pattern="dd-MM-yyyy"/>
                 </p:toolbarGroup>
                 <p:separator></p:separator>
                 <p:toolbarGroup style="margin-right: 5px">
                     <p:outputLabel for="dataFimPesq" value="Data Final:"/>
-                    <p:calendar id="dataFimPesq" value="#{ocupacaoControle.dataFimPesquisa}" locale="pt" navigator="true" pattern="dd-MM-yyyy"/>
-                </p:toolbarGroup>
+                    <p:calendar id="dataFimPesq" value="# {ocupacaoControle.dataFimPesquisa}" locale="pt" navigator="true" pattern="dd-MM-yyyy"/>
+                </p:toolbarGroup>-->
                 <p:separator></p:separator>
                 <p:toolbarGroup style="margin-right: 5px">
-                    <p:commandButton value="Pesquisar" actionListener="#{ocupacaoControle.pesquisa()}" update="timelineTodasSalas" />
+                    <p:commandButton value="Pesquisar" actionListener="#{ocupacaoControle.pesquisa()}" update="@form,timelineTodasSalas" />
                 </p:toolbarGroup>
                 <p:separator></p:separator>
                 <p:toolbarGroup>
@@ -42,8 +42,8 @@
             <p:timeline id="timelineTodasSalas" value="#{ocupacaoControle.timeline}" editable="false" 
                         start="#{ocupacaoControle.inicioTimeline}" end="#{ocupacaoControle.fimTimeline}" 
                         zoomMin="#{ocupacaoControle.zoomMin}" zoomMax="#{ocupacaoControle.zoomMax}" 
-                        eventMargin="10" eventMarginAxis="0" showNavigation="true" showButtonNew="false" 
-                        axisOnTop="true"/>
+                        eventMargin="0" eventMarginAxis="10" showNavigation="true" showButtonNew="false" 
+                        axisOnTop="true" locale="pt" animate="false" animateZoom="false" groupMinHeight="25"/>
         </h:form>
 
         <h:form id="form_salvar">
@@ -84,11 +84,11 @@
                                          label="Salas" filter="false" style="width: 250px" 
                                          converter="conversorSala" disabled="#{ocupacaoControle.salasParaPesquisa.isEmpty()}">
                             <f:selectItems value="#{ocupacaoControle.salasParaPesquisa}" var="salaPesquisa" itemLabel="#{salaPesquisa.nome}" itemValue="#{salaPesquisa}"/>
-                            <p:ajax event="change" process="@this,listaDeClassesDisponiveis"/>
+                            <p:ajax event="select" process="@this,listaDeClassesDisponiveis"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
                     <p:separator />
-                    <p:commandButton value="Salvar" actionListener="#{ocupacaoControle.salvar()}" oncomplete="PF('caixaDialogo').hide();" />
+                    <p:commandButton id="btSalvarReserva" value="Salvar" actionListener="#{ocupacaoControle.salvar()}" oncomplete="PF('caixaDialogo').hide();"/>
                 </p:outputPanel>
             </p:dialog>
         </h:form>

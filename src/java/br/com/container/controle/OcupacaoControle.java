@@ -34,7 +34,7 @@ import org.primefaces.model.timeline.TimelineModel;
  */
 @ManagedBean
 @ViewScoped
-public class OcupacaoControle implements Serializable{
+public class OcupacaoControle implements Serializable {
 
     private TimelineModel timeline;
     private TimelineEvent timelineEvent;
@@ -42,23 +42,23 @@ public class OcupacaoControle implements Serializable{
     private Date fimTimeline;
     private long zoomMax;
     private long zoomMin;
-    
+
     private Session session;
     private ReservaDao reservaDao;
-    
+
     private Reserva reserva;
     private Sala sala;
-    
+
     private List<Reserva> reservas;
     private List<Sala> salasParaPesquisa;
     private List<Sala> salasSelecionadas;
     private List<DiaDaSemana> diasDaSemana;
-    
+
     private Date dataInicioPesquisa;
     private Date dataFimPesquisa;
-    
+
     @PostConstruct
-    public void inicializar(){
+    public void inicializar() {
         //Carrega obj's iniciaias do banco de dados
         session = HibernateUtil.abreSessao();
         DiaDaSemanaDao semanaDao = new DiaDaSemanaDaoImpl();
@@ -68,93 +68,172 @@ public class OcupacaoControle implements Serializable{
         reservaDao = new ReservaDaoImpl();
 //        reservas = reservaDao.listaTodos(session);
         session.close();
-        
+
         //inicia a timeline
         iniciaTimeline();
     }
-    
+
     //métodos da pesquisa inicial
-    public void iniciaTimeline(){
+    public void iniciaTimeline() {
         timeline = new TimelineModel();
         //este é a data inicial e final vista na timeline na primeira vez, depois o usuario pode mudar
         Calendar calendario = new GregorianCalendar();
-        calendario.add(Calendar.DAY_OF_YEAR, -5); 
+        calendario.add(Calendar.DAY_OF_YEAR, -5);
         inicioTimeline = calendario.getTime();
         calendario.add(Calendar.DAY_OF_YEAR, 30);
         fimTimeline = calendario.getTime();
         //atribui o zoom minimo para a timeline, 1 mes
-        zoomMin = 1000l * 60 * 60 * 24 * 30;
+        zoomMin = 1000l * 60 * 60 * 24 * 15;
         //atribui o zoom maximo para a timeline, 4 anos, cursos de faculdade
         zoomMax = 1000l * 60 * 60 * 24 * 30 * 12 * 4;
-        //aqui coloca as salasParaPesquisa e suas reservas
-        montaTimeLine();
     }
-    
-    public void montaTimeLine(){
-        if(salasSelecionadas == null){
-            salasSelecionadas = new ArrayList<>();
-        }
-        for (Sala s : salasSelecionadas) {
-//            timelineEvent = new TimelineEvent(null, null, null, false, s.getNome(), null);
-//            timeline.add(timelineEvent);
-        }
-    }
-    
-    public void pesquisa(){
-        if(salasSelecionadas.isEmpty()){
+
+    public void pesquisa() {
+        if (salasSelecionadas.isEmpty()) {
             Mensagem.mensagemError("Selecione pelo menos uma sala");
             return;
         }
+        iniciaTimeline();
+        montaTimeLine();
+    }
+
+    private void montaTimeLine() {
         session = HibernateUtil.abreSessao();
         reservaDao = new ReservaDaoImpl();
+        for (Sala salaSelecionada : salasSelecionadas) {
+            montaLinhaTimeline(reservaDao.pesquisarReservaPorSala(salaSelecionada, session));
+        }
         session.close();
     }
-    
+
+    private void montaLinhaTimeline(List<Reserva> rs) {
+        if(rs.isEmpty()){
+            return;
+        }
+        String nomeSala = rs.get(0).getSala().getNome();
+        String classeCss = "";
+
+        Date dataInicial = rs.get(0).getInicio();
+        Date dataAtual = dataInicial;
+        Date dataFinal = rs.get(rs.size() - 1).getFim();
+        Date fimDoDia = new Date();
+
+        boolean manha = false;
+        boolean tarde = false;
+        boolean noite = false;
+
+        Calendar calendarAtual = new GregorianCalendar();
+
+        do {
+            calendarAtual.setTime(dataAtual);
+            for (Reserva r : rs) {
+                if(r.getFim().compareTo(dataFinal)>0){
+                    dataFinal.setTime(r.getFim().getTime());
+                }
+                if (r.getFim().compareTo(dataAtual) < 0) {
+                    rs.remove(r);
+                    continue;
+                }
+
+                if (r.getInicio().compareTo(dataAtual) <= 0) {
+                    for (DiaDaSemana diaDaSemana : r.getDiasDaSemana()) {
+                        if (diaDaSemana.getNumeroDoDia() == calendarAtual.get(Calendar.DAY_OF_WEEK)) {
+                            switch (r.getPeriodo()) {
+                                case Reserva.MANHA:
+                                    manha = true;
+                                    break;
+                                case Reserva.TARDE:
+                                    tarde = true;
+                                    break;
+                                case Reserva.NOITE:
+                                    noite = true;
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            calendarAtual.add(Calendar.DATE, 1);
+            fimDoDia.setTime(calendarAtual.getTimeInMillis() - 60000);
+            if (manha || tarde || noite) {
+                if (manha && tarde && noite) {
+                    classeCss = "manhaTardeNoite";
+                } else if (manha && tarde) {
+                    classeCss = "manhaTarde";
+                } else if (manha && noite) {
+                    classeCss = "manhaNoite";
+                } else if (tarde && noite) {
+                    classeCss = "tardeNoite";
+                } else if (manha) {
+                    classeCss = "manha";
+                } else if (tarde) {
+                    classeCss = "tarde";
+                } else {
+                    classeCss = "noite";
+                }
+                timelineEvent = new TimelineEvent(null, dataAtual, calendarAtual.getTime(), false, nomeSala, classeCss);
+                timeline.add(timelineEvent);
+            }
+            manha = false;
+            tarde = false;
+            noite = false;
+            dataAtual = calendarAtual.getTime();
+        } while (dataAtual.compareTo(dataFinal) <= 0);
+    }
+
     //métodos para o salvaento de uma reserva
-    public void iniciaSalvamento(){
+    public void iniciaSalvamento() {
         reserva = new Reserva();
         salasParaPesquisa = new ArrayList<>();
         reserva.setDiasDaSemana(new ArrayList<>());
-        if(session == null || !session.isOpen()){
+        if (session == null || !session.isOpen()) {
             session = HibernateUtil.abreSessao();
         }
         reserva.setUsuario(new UsuarioLogado().usuarioLogadoSpring(session));
     }
-    
-    public void pesquisaSalaParaSalvar(){
-        if(reserva.getInicio() == null || reserva.getFim() == null || reserva.getDiasDaSemana().isEmpty() || reserva.getPeriodo() == null || reserva.getPeriodo().equals("")){
+
+    public void pesquisaSalaParaSalvar() {
+        if (reserva.getInicio() == null || reserva.getFim() == null || reserva.getDiasDaSemana().isEmpty() || reserva.getPeriodo() == null || reserva.getPeriodo().equals("")) {
             salasParaPesquisa = new ArrayList<>();
             return;
         }
         System.out.println("Pesq");
-        if(session == null || !session.isOpen()){
+        if (session == null || !session.isOpen()) {
             session = HibernateUtil.abreSessao();
         }
         SalaDao salaDao = new SalaDaoImpl();
         salasParaPesquisa = salaDao.pesquisaSalaSemReserva(reserva, session);
     }
-    
-    public void salvar(){
-        if(reserva.getSala() != null){
-            reservaDao = new ReservaDaoImpl();
-            if(session == null || !session.isOpen()){
-                session = HibernateUtil.abreSessao();
-            }
-            reservaDao.salvarOuAlterar(reserva, session);
-            session.close();
+
+    public void salvar() {
+        if (reserva.getSala() == null) {
+            Mensagem.mensagemError("Selecione uma sala");
+            return;
         }
+        if(reserva.getInicio().compareTo(reserva.getFim())>0){
+            Mensagem.mensagemError("Data do final da reserva foi antes do início");
+            return;
+        }
+        reservaDao = new ReservaDaoImpl();
+        if (session == null || !session.isOpen()) {
+            session = HibernateUtil.abreSessao();
+        }
+        reservaDao.salvarOuAlterar(reserva, session);
+        session.close();
+        inicializar();
     }
-    
+
     //Getters e Setters
     public TimelineModel getTimeline() {
         return timeline;
     }
-    
+
     public Date getInicioTimeline() {
         return inicioTimeline;
     }
 
-    public Date getFimTimeline() {    
+    public Date getFimTimeline() {
         return fimTimeline;
     }
 
@@ -195,7 +274,7 @@ public class OcupacaoControle implements Serializable{
     }
 
     public List<Sala> getSalasSelecionadas() {
-        if(salasSelecionadas == null){
+        if (salasSelecionadas == null) {
             salasSelecionadas = new ArrayList<>();
         }
         return salasSelecionadas;
@@ -224,5 +303,5 @@ public class OcupacaoControle implements Serializable{
     public void setDataFimPesquisa(Date dataFimPesquisa) {
         this.dataFimPesquisa = dataFimPesquisa;
     }
-    
+
 }

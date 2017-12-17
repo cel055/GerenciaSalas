@@ -46,14 +46,14 @@ public class ReservaDaoImpl extends BaseDaoImpl<Reserva, Long> implements Reserv
 
     @Override
     public List<Reserva> pesquisarReservaPorSala(Sala sala, Session session) throws HibernateException {
-        Query consulta = session.createQuery("from Reserva r where r.sala.id = :idSala");
+        Query consulta = session.createQuery("from Reserva r where r.sala.id = :idSala group by r.id order by r.inicio");
         consulta.setParameter("idSala", sala.getId());
         return consulta.list();
     }
 
     @Override
     public List<Reserva> pesquisarReservaPorSala(Sala sala, Date inicio, Date fim, Session session) throws HibernateException {
-        Query consulta = session.createQuery("from Reserva r where r.sala.id = :idSala");
+        Query consulta = session.createQuery("from Reserva r where r.sala.id = :idSala  group by r.id");
         consulta.setParameter("idSala", sala.getId());
         return consulta.list();
     }
@@ -64,7 +64,7 @@ public class ReservaDaoImpl extends BaseDaoImpl<Reserva, Long> implements Reserv
         for (Sala sala : salas) {
             ids.add(sala.getId());
         }
-        Query consulta = session.createQuery("select r from Reserva r join r.diasDaSemana where r.sala.id in (:idSala)");
+        Query consulta = session.createQuery("select r from Reserva r join r.diasDaSemana where r.sala.id in (:idSala) group by r.id");
         consulta.setParameterList("idSala", ids);
         return consulta.list();
     }
