@@ -130,12 +130,7 @@ public class OcupacaoControle implements Serializable {
                 if(r.getFim().compareTo(dataFinal)>0){
                     dataFinal.setTime(r.getFim().getTime());
                 }
-                if (r.getFim().compareTo(dataAtual) < 0) {
-                    rs.remove(r);
-                    continue;
-                }
-
-                if (r.getInicio().compareTo(dataAtual) <= 0) {
+                if (r.getInicio().compareTo(dataAtual) <= 0 && r.getFim().compareTo(dataAtual) >= 0) {
                     for (DiaDaSemana diaDaSemana : r.getDiasDaSemana()) {
                         if (diaDaSemana.getNumeroDoDia() == calendarAtual.get(Calendar.DAY_OF_WEEK)) {
                             switch (r.getPeriodo()) {
