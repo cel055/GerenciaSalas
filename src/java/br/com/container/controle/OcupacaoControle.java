@@ -228,6 +228,7 @@ public class OcupacaoControle implements Serializable {
         if (periodos.size() == 1) {
             reserva.setPeriodo(periodos.get(0));
             reservaDao.salvarOuAlterar(reserva, session);
+            Mensagem.salvar(reserva.getInformacao());
         } else {
             Reserva r;
             for (String periodo : periodos) {

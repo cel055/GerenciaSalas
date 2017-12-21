@@ -100,11 +100,12 @@
                              styleClass="painel_grid_noborder" >
 
 
-                    <p:outputLabel for="nome" value="Usuário :" />
+                    <p:outputLabel for="nome" value="Nome :" />
                     <p:inputText id="nome" value="#{usuarioC.usuario.nome}" required="true" style="width: 100%; max-width: 600px;"/>
 
                     <p:outputLabel for="login" value="E-mail :" />
-                    <p:inputText id="login" value="#{usuarioC.usuario.login}" required="true" style="width: 100%; max-width: 600px;"/>
+                    <p:inputText id="login" value="#{usuarioC.usuario.login}" type="email"
+                                 required="true" style="width: 100%; max-width: 600px;"/>
 
                     <h:outputLabel for="perfil" value="Perfil " />
                     <p:selectOneMenu styleClass="form-control" id="perfil" value="#{usuarioC.perfil.id}" style="width: 90%; max-width: 580px;" required="true" 

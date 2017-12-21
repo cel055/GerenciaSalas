@@ -82,7 +82,11 @@ public class EventoControle implements Serializable {
         evento = new Reserva();
         evento.setDiasDaSemana(new ArrayList<>());
         try {
-            eventos = eventoDao.pesquisarReservaPorSala("001", session);
+            if (sala == null) {
+                eventos = eventoDao.pesquisarReservaPorSala("001", session);
+            } else {
+                eventos = eventoDao.pesquisarReservaPorSala(sala.getNome(), session);
+            }
             session.close();
         } catch (Exception e) {
             System.out.println("Erro no controle   " + e.getMessage());
@@ -345,5 +349,5 @@ public class EventoControle implements Serializable {
     public List<DiaDaSemana> getDiasDaSemana() {
         return diasDaSemana;
     }
-    
+
 }

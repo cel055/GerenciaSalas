@@ -26,7 +26,7 @@ public class Mensagem {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(
                                 FacesMessage.SEVERITY_INFO,
-                                msg + " Salvo com Sucesso.", "")
+                                msg + " salvo com Sucesso.", "")
                 );
     }
     
