@@ -22,4 +22,5 @@ public interface SalaDao extends BaseDao<Sala, Long>{
     List<Sala> pesquisaSalaComReserva(Date inicio, Date fim, List<DiaDaSemana> dias, String periodo, Session session) throws HibernateException ;
     List<Sala> pesquisaSalaSemReserva(Reserva reserva, Session session) throws HibernateException ;
     List<Sala> pesquisaSalaSemReserva(Date inicio, Date fim, List<DiaDaSemana> dias, String periodo, Session session) throws HibernateException ;
+    List<Sala> pesquisaSalaSemReserva(List<Reserva> reservas, Session session) throws HibernateException ;
 }

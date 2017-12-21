@@ -49,10 +49,10 @@ public class OcupacaoControle implements Serializable {
     private Reserva reserva;
     private Sala sala;
 
-    private List<Reserva> reservas;
     private List<Sala> salasParaPesquisa;
     private List<Sala> salasSelecionadas;
     private List<DiaDaSemana> diasDaSemana;
+    private List<String> periodos;
 
     private Date dataInicioPesquisa;
     private Date dataFimPesquisa;
@@ -107,7 +107,7 @@ public class OcupacaoControle implements Serializable {
     }
 
     private void montaLinhaTimeline(List<Reserva> rs) {
-        if(rs.isEmpty()){
+        if (rs.isEmpty()) {
             return;
         }
         String nomeSala = rs.get(0).getSala().getNome();
@@ -127,7 +127,7 @@ public class OcupacaoControle implements Serializable {
         do {
             calendarAtual.setTime(dataAtual);
             for (Reserva r : rs) {
-                if(r.getFim().compareTo(dataFinal)>0){
+                if (r.getFim().compareTo(dataFinal) > 0) {
                     dataFinal.setTime(r.getFim().getTime());
                 }
                 if (r.getInicio().compareTo(dataAtual) <= 0 && r.getFim().compareTo(dataAtual) >= 0) {
@@ -148,7 +148,7 @@ public class OcupacaoControle implements Serializable {
                     }
                 }
             }
-            
+
             calendarAtual.add(Calendar.DATE, 1);
             fimDoDia.setTime(calendarAtual.getTimeInMillis() - 60000);
             if (manha || tarde || noite) {
@@ -189,7 +189,7 @@ public class OcupacaoControle implements Serializable {
     }
 
     public void pesquisaSalaParaSalvar() {
-        if (reserva.getInicio() == null || reserva.getFim() == null || reserva.getDiasDaSemana().isEmpty() || reserva.getPeriodo() == null || reserva.getPeriodo().equals("")) {
+        if (reserva.getInicio() == null || reserva.getFim() == null || reserva.getDiasDaSemana().isEmpty() || periodos.isEmpty()) {
             salasParaPesquisa = new ArrayList<>();
             return;
         }
@@ -198,7 +198,18 @@ public class OcupacaoControle implements Serializable {
             session = HibernateUtil.abreSessao();
         }
         SalaDao salaDao = new SalaDaoImpl();
-        salasParaPesquisa = salaDao.pesquisaSalaSemReserva(reserva, session);
+        if (periodos.size() == 1) {
+            reserva.setPeriodo(periodos.get(0));
+            salasParaPesquisa = salaDao.pesquisaSalaSemReserva(reserva, session);
+        } else {
+            List<Reserva> reservas = new ArrayList<>();
+            Reserva r;
+            for (String periodo : periodos) {
+                r = new Reserva(null, reserva.getInformacao(), reserva.getInicio(), reserva.getFim(), reserva.getUsuario(), null, periodo, reserva.getDiasDaSemana());
+                reservas.add(r);
+            }
+            salasParaPesquisa = salaDao.pesquisaSalaSemReserva(reservas, session);
+        }
     }
 
     public void salvar() {
@@ -206,7 +217,7 @@ public class OcupacaoControle implements Serializable {
             Mensagem.mensagemError("Selecione uma sala");
             return;
         }
-        if(reserva.getInicio().compareTo(reserva.getFim())>0){
+        if (reserva.getInicio().compareTo(reserva.getFim()) > 0) {
             Mensagem.mensagemError("Data do final da reserva foi antes do início");
             return;
         }
@@ -214,7 +225,16 @@ public class OcupacaoControle implements Serializable {
         if (session == null || !session.isOpen()) {
             session = HibernateUtil.abreSessao();
         }
-        reservaDao.salvarOuAlterar(reserva, session);
+        if (periodos.size() == 1) {
+            reserva.setPeriodo(periodos.get(0));
+            reservaDao.salvarOuAlterar(reserva, session);
+        } else {
+            Reserva r;
+            for (String periodo : periodos) {
+                r = new Reserva(null, reserva.getInformacao(), reserva.getInicio(), reserva.getFim(), reserva.getUsuario(), reserva.getSala(), periodo, reserva.getDiasDaSemana());
+                reservaDao.salvarOuAlterar(r, session);
+            }
+        }
         session.close();
         inicializar();
     }
@@ -256,14 +276,6 @@ public class OcupacaoControle implements Serializable {
         this.sala = sala;
     }
 
-    public List<Reserva> getReservas() {
-        return reservas;
-    }
-
-    public void setReservas(List<Reserva> reservas) {
-        this.reservas = reservas;
-    }
-
     public List<Sala> getSalasParaPesquisa() {
         return salasParaPesquisa;
     }
@@ -281,6 +293,17 @@ public class OcupacaoControle implements Serializable {
 
     public List<DiaDaSemana> getDiasDaSemana() {
         return diasDaSemana;
+    }
+
+    public List<String> getPeriodos() {
+        if (periodos == null) {
+            periodos = new ArrayList<>();
+        }
+        return periodos;
+    }
+
+    public void setPeriodos(List<String> periodos) {
+        this.periodos = periodos;
     }
 
     public Date getDataInicioPesquisa() {

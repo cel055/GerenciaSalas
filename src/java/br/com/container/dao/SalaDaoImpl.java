@@ -81,4 +81,18 @@ public class SalaDaoImpl extends BaseDaoImpl<Sala, Long> implements SalaDao {
         return consulta.list();
     }
 
+    @Override
+    public List<Sala> pesquisaSalaSemReserva(List<Reserva> reservas, Session session) throws HibernateException {
+        List idsSalasOcupadas = new ArrayList();
+        for (Reserva reserva : reservas) {
+            idsSalasOcupadas.addAll(pesquisaSalaComReserva(reserva.getInicio(), reserva.getFim(), reserva.getDiasDaSemana(), reserva.getPeriodo(), session));
+        }
+        if (idsSalasOcupadas.isEmpty()) {
+            return listaTodos(session);
+        }
+        Query consulta = session.createQuery("from Sala s where s.id not in (:ids)");
+        consulta.setParameterList("ids", idsSalasOcupadas);
+        return consulta.list();
+    }
+
 }

@@ -63,6 +63,20 @@ public class Reserva implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "dia_da_semana_id")})
     private List<DiaDaSemana> diasDaSemana;
 
+    public Reserva() {
+    }
+
+    public Reserva(Long id, String informacao, Date inicio, Date fim, Usuario usuario, Sala sala, String periodo, List<DiaDaSemana> diasDaSemana) {
+        this.id = id;
+        this.informacao = informacao;
+        this.inicio = inicio;
+        this.fim = fim;
+        this.usuario = usuario;
+        this.sala = sala;
+        this.periodo = periodo;
+        this.diasDaSemana = diasDaSemana;
+    }
+
     public Long getId() {
         return id;
     }
