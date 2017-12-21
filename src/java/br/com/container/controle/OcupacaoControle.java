@@ -25,6 +25,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import org.hibernate.Session;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.timeline.TimelineSelectEvent;
 import org.primefaces.model.timeline.TimelineEvent;
 import org.primefaces.model.timeline.TimelineModel;
 
@@ -56,6 +58,8 @@ public class OcupacaoControle implements Serializable {
 
     private Date dataInicioPesquisa;
     private Date dataFimPesquisa;
+    
+    private String idsReservaParaPesq;
 
     @PostConstruct
     public void inicializar() {
@@ -98,12 +102,15 @@ public class OcupacaoControle implements Serializable {
     }
 
     private void montaTimeLine() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("removeEventoTimeline()");
         session = HibernateUtil.abreSessao();
         reservaDao = new ReservaDaoImpl();
         for (Sala salaSelecionada : salasSelecionadas) {
             montaLinhaTimeline(reservaDao.pesquisarReservaPorSala(salaSelecionada, session));
         }
         session.close();
+        context.execute("addEventoTimeline()");
     }
 
     private void montaLinhaTimeline(List<Reserva> rs) {
@@ -112,6 +119,7 @@ public class OcupacaoControle implements Serializable {
         }
         String nomeSala = rs.get(0).getSala().getNome();
         String classeCss = "";
+        String idsReserva;
 
         Date dataInicial = rs.get(0).getInicio();
         Date dataAtual = dataInicial;
@@ -125,6 +133,7 @@ public class OcupacaoControle implements Serializable {
         Calendar calendarAtual = new GregorianCalendar();
 
         do {
+            idsReserva = "";
             calendarAtual.setTime(dataAtual);
             for (Reserva r : rs) {
                 if (r.getFim().compareTo(dataFinal) > 0) {
@@ -133,6 +142,10 @@ public class OcupacaoControle implements Serializable {
                 if (r.getInicio().compareTo(dataAtual) <= 0 && r.getFim().compareTo(dataAtual) >= 0) {
                     for (DiaDaSemana diaDaSemana : r.getDiasDaSemana()) {
                         if (diaDaSemana.getNumeroDoDia() == calendarAtual.get(Calendar.DAY_OF_WEEK)) {
+                            if(idsReserva.equals("")){
+                                idsReserva += ",";
+                            }
+                            idsReserva += r.getId().toString() + ",";
                             switch (r.getPeriodo()) {
                                 case Reserva.MANHA:
                                     manha = true;
@@ -167,7 +180,7 @@ public class OcupacaoControle implements Serializable {
                 } else {
                     classeCss = "noite";
                 }
-                timelineEvent = new TimelineEvent(null, dataAtual, calendarAtual.getTime(), false, nomeSala, classeCss);
+                timelineEvent = new TimelineEvent(null, dataAtual, calendarAtual.getTime(), false, nomeSala, classeCss + " " + idsReserva);
                 timeline.add(timelineEvent);
             }
             manha = false;
@@ -238,6 +251,20 @@ public class OcupacaoControle implements Serializable {
         }
         session.close();
         inicializar();
+    }
+    
+    //Metodo de selecionar um elemento na timeline
+    public void reservaSelecionada(TimelineSelectEvent selectEvent){
+        TimelineEvent eventoSelecionado = selectEvent.getTimelineEvent();
+        System.out.println("Dados evento -> /n " + eventoSelecionado.getGroup()
+                + "/n" + eventoSelecionado.getStyleClass() + "/n" 
+                + eventoSelecionado.getStartDate().toString() + "/n" 
+                + eventoSelecionado.getEndDate().toString()
+        );
+    }
+    
+    public void pesqReservaSelecionada(){
+        System.out.println("Ids selecionados = " + idsReservaParaPesq);
     }
 
     //Getters e Setters
@@ -321,6 +348,14 @@ public class OcupacaoControle implements Serializable {
 
     public void setDataFimPesquisa(Date dataFimPesquisa) {
         this.dataFimPesquisa = dataFimPesquisa;
+    }
+
+    public String getIdsReservaParaPesq() {
+        return idsReservaParaPesq;
+    }
+
+    public void setIdsReservaParaPesq(String idsReservaParaPesq) {
+        this.idsReservaParaPesq = idsReservaParaPesq;
     }
 
 }

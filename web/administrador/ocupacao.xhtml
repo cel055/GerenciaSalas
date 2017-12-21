@@ -31,19 +31,25 @@
                 </p:toolbarGroup>-->
                 <p:separator></p:separator>
                 <p:toolbarGroup style="margin-right: 5px">
-                    <p:commandButton value="Pesquisar" actionListener="#{ocupacaoControle.pesquisa()}" update="@form,timelineTodasSalas" />
+                    <p:commandButton value="Pesquisar" actionListener="#{ocupacaoControle.pesquisa()}" update=":form_timeline" />
                 </p:toolbarGroup>
                 <p:separator></p:separator>
                 <p:toolbarGroup>
                     <p:commandButton value="Novo" actionListener="#{ocupacaoControle.iniciaSalvamento()}" update="form_salvar" oncomplete="PF('caixaDialogo').show();"/>
                 </p:toolbarGroup>
             </p:toolbar>
-
-            <p:timeline id="timelineTodasSalas" value="#{ocupacaoControle.timeline}" editable="false" 
+            <p:inputText id="idsReserva" value="#{ocupacaoControle.idsReservaParaPesq}"/>
+            <p:commandButton type="button" onclick="alert('clicou')" id="enviaIdsParaPesquisa" actionListener="#{ocupacaoControle.pesqReservaSelecionada}"/>
+            <p:remoteCommand name="enviaIdsParaPesq" actionListener="#{ocupacaoControle.pesqReservaSelecionada}" process="form_pesquisa:idsReserva"/>
+        </h:form>
+        <h:form id="form_timeline">
+            <p:timeline id="timelineTodasSalas" value="#{ocupacaoControle.timeline}" 
                         start="#{ocupacaoControle.inicioTimeline}" end="#{ocupacaoControle.fimTimeline}" 
                         zoomMin="#{ocupacaoControle.zoomMin}" zoomMax="#{ocupacaoControle.zoomMax}" 
                         eventMargin="0" eventMarginAxis="10" showNavigation="true" showButtonNew="false" 
-                        axisOnTop="true" locale="pt" animate="false" animateZoom="false" groupMinHeight="25"/>
+                        axisOnTop="true" locale="pt" animate="false" animateZoom="false" groupMinHeight="30">
+                <!--<p:ajax event="select"  listener="# {ocupacaoControle.reservaSelecionada}" process="form_timeline"/>-->
+            </p:timeline>
         </h:form>
 
         <h:form id="form_salvar">
@@ -92,6 +98,7 @@
                 </p:outputPanel>
             </p:dialog>
         </h:form>
+        <h:outputScript target="body" library="js" name="eventosTimeline.js"/>
     </ui:define>
 
 </ui:composition>
