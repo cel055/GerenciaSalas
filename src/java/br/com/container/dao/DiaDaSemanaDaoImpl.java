@@ -8,6 +8,7 @@ package br.com.container.dao;
 import br.com.container.modelo.DiaDaSemana;
 import java.util.List;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
@@ -29,6 +30,13 @@ public class DiaDaSemanaDaoImpl extends BaseDaoImpl<DiaDaSemana, Long> implement
     @Override
     public List<DiaDaSemana> pesquisaPorNome(String nome, Session session) throws HibernateException {
         throw new UnsupportedOperationException("Método pesquisaPorNome não implementado para o DiaDaSemana");
+    }
+
+    @Override
+    public List<DiaDaSemana> pesquisaPelaReserserva(Long reserva, Session session) throws HibernateException {
+        Query consulta = session.createQuery("select r.diasDaSemana from Reserva r where r.id = :id");
+        consulta.setParameter("id", reserva);
+        return consulta.list();
     }
     
 }

@@ -6,11 +6,14 @@
 package br.com.container.dao;
 
 import br.com.container.modelo.DiaDaSemana;
+import java.util.List;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 /**
  *
  * @author maodeobra
  */
 public interface DiaDaSemanaDao extends BaseDao<DiaDaSemana, Long>{
-    
+    List<DiaDaSemana> pesquisaPelaReserserva(Long reserva, Session session) throws HibernateException;
 }

@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -58,8 +59,9 @@ public class OcupacaoControle implements Serializable {
 
     private Date dataInicioPesquisa;
     private Date dataFimPesquisa;
-    
+
     private String idsReservaParaPesq;
+    private List<Reserva> reservasSelecionadas;
 
     @PostConstruct
     public void inicializar() {
@@ -142,7 +144,7 @@ public class OcupacaoControle implements Serializable {
                 if (r.getInicio().compareTo(dataAtual) <= 0 && r.getFim().compareTo(dataAtual) >= 0) {
                     for (DiaDaSemana diaDaSemana : r.getDiasDaSemana()) {
                         if (diaDaSemana.getNumeroDoDia() == calendarAtual.get(Calendar.DAY_OF_WEEK)) {
-                            if(idsReserva.equals("")){
+                            if (idsReserva.equals("")) {
                                 idsReserva += ",";
                             }
                             idsReserva += r.getId().toString() + ",";
@@ -180,7 +182,7 @@ public class OcupacaoControle implements Serializable {
                 } else {
                     classeCss = "noite";
                 }
-                timelineEvent = new TimelineEvent(null, dataAtual, calendarAtual.getTime(), false, nomeSala, classeCss + " " + idsReserva);
+                timelineEvent = new TimelineEvent(null, dataAtual, calendarAtual.getTime(), false, nomeSala, "reserva " + classeCss + " " + idsReserva);
                 timeline.add(timelineEvent);
             }
             manha = false;
@@ -198,6 +200,7 @@ public class OcupacaoControle implements Serializable {
         if (session == null || !session.isOpen()) {
             session = HibernateUtil.abreSessao();
         }
+        periodos = new ArrayList<>();
         reserva.setUsuario(new UsuarioLogado().usuarioLogadoSpring(session));
     }
 
@@ -250,21 +253,101 @@ public class OcupacaoControle implements Serializable {
             }
         }
         session.close();
-        inicializar();
+        iniciaSalvamento();
+//        inicializar();
     }
-    
+
     //Metodo de selecionar um elemento na timeline
-    public void reservaSelecionada(TimelineSelectEvent selectEvent){
+    public void reservaSelecionada(TimelineSelectEvent selectEvent) {
         TimelineEvent eventoSelecionado = selectEvent.getTimelineEvent();
         System.out.println("Dados evento -> /n " + eventoSelecionado.getGroup()
-                + "/n" + eventoSelecionado.getStyleClass() + "/n" 
-                + eventoSelecionado.getStartDate().toString() + "/n" 
+                + "/n" + eventoSelecionado.getStyleClass() + "/n"
+                + eventoSelecionado.getStartDate().toString() + "/n"
                 + eventoSelecionado.getEndDate().toString()
         );
     }
+
+    public void pesqReservaSelecionada() {
+        List<Long> idsPesq = listaIdsReservas();
+        reservasSelecionadas = new ArrayList<>();
+        if (session == null || !session.isOpen()) {
+            session = HibernateUtil.abreSessao();
+        }
+        reservaDao = new ReservaDaoImpl();
+        for (Long idReser : idsPesq) {
+            reservasSelecionadas.add(reservaDao.pesquisaEntidadeId(idReser, session));
+        }
+        session.close();
+    }
+
+    private List<Long> listaIdsReservas() {
+        List<Long> idsPesq = new ArrayList<>();
+        int inicio = idsReservaParaPesq.indexOf(",") + 1;
+        int fim = idsReservaParaPesq.indexOf(",", inicio);
+        String id;
+        while (fim > 0) {
+            id = idsReservaParaPesq.substring(inicio, fim);
+            idsPesq.add(Long.parseLong(id));
+            inicio = idsReservaParaPesq.indexOf(",", fim) + 1;
+            fim = idsReservaParaPesq.indexOf(",", inicio);
+        }
+        id = idsReservaParaPesq.substring(inicio);
+        idsPesq.add(Long.parseLong(id));
+        return idsPesq;
+    }
+
+    public String stringfyDiasDaSemana(String idReserva) {
+        String diasDaSemana = "";
+        Long id = Long.parseLong(idReserva);
+
+        DiaDaSemanaDao dao = new DiaDaSemanaDaoImpl();
+        if (session == null || !session.isOpen()) {
+            session = HibernateUtil.abreSessao();
+        }
+        List<DiaDaSemana> dias = dao.pesquisaPelaReserserva(id, session);
+        session.close();
+        
+        for (int i = 0; i < dias.size(); i++) {
+            switch (dias.get(i).getNumeroDoDia()) {
+                case 1:
+                    diasDaSemana += "DOM";
+                    break;
+                case 2:
+                    diasDaSemana += "2ª";
+                    break;
+                case 3:
+                    diasDaSemana += "3ª";
+                    break;
+                case 4:
+                    diasDaSemana += "4ª";
+                    break;
+                case 5:
+                    diasDaSemana += "5ª";
+                    break;
+                case 6:
+                    diasDaSemana += "6ª";
+                    break;
+                case 7:
+                    diasDaSemana += "SAB";
+                    break;
+            }
+            if (i < dias.size() - 1) {
+                diasDaSemana += ", ";
+            }
+        }
+        return diasDaSemana;
+    }
     
-    public void pesqReservaSelecionada(){
-        System.out.println("Ids selecionados = " + idsReservaParaPesq);
+    public void deletarReserva(String idReserva){
+        Long id = Long.parseLong(idReserva);
+
+        reservaDao = new ReservaDaoImpl();
+        if (session == null || !session.isOpen()) {
+            session = HibernateUtil.abreSessao();
+        }
+        Reserva r = reservaDao.pesquisaEntidadeId(id, session);
+        reservaDao.remover(r, session);
+        session.close();
     }
 
     //Getters e Setters
@@ -356,6 +439,17 @@ public class OcupacaoControle implements Serializable {
 
     public void setIdsReservaParaPesq(String idsReservaParaPesq) {
         this.idsReservaParaPesq = idsReservaParaPesq;
+    }
+
+    public List<Reserva> getReservasSelecionadas() {
+        if (reservasSelecionadas == null) {
+            reservasSelecionadas = new ArrayList<>();
+        }
+        return reservasSelecionadas;
+    }
+
+    public void setReservasSelecionadas(List<Reserva> reservasSelecionadas) {
+        this.reservasSelecionadas = reservasSelecionadas;
     }
 
 }

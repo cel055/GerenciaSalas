@@ -10,9 +10,8 @@
     <ui:define name="conteudo">
         <h1 class="jr-titulo1">Ocupações de salas</h1>
 
+        <p:messages closable="true" id="msgParaSalvar" />
         <h:form id="form_pesquisa">
-            <p:messages id="mens" autoUpdate="true" />
-
             <p:toolbar styleClass="toolbar">
                 <p:toolbarGroup style="margin-right: 5px">
                     <p:selectCheckboxMenu id="salasParaPesquisa" value="#{ocupacaoControle.salasSelecionadas}" label="Salas" filter="false" converter="conversorSala" panelStyle="width:250px">
@@ -20,42 +19,79 @@
                     </p:selectCheckboxMenu>
                 </p:toolbarGroup>
                 <p:separator></p:separator>
-<!--                <p:toolbarGroup style="margin-right: 5px">
-                    <p:outputLabel for="dataInicioPesq" value="Data Inicio:"/>
-                    <p:calendar id="dataInicioPesq" value="# {ocupacaoControle.dataInicioPesquisa}" locale="pt" navigator="true" pattern="dd-MM-yyyy"/>
-                </p:toolbarGroup>
+                <!--                <p:toolbarGroup style="margin-right: 5px">
+                                    <p:outputLabel for="dataInicioPesq" value="Data Inicio:"/>
+                                    <p:calendar id="dataInicioPesq" value="# {ocupacaoControle.dataInicioPesquisa}" locale="pt" navigator="true" pattern="dd-MM-yyyy"/>
+                                </p:toolbarGroup>
+                                <p:separator></p:separator>
+                                <p:toolbarGroup style="margin-right: 5px">
+                                    <p:outputLabel for="dataFimPesq" value="Data Final:"/>
+                                    <p:calendar id="dataFimPesq" value="# {ocupacaoControle.dataFimPesquisa}" locale="pt" navigator="true" pattern="dd-MM-yyyy"/>
+                                </p:toolbarGroup>-->
                 <p:separator></p:separator>
                 <p:toolbarGroup style="margin-right: 5px">
-                    <p:outputLabel for="dataFimPesq" value="Data Final:"/>
-                    <p:calendar id="dataFimPesq" value="# {ocupacaoControle.dataFimPesquisa}" locale="pt" navigator="true" pattern="dd-MM-yyyy"/>
-                </p:toolbarGroup>-->
-                <p:separator></p:separator>
-                <p:toolbarGroup style="margin-right: 5px">
-                    <p:commandButton value="Pesquisar" actionListener="#{ocupacaoControle.pesquisa()}" update=":form_timeline" />
+                    <p:commandButton value="Pesquisar" actionListener="#{ocupacaoControle.pesquisa()}" update=":form_timeline, :msgParaSalvar" />
                 </p:toolbarGroup>
                 <p:separator></p:separator>
                 <p:toolbarGroup>
                     <p:commandButton value="Novo" actionListener="#{ocupacaoControle.iniciaSalvamento()}" update="form_salvar" oncomplete="PF('caixaDialogo').show();"/>
                 </p:toolbarGroup>
             </p:toolbar>
-            <p:inputText id="idsReserva" value="#{ocupacaoControle.idsReservaParaPesq}"/>
-            <p:commandButton type="button" onclick="alert('clicou')" id="enviaIdsParaPesquisa" actionListener="#{ocupacaoControle.pesqReservaSelecionada}"/>
-            <p:remoteCommand name="enviaIdsParaPesq" actionListener="#{ocupacaoControle.pesqReservaSelecionada}" process="form_pesquisa:idsReserva"/>
         </h:form>
+
         <h:form id="form_timeline">
             <p:timeline id="timelineTodasSalas" value="#{ocupacaoControle.timeline}" 
                         start="#{ocupacaoControle.inicioTimeline}" end="#{ocupacaoControle.fimTimeline}" 
                         zoomMin="#{ocupacaoControle.zoomMin}" zoomMax="#{ocupacaoControle.zoomMax}" 
                         eventMargin="0" eventMarginAxis="10" showNavigation="true" showButtonNew="false" 
                         axisOnTop="true" locale="pt" animate="false" animateZoom="false" groupMinHeight="30">
-                <!--<p:ajax event="select"  listener="# {ocupacaoControle.reservaSelecionada}" process="form_timeline"/>-->
             </p:timeline>
+            <p:inputText id="idsReserva" value="#{ocupacaoControle.idsReservaParaPesq}" style="display: none">
+                <p:ajax event="change" listener="#{ocupacaoControle.pesqReservaSelecionada}" oncomplete="PF('detalhesReservas').show()" update="dialogDetalhesReservas"/>
+            </p:inputText>
+            <p:dialog id="dialogDetalhesReservas" widgetVar="detalhesReservas" modal="true">
+                <p:dataGrid value="#{ocupacaoControle.reservasSelecionadas}" var="reserva" columns="#{ocupacaoControle.reservasSelecionadas.size()}" layout="grid">
+                    <f:facet name="header">
+                        <h:outputText value="Sala #{ocupacaoControle.reservasSelecionadas.size() == 0 ? '' : ocupacaoControle.reservasSelecionadas.get(0).getSala().getNome()}" />
+                    </f:facet>
+                    <p:panel style="text-align: center">
+                        <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" >
+
+                            <h:outputText value="Inicio:" />
+                            <h:outputText value="#{reserva.inicio}" />
+
+                            <h:outputText value="Fim" />
+                            <h:outputText value="#{reserva.fim}"/>
+
+                            <h:outputText value="Periodo" />
+                            <h:outputText value="#{reserva.periodo}" />
+
+                            <h:outputText value="Dias da Semana" />
+                            <h:outputText value="#{ocupacaoControle.stringfyDiasDaSemana(reserva.id)}" />
+
+                            <h:outputText value="Reserva feita por " />
+                            <h:outputText value="#{reserva.usuario.nome}" />
+
+                            <h:outputText value="Info: " />
+                            <h:outputText value="#{reserva.informacao}" />
+
+                            <h:outputText value="" />
+                            <p:commandButton value="Deletar" icon="far fa-trash-al" type="button">
+                                <p:ajax event="click" listener="#{ocupacaoControle.deletarReserva(reserva.id)}" update="form_timeline" oncomplete="PF('dialogDetalhesReservas').hide()"/>
+                            </p:commandButton>
+                        </p:panelGrid>
+                    </p:panel>
+                </p:dataGrid>
+            </p:dialog>
         </h:form>
 
         <h:form id="form_salvar">
             <p:dialog id="dialogoSalvar" widgetVar="caixaDialogo"  header="Reserva de Sala" resizable="false" modal="true"
                       showEffect="clip">
+                <p:ajax event="close" listener="#{ocupacaoControle.inicializar}"/>
+
                 <p:outputPanel id="eventoDetalhe">
+                    <p:messages closable="true" id="msgParaSalvar" />
                     <p:panelGrid columns="2">  
                         <p:outputLabel  value="Informação" />
                         <p:inputTextarea value="#{ocupacaoControle.reserva.informacao}"  />
@@ -84,7 +120,7 @@
                             <f:selectItems value="#{ocupacaoControle.diasDaSemana}" var="semana" itemLabel="#{semana.nomeDoDia}" itemValue="#{semana}" />
                             <p:ajax event="change" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" update="listaDeClassesDisponiveis"/>
                         </p:selectManyCheckbox>
-                        
+
                         <p:outputLabel value="Salas Disponiveis" for="listaDeClassesDisponiveis"/>
                         <p:selectOneMenu id="listaDeClassesDisponiveis" value="#{ocupacaoControle.reserva.sala}" 
                                          label="Salas" filter="false" style="width: 250px" 
@@ -94,10 +130,11 @@
                         </p:selectOneMenu>
                     </p:panelGrid>
                     <p:separator />
-                    <p:commandButton id="btSalvarReserva" value="Salvar" actionListener="#{ocupacaoControle.salvar()}" oncomplete="PF('caixaDialogo').hide();"/>
+                    <p:commandButton id="btSalvarReserva" value="Salvar" actionListener="#{ocupacaoControle.salvar()}" update="form_salvar:msgParaSalvar, form_salvar:eventoDetalhe" />
                 </p:outputPanel>
             </p:dialog>
         </h:form>
+
         <h:outputScript target="body" library="js" name="eventosTimeline.js"/>
     </ui:define>
 
