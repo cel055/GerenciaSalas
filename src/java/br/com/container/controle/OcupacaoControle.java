@@ -338,16 +338,18 @@ public class OcupacaoControle implements Serializable {
         return diasDaSemana;
     }
     
-    public void deletarReserva(String idReserva){
+    public String deletarReserva(String idReserva){
         Long id = Long.parseLong(idReserva);
 
         reservaDao = new ReservaDaoImpl();
         if (session == null || !session.isOpen()) {
             session = HibernateUtil.abreSessao();
         }
-        Reserva r = reservaDao.pesquisaEntidadeId(id, session);
-        reservaDao.remover(r, session);
+        Reserva reservaExclusao = reservaDao.pesquisaEntidadeId(id, session);
+        reservaDao.remover(reservaExclusao, session);
         session.close();
+        pesquisa();
+        return "ocupacao";
     }
 
     //Getters e Setters

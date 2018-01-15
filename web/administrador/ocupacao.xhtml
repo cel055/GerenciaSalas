@@ -76,13 +76,21 @@
                             <h:outputText value="#{reserva.informacao}" />
 
                             <h:outputText value="" />
-                            <p:commandButton value="Deletar" icon="far fa-trash-al" type="button">
-                                <p:ajax event="click" listener="#{ocupacaoControle.deletarReserva(reserva.id)}" update="form_timeline" oncomplete="PF('dialogDetalhesReservas').hide()"/>
+                            <p:commandButton icon="ui-icon-trash" actionListener="#{ocupacaoControle.deletarReserva(reserva.id)}"
+                                             update="form_timeline" title="Excluir" value="Deletar">
+                                <p:confirm header="Confirmação" message="Tem certeza exclusão?" 
+                                           icon="ui-icon-alert" />
                             </p:commandButton>
                         </p:panelGrid>
                     </p:panel>
                 </p:dataGrid>
             </p:dialog>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" 
+                                 icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" 
+                                 icon="ui-icon-close" />
+            </p:confirmDialog>
         </h:form>
 
         <h:form id="form_salvar">
