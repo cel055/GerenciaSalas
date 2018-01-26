@@ -8,7 +8,6 @@ package br.com.container.dao;
 import br.com.container.modelo.DiaDaSemana;
 import br.com.container.modelo.Reserva;
 import br.com.container.modelo.Sala;
-import br.com.container.modelo.Usuario;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -93,6 +92,12 @@ public class SalaDaoImpl extends BaseDaoImpl<Sala, Long> implements SalaDao {
         Query consulta = session.createQuery("from Sala s where s.id not in (:ids)");
         consulta.setParameterList("ids", idsSalasOcupadas);
         return consulta.list();
+    }
+
+    @Override
+    public Long totalSala(Session session) throws HibernateException {
+        Query consulta = session.createQuery("Select count(id) from Sala");
+        return (Long) consulta.uniqueResult();
     }
 
 }

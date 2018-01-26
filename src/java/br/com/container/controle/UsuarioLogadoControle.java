@@ -6,11 +6,14 @@
 package br.com.container.controle;
 
 import br.com.container.dao.HibernateUtil;
+import br.com.container.dao.SalaDao;
+import br.com.container.dao.SalaDaoImpl;
 import br.com.container.dao.UsuarioDao;
 import br.com.container.dao.UsuarioDaoImpl;
 import br.com.container.modelo.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -30,6 +33,17 @@ public class UsuarioLogadoControle implements Serializable {
     private Session sessao;
     private String senhaAtual;
     private String senhaNova;
+    private Session session;
+    private long totalSala;
+    
+    @PostConstruct
+    public void inicializar() {
+        //Carrega obj's iniciais do banco de dados
+        session = HibernateUtil.abreSessao();
+        SalaDao salaDao = new SalaDaoImpl();
+        totalSala = salaDao.totalSala(session);
+        session.close();
+    }
 
     private void abreSessao() {
         if (sessao == null) {
@@ -39,11 +53,6 @@ public class UsuarioLogadoControle implements Serializable {
         }
     }
 
-//    public UsuarioLogadoControle() {
-////        abreSessao();
-////        logado = new UsuarioLogado();
-////        usuario = logado.usuarioLogadoSpring(sessao);
-//    }
     public void usuarioAtual() {
         abreSessao();
         try {
@@ -118,6 +127,10 @@ public class UsuarioLogadoControle implements Serializable {
 
     public void setSenhaNova(String senhaNova) {
         this.senhaNova = senhaNova;
+    }
+
+    public long getTotalSala() {
+        return totalSala;
     }
 
 }

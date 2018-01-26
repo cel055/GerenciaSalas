@@ -86,6 +86,9 @@ public class EventoControle implements Serializable {
                 eventos = eventoDao.pesquisarReservaPorSala("001", session);
             } else {
                 eventos = eventoDao.pesquisarReservaPorSala(sala.getNome(), session);
+                if(eventos.isEmpty()){
+                    Mensagem.mensagemError("Não trouxe nenhum dados para essa consulta!");
+                }
             }
             session.close();
         } catch (Exception e) {
@@ -101,6 +104,16 @@ public class EventoControle implements Serializable {
             evt.setDescription(eve.getInformacao());
             evt.setAllDay(true);
             evt.setEditable(true);
+            switch (eve.getPeriodo()) {
+                
+                case "Vespertino":
+                    evt.setStyleClass("corAmarela");
+                    break;
+                case "Matutino":
+                    evt.setStyleClass("corVerde");
+                    break;
+            }
+            
 
             eventoModel.addEvent(evt);
 

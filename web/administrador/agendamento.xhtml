@@ -40,12 +40,18 @@
                 <p:outputLabel for="nome" value="Sala" />
                 <p:inputText id="nome" value="#{eventoControle.sala.nome}"  />
                 <p:commandButton value="Pesquisar" actionListener="#{eventoControle.iniciarAgenda()}"
-                                 update=":form_calendario:schEvento" process="@this,nome" />
+                                 update=":form_calendario:schEvento :form_calendario:msg" process="@this,nome" />
             </p:panelGrid>                            
         </h:form>
+
         <div style="width: 700px; height: 700px">
+            <div id="legenda">
+                <p:graphicImage name="matutinoLegenda.png" library="imagem"/>
+                <p:graphicImage name="vespertinoLegenda.png" library="imagem"/>
+                <p:graphicImage name="noturnoLegenda.png" library="imagem"/>
+            </div>
             <h:form id="form_calendario">
-                <p:growl id="msg" showDetail="true" />
+                <p:messages id="msg" showDetail="true" />
                 <p:schedule id="schEvento" value="#{eventoControle.eventoModel}" widgetVar="meuCalendario"
                             timeZone="America/Sao_Paulo" locale="pt" >
 
@@ -73,16 +79,16 @@
                                 <f:selectItem itemLabel="#{Constantes.NOITE}" itemValue="#{Constantes.NOITE}" />
                             </p:selectOneRadio>
 
-                            <p:outputLabel  value="Persistir em:" />
-                            <p:selectManyCheckbox id="diaSemana" value="#{eventoControle.evento.diasDaSemana}" layout="responsive" converter="conversorDiaDaSemana"
-                                                  columns="3">
-                                <f:selectItems value="#{eventoControle.diasDaSemana}" var="semana" itemLabel="#{semana.nomeDoDia}" itemValue="#{semana}" />
-                            </p:selectManyCheckbox>
+                            <!--                            <p:outputLabel  value="Persistir em:" />
+                                                        <p:selectManyCheckbox id="diaSemana" value="# {eventoControle.evento.diasDaSemana}" layout="responsive" converter="conversorDiaDaSemana"
+                                                                              columns="3">
+                                                            <f:selectItems value="# {eventoControle.diasDaSemana}" var="semana" itemLabel="# {semana.nomeDoDia}" itemValue="# {semana}" />
+                                                        </p:selectManyCheckbox>-->
 
                         </p:panelGrid>
                         <p:separator />
-                        <p:commandButton value="Salvar" actionListener="#{eventoControle.salvar()}" update="msg schEvento"
-                                         oncomplete="PF('caixaDialogo').hide();" />
+                        <!--                        <p:commandButton value="Salvar" actionListener="# {eventoControle.salvar()}" update="msg schEvento"
+                                                                 oncomplete="PF('caixaDialogo').hide();" />-->
                     </p:outputPanel>
                 </p:dialog>
             </h:form>
