@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../logado/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="conteudo">
+        <h1 class="jr-titulo1">Funcionário</h1>
+
+        <h:form id="form_pesquisa">
+
+            <!--mostra a toolbar se mostra_toolbar == true-->
+            <p:toolbar styleClass="toolbar" rendered="#{!funcionarioC.mostra_toolbar}">
+                <p:toolbarGroup  >
+                    <p:commandButton value="Pesquisar" actionListener="#{funcionarioC.pesquisar()}"
+                                     update="dadosFuncionario" process="@this panelGridPesq" />
+                    <p:separator></p:separator>
+                    <p:commandButton value="Novo" actionListener="#{funcionarioC.novo}" update="@form" global="false"  />
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <!--mostra a toolbar se mostra_toolbar == false-->
+            <p:toolbar id="toolbar_pesquisa" styleClass="toolbar" rendered="#{funcionarioC.mostra_toolbar}">
+                <p:toolbarGroup  >
+                    <p:commandButton value="Salvar" action="#{funcionarioC.salvar()}" update="panelGrop" />
+                    <p:separator></p:separator>
+                    <p:commandButton value="Cancelar" actionListener="#{funcionarioC.novaPesquisa}" immediate="true"
+                                     update="@form" global="false" />
+                </p:toolbarGroup>
+
+                <p:toolbarGroup align="right">
+
+
+                </p:toolbarGroup>
+
+            </p:toolbar>
+
+            <p:messages id="mens" autoUpdate="true" />
+
+            <!--inicio da tela de pesquisa-->
+            <h:panelGroup id="aba1" rendered="#{!funcionarioC.mostra_toolbar}" >
+                <p:panelGrid id="panelGridPesq" columns="2" layout="grid" columnClasses="ui-grid-col-1, ui-grid-col-5" styleClass="painel_grid_noborder" >
+
+                    <p:outputLabel for="nome_pesquisa" value="Nome :" />
+                    <p:inputText id="nome_pesquisa" value="#{funcionarioC.funcionario.nome}" style="width: 100%" />
+                    <p:spacer />
+
+                </p:panelGrid>
+
+                <p:dataTable id="dadosFuncionario" value="#{funcionarioC.modelFuncionarios}" var="funcionario" reflow="true"
+                             style="margin-top: 20px;"  emptyMessage="Nenhum funcionário encontrado">
+                    <p:column headerText="Nome" priority="1">
+                        <h:outputText value="#{funcionario.nome}" />
+                    </p:column>
+                    <p:column headerText="E-mail" priority="1">
+                        <h:outputText value="#{funcionario.email}" />
+                    </p:column>
+                    <p:column headerText="Função" priority="2">
+                        <h:outputText value="#{funcionario.funcao.nome}" />
+                    </p:column>
+
+                    <p:column headerText="Alterar" class="centralizado tabela_botao_usuario" priority="1" >
+                        <p:commandButton icon="ui-icon-pencil" title="Alterar"
+                                         process="@this" update="@form" actionListener="#{funcionarioC.carregarParaAlterar()}">
+                            <f:setPropertyActionListener target="#{funcionarioC.funcionario}" value="#{funcionario}"   />          
+                        </p:commandButton>
+
+                        <p:commandButton icon="ui-icon-trash" actionListener="#{funcionarioC.excluir()}"
+                                         update="dadosFuncionario" title="Excluir" >
+                            <p:confirm header="Confirmação" message="Tem certeza exclusão?" 
+                                       icon="ui-icon-alert" />
+                            <f:setPropertyActionListener target="#{funcionarioC.funcionario}" value="#{funcionario}"   />
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGroup> 
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" 
+                                 icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" 
+                                 icon="ui-icon-close" />
+            </p:confirmDialog>
+            <!--fim da tela de pesquisa-->
+
+            <!--inicio da tela de cadastro (salvar e alterar)-->
+            <h:panelGroup id="panelGrop" rendered="#{funcionarioC.mostra_toolbar}" >
+                <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-4" 
+                             styleClass="painel_grid_noborder" >
+
+
+                    <p:outputLabel for="nome" value="Nome :" />
+                    <p:inputText id="nome" value="#{funcionarioC.funcionario.nome}" required="true" style="width: 100%; max-width: 600px;"/>
+
+                    <p:outputLabel for="email" value="E-mail :" />
+                    <p:inputText id="email" value="#{funcionarioC.funcionario.email}" type="email"
+                                 required="true" style="width: 100%; max-width: 600px;"/>
+
+                    <h:outputLabel for="funcao" value="Função " />
+                    <p:selectOneMenu styleClass="form-control" id="perfil" value="#{funcionarioC.funcao.id}" style="width: 90%; max-width: 580px;" required="true" 
+                                     requiredMessage="Campo função é obrigatório"  >
+                        <f:selectItem itemLabel="Selecione uma Função" itemValue="" />
+                        <f:selectItems value="#{funcionarioC.funcoes}" />
+                    </p:selectOneMenu>
+
+                </p:panelGrid>
+            </h:panelGroup>
+            <!--fim da tela de cadastro-->
+
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
