@@ -39,7 +39,7 @@ public class ReservaDaoImpl extends BaseDaoImpl<Reserva, Long> implements Reserv
 
     @Override
     public List<Reserva> pesquisarReservaPorSala(String sala, Session session) throws HibernateException {
-        Query consulta = session.createQuery("from Reserva r where r.sala.nome = :sala order by r.sala.nome");
+        Query consulta = session.createQuery("SELECT r from Reserva r JOIN r.diasDaSemana where r.sala.nome = :sala GROUP BY r.id order by r.sala.nome");
         consulta.setParameter("sala", sala);
         return consulta.list();
     }

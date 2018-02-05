@@ -86,37 +86,80 @@ public class EventoControle implements Serializable {
                 eventos = eventoDao.pesquisarReservaPorSala("001", session);
             } else {
                 eventos = eventoDao.pesquisarReservaPorSala(sala.getNome(), session);
-                if(eventos.isEmpty()){
+                if (eventos.isEmpty()) {
                     Mensagem.mensagemError("Não trouxe nenhum dados para essa consulta!");
                 }
             }
+            //carregar os eventos do banco
+//        for (Reserva eve : eventos) {
+//            DefaultScheduleEvent evt = new DefaultScheduleEvent();
+//            evt.setTitle(eve.getInformacao() + " - " + eve.getPeriodo());
+//            evt.setData(eve.getId());
+//            evt.setEndDate(eve.getFim());
+//            evt.setStartDate(eve.getInicio());
+//            evt.setDescription(eve.getInformacao());
+//            evt.setAllDay(true);
+//            evt.setEditable(true);
+//            switch (eve.getPeriodo()) {
+//
+//                case "Vespertino":
+//                    evt.setStyleClass("corAmarela");
+//                    break;
+//                case "Matutino":
+//                    evt.setStyleClass("corVerde");
+//                    break;
+//            }
+//
+//            eventoModel.addEvent(evt);
+//
+//        }
+
+            Calendar calendarAtual = new GregorianCalendar();
+            if (eventos == null || eventos.isEmpty()) {
+                return;
+            }
+            Date dataInicial = eventos.get(0).getInicio();
+            Date dataAtual = dataInicial;
+            Date dataFinal = eventos.get(eventos.size() - 1).getFim();
+            do {
+                calendarAtual.setTime(dataAtual);
+                for (Reserva eve : eventos) {
+                    if (eve.getFim().compareTo(dataFinal) > 0) {
+                        dataFinal.setTime(eve.getFim().getTime());
+                    }
+                    if (eve.getInicio().compareTo(dataAtual) <= 0 && eve.getFim().compareTo(dataAtual) >= 0) {
+                        for (DiaDaSemana diaDaSemana : eve.getDiasDaSemana()) {
+                            if (diaDaSemana.getNumeroDoDia() == calendarAtual.get(Calendar.DAY_OF_WEEK)) {
+                                DefaultScheduleEvent evt = new DefaultScheduleEvent();
+                                evt.setTitle(eve.getInformacao() + " - " + eve.getPeriodo());
+                                evt.setData(eve.getId());
+                                evt.setEndDate(dataAtual);
+                                evt.setStartDate(dataAtual);
+                                evt.setDescription(eve.getInformacao());
+                                evt.setAllDay(true);
+                                evt.setEditable(true);
+                                switch (eve.getPeriodo()) {
+
+                                    case "Vespertino":
+                                        evt.setStyleClass("corAmarela");
+                                        break;
+                                    case "Matutino":
+                                        evt.setStyleClass("corVerde");
+                                        break;
+                                }
+
+                                eventoModel.addEvent(evt);
+                            }
+                        }
+                    }
+
+                }
+                calendarAtual.add(Calendar.DATE, 1);
+                dataAtual = calendarAtual.getTime();
+            } while (dataAtual.compareTo(dataFinal) <= 0);
             session.close();
         } catch (Exception e) {
             System.out.println("Erro no controle   " + e.getMessage());
-        }
-        //carregar os eventos do banco
-        for (Reserva eve : eventos) {
-            DefaultScheduleEvent evt = new DefaultScheduleEvent();
-            evt.setTitle(eve.getInformacao() + " - " + eve.getPeriodo());
-            evt.setData(eve.getId());
-            evt.setEndDate(eve.getFim());
-            evt.setStartDate(eve.getInicio());
-            evt.setDescription(eve.getInformacao());
-            evt.setAllDay(true);
-            evt.setEditable(true);
-            switch (eve.getPeriodo()) {
-                
-                case "Vespertino":
-                    evt.setStyleClass("corAmarela");
-                    break;
-                case "Matutino":
-                    evt.setStyleClass("corVerde");
-                    break;
-            }
-            
-
-            eventoModel.addEvent(evt);
-
         }
     }
 
