@@ -1,15 +1,15 @@
 function atualizaEventos(){
-    document.getElementById("form_timeline:timelineTodasSalas").addEventListener("mouseover",function(evento){
+    document.getElementById("form_timeline:timelineTodasSalas").addEventListener("click",function(evento){
         removeEventoTimeline();
         addEventoTimeline();
-    },false);
+    },true);
 }
 
 function addEventoTimeline() {
     var reservas;
     reservas = document.getElementsByClassName("reserva");
     for (var i = 0; i < reservas.length; i++) {
-        reservas[i].addEventListener("click", eventoTimeline, false);
+        reservas[i].addEventListener("click", eventoTimeline, true);
     }
 }
 
@@ -17,7 +17,7 @@ function removeEventoTimeline() {
     var reservas;
     reservas = document.getElementsByClassName("reserva");
     for (var i = 0; i < reservas.length; i++) {
-        reservas[i].removeEventListener("click", eventoTimeline, false);
+        reservas[i].removeEventListener("click", eventoTimeline, true);
     }
 }
 

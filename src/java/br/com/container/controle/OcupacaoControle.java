@@ -77,6 +77,9 @@ public class OcupacaoControle implements Serializable {
 
         //inicia a timeline
         iniciaTimeline();
+        if (salasSelecionadas != null && !salasSelecionadas.isEmpty()) {
+            pesquisa();
+        }
     }
 
     //métodos da pesquisa inicial
@@ -216,8 +219,8 @@ public class OcupacaoControle implements Serializable {
         }
         SalaDao salaDao = new SalaDaoImpl();
         if (periodos.size() == 1) {
-            reserva.setPeriodo(periodos.get(0));
-            salasParaPesquisa = salaDao.pesquisaSalaSemReserva(reserva, session);
+            Reserva r = new Reserva(reserva.getId(), reserva.getInformacao(), reserva.getInicio(), reserva.getFim(), reserva.getUsuario(), null, periodos.get(0), reserva.getDiasDaSemana());
+            salasParaPesquisa = salaDao.pesquisaSalaSemReserva(r, session);
         } else {
             List<Reserva> reservas = new ArrayList<>();
             Reserva r;
@@ -250,9 +253,34 @@ public class OcupacaoControle implements Serializable {
             Mensagem.salvar(reserva.getInformacao());
         } else {
             Reserva r;
-            for (String periodo : periodos) {
-                r = new Reserva(null, reserva.getInformacao(), reserva.getInicio(), reserva.getFim(), reserva.getUsuario(), reserva.getSala(), periodo, reserva.getDiasDaSemana());
-                reservaDao.salvarOuAlterar(r, session);
+            if (reserva.getId() == null) {
+                
+                for (String periodo : periodos) {
+                    r = new Reserva(null, reserva.getInformacao(), reserva.getInicio(), reserva.getFim(), reserva.getUsuario(), reserva.getSala(), periodo, new ArrayList<>(reserva.getDiasDaSemana()));
+                    reservaDao.salvarOuAlterar(r, session);
+                }
+                
+            } else {
+                
+                if (periodos.contains(reserva.getPeriodo())) {
+                    for (String periodo : periodos) {
+                        if (reserva.getPeriodo().equals(periodo)) {
+                            reservaDao.salvarOuAlterar(reserva, session);
+                        } else {
+                            r = new Reserva(null, reserva.getInformacao(), reserva.getInicio(), reserva.getFim(), reserva.getUsuario(), reserva.getSala(), periodo, new ArrayList<>(reserva.getDiasDaSemana()));
+                            reservaDao.salvarOuAlterar(r, session);
+                        }
+                    }
+                } else {
+                    reserva.setPeriodo(periodos.get(0));
+                    reservaDao.salvarOuAlterar(reserva, session);
+                    periodos.remove(0);
+                    for (String periodo : periodos) {
+                        r = new Reserva(null, reserva.getInformacao(), reserva.getInicio(), reserva.getFim(), reserva.getUsuario(), reserva.getSala(), periodo, new ArrayList<>(reserva.getDiasDaSemana()));
+                        reservaDao.salvarOuAlterar(r, session);
+                    }
+                }
+                
             }
         }
         session.close();
@@ -298,6 +326,7 @@ public class OcupacaoControle implements Serializable {
         }
         id = idsReservaParaPesq.substring(inicio);
         idsPesq.add(Long.parseLong(id));
+        System.out.println("IDS: " + idsReservaParaPesq);
         return idsPesq;
     }
 

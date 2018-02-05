@@ -19,15 +19,6 @@
                     </p:selectCheckboxMenu>
                 </p:toolbarGroup>
                 <p:separator></p:separator>
-                <!--                <p:toolbarGroup style="margin-right: 5px">
-                                    <p:outputLabel for="dataInicioPesq" value="Data Inicio:"/>
-                                    <p:calendar id="dataInicioPesq" value="# {ocupacaoControle.dataInicioPesquisa}" locale="pt" navigator="true" pattern="dd-MM-yyyy"/>
-                                </p:toolbarGroup>
-                                <p:separator></p:separator>
-                                <p:toolbarGroup style="margin-right: 5px">
-                                    <p:outputLabel for="dataFimPesq" value="Data Final:"/>
-                                    <p:calendar id="dataFimPesq" value="# {ocupacaoControle.dataFimPesquisa}" locale="pt" navigator="true" pattern="dd-MM-yyyy"/>
-                                </p:toolbarGroup>-->
                 <p:separator></p:separator>
                 <p:toolbarGroup style="margin-right: 5px">
                     <p:commandButton value="Pesquisar" actionListener="#{ocupacaoControle.pesquisa()}" update=":form_timeline, :msgParaSalvar" />
@@ -80,7 +71,7 @@
                             <h:outputText value="Info: " />
                             <h:outputText value="#{reserva.informacao}" />
                             
-                            <p:commandButton actionListener="#{ocupacaoControle.alterarReserva(reserva.id)}" oncomplete="PF('caixaDialogo').show();"
+                            <p:commandButton icon="fa fa-edit" actionListener="#{ocupacaoControle.alterarReserva(reserva.id)}" oncomplete="PF('caixaDialogo').show();"
                                              update="form_timeline, form_salvar" title="Alterar" value="Alterar"/>
                             
                             <p:commandButton icon="ui-icon-trash" actionListener="#{ocupacaoControle.deletarReserva(reserva.id)}"
@@ -103,7 +94,7 @@
         <h:form id="form_salvar">
             <p:dialog id="dialogoSalvar" widgetVar="caixaDialogo"  header="Reserva de Sala" resizable="false" modal="true"
                       showEffect="clip">
-                <p:ajax event="close" listener="#{ocupacaoControle.inicializar}"/>
+                <p:ajax event="close" listener="#{ocupacaoControle.inicializar}" update="form_timeline"/>
 
                 <p:outputPanel id="eventoDetalhe">
                     <p:messages closable="true" id="msgParaSalvar" />
