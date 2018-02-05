@@ -28,12 +28,12 @@ public class SalaDaoImpl extends BaseDaoImpl<Sala, Long> implements SalaDao {
 
     @Override
     public List<Sala> listaTodos(Session session) throws HibernateException {
-        return session.createQuery("from Sala").list();
+        return session.createQuery("from Sala s ORDER BY s.nome").list();
     }
 
     @Override
     public List<Sala> pesquisaPorNome(String nome, Session session) throws HibernateException {
-        Query consulta = session.createQuery("from Sala s where s.nome like :nome");
+        Query consulta = session.createQuery("from Sala s where s.nome like :nome ORDER BY s.nome");
         consulta.setParameter("nome", "%" + nome + "%");
         return consulta.list();
     }
@@ -58,7 +58,8 @@ public class SalaDaoImpl extends BaseDaoImpl<Sala, Long> implements SalaDao {
                 + "and r.inicio <= :dataFinal "
                 + "and r.fim >= :dataInicio "
                 + "and d.id in (:idDias) "
-                + "group by r.sala.id"
+                + "group by r.sala.id "
+                + "ORDER BY r.sala.nome"
         );
         consulta.setParameter("dataFinal", fim);
         consulta.setParameter("dataInicio", inicio);
@@ -80,7 +81,8 @@ public class SalaDaoImpl extends BaseDaoImpl<Sala, Long> implements SalaDao {
                 + "and r.fim >= :dataInicio "
                 + "and d.id in (:idDias) "
                 + "and r.id != :idReserva "
-                + "group by r.sala.id"
+                + "group by r.sala.id "
+                + "ORDER BY r.sala.nome"
         );
         consulta.setParameter("dataFinal", fim);
         consulta.setParameter("dataInicio", inicio);
@@ -106,7 +108,7 @@ public class SalaDaoImpl extends BaseDaoImpl<Sala, Long> implements SalaDao {
         if (idsSalasOcupadas.isEmpty()) {
             return listaTodos(session);
         }
-        Query consulta = session.createQuery("from Sala s where s.id not in (:ids)");
+        Query consulta = session.createQuery("from Sala s where s.id not in (:ids) ORDER BY s.nome");
         consulta.setParameterList("ids", idsSalasOcupadas);
         return consulta.list();
     }
@@ -124,7 +126,7 @@ public class SalaDaoImpl extends BaseDaoImpl<Sala, Long> implements SalaDao {
         if (idsSalasOcupadas.isEmpty()) {
             return listaTodos(session);
         }
-        Query consulta = session.createQuery("from Sala s where s.id not in (:ids)");
+        Query consulta = session.createQuery("from Sala s where s.id not in (:ids) ORDER BY s.nome");
         consulta.setParameterList("ids", idsSalasOcupadas);
         return consulta.list();
     }
