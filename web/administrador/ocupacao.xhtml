@@ -14,7 +14,7 @@
         <h:form id="form_pesquisa">
             <p:toolbar styleClass="toolbar">
                 <p:toolbarGroup style="margin-right: 5px">
-                    <p:selectCheckboxMenu id="salasParaPesquisa" value="#{ocupacaoControle.salasSelecionadas}" label="Salas" filter="false" converter="conversorSala" panelStyle="width:250px">
+                    <p:selectCheckboxMenu id="salasParaPesquisa" value="#{ocupacaoControle.salasSelecionadas}" label="Salas" filter="true" converter="conversorSala" panelStyle="width:250px">
                         <f:selectItems value="#{ocupacaoControle.salasParaPesquisa}" var="salaPesquisa" itemLabel="#{salaPesquisa.nome}" itemValue="#{salaPesquisa}"/>
                     </p:selectCheckboxMenu>
                 </p:toolbarGroup>
