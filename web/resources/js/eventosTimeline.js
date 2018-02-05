@@ -1,3 +1,10 @@
+function atualizaEventos(){
+    document.getElementById("form_timeline:timelineTodasSalas").addEventListener("mouseover",function(evento){
+        removeEventoTimeline();
+        addEventoTimeline();
+    },false);
+}
+
 function addEventoTimeline() {
     var reservas;
     reservas = document.getElementsByClassName("reserva");

@@ -113,6 +113,7 @@ public class OcupacaoControle implements Serializable {
         }
         session.close();
         context.execute("addEventoTimeline()");
+        context.execute("atualizaEventos()");
     }
 
     private void montaLinhaTimeline(List<Reserva> rs) {
@@ -359,7 +360,7 @@ public class OcupacaoControle implements Serializable {
     public String alterarReserva(String idReserva) {
         Long id = Long.parseLong(idReserva);
 
-        if(session == null || !session.isOpen()){
+        if (session == null || !session.isOpen()) {
             session = HibernateUtil.abreSessao();
         }
         reserva = reservaDao.pesquisaEntidadeId(id, session);
@@ -367,7 +368,7 @@ public class OcupacaoControle implements Serializable {
         periodos = new ArrayList<>();
         periodos.add(reserva.getPeriodo());
         pesquisaSalaParaSalvar();
-        if(session.isOpen()){
+        if (session.isOpen()) {
             session.close();
         }
         return "ocupacao";
