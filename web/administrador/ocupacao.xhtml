@@ -74,8 +74,9 @@
 
                             <h:outputText value="Info: " />
                             <h:outputText value="#{reserva.informacao}" />
-
-                            <h:outputText value="" />
+                            
+                            <p:commandButton actionListener="#{ocupacaoControle.alterarReserva(reserva.id)}" oncomplete="PF('caixaDialogo').show();"
+                                             update="form_timeline, form_salvar" title="Alterar" value="Alterar"/>
                             <p:commandButton icon="ui-icon-trash" actionListener="#{ocupacaoControle.deletarReserva(reserva.id)}"
                                              update="form_timeline" title="Excluir" value="Deletar">
                                 <p:confirm header="Confirmação" message="Tem certeza exclusão?" 
