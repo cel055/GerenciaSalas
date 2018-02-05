@@ -39,12 +39,15 @@ public class SalaDaoImpl extends BaseDaoImpl<Sala, Long> implements SalaDao {
     }
 
     @Override
-    public List<Sala> pesquisaSalaComReserva(Reserva reserva, Session session)  throws HibernateException {
+    public List<Sala> pesquisaSalaComReserva(Reserva reserva, Session session) throws HibernateException {
+        if (reserva.getId() != null) {
+            return pesquisaSalaComReserva(reserva.getId(), reserva.getInicio(), reserva.getFim(), reserva.getDiasDaSemana(), reserva.getPeriodo(), session);
+        }
         return pesquisaSalaComReserva(reserva.getInicio(), reserva.getFim(), reserva.getDiasDaSemana(), reserva.getPeriodo(), session);
     }
 
     @Override
-    public List<Sala> pesquisaSalaComReserva(Date inicio, Date fim, List<DiaDaSemana> dias, String periodo, Session session)  throws HibernateException {
+    public List<Sala> pesquisaSalaComReserva(Date inicio, Date fim, List<DiaDaSemana> dias, String periodo, Session session) throws HibernateException {
         List<Long> idDias = new ArrayList<>();
         for (DiaDaSemana dia : dias) {
             idDias.add(dia.getId());
@@ -65,13 +68,41 @@ public class SalaDaoImpl extends BaseDaoImpl<Sala, Long> implements SalaDao {
     }
 
     @Override
-    public List<Sala> pesquisaSalaSemReserva(Reserva reserva, Session session)  throws HibernateException {
-        return pesquisaSalaSemReserva(reserva.getInicio(), reserva.getFim(), reserva.getDiasDaSemana(), reserva.getPeriodo(), session);
+    public List<Sala> pesquisaSalaComReserva(Long id, Date inicio, Date fim, List<DiaDaSemana> dias, String periodo, Session session) throws HibernateException {
+        List<Long> idDias = new ArrayList<>();
+        for (DiaDaSemana dia : dias) {
+            idDias.add(dia.getId());
+        }
+        Query consulta = session.createQuery(
+                "select r.sala.id from Reserva r join r.diasDaSemana d "
+                + "where r.periodo like :periodo "
+                + "and r.inicio <= :dataFinal "
+                + "and r.fim >= :dataInicio "
+                + "and d.id in (:idDias) "
+                + "and r.id != :idReserva "
+                + "group by r.sala.id"
+        );
+        consulta.setParameter("dataFinal", fim);
+        consulta.setParameter("dataInicio", inicio);
+        consulta.setParameter("periodo", periodo);
+        consulta.setParameter("idReserva", id);
+        consulta.setParameterList("idDias", idDias);
+        return consulta.list();
     }
 
     @Override
-    public List<Sala> pesquisaSalaSemReserva(Date inicio, Date fim, List<DiaDaSemana> dias, String periodo, Session session)  throws HibernateException {
-        List idsSalasOcupadas = pesquisaSalaComReserva(inicio, fim, dias, periodo, session);
+    public List<Sala> pesquisaSalaSemReserva(Reserva reserva, Session session) throws HibernateException {
+        return pesquisaSalaSemReserva(reserva.getId(), reserva.getInicio(), reserva.getFim(), reserva.getDiasDaSemana(), reserva.getPeriodo(), session);
+    }
+
+    @Override
+    public List<Sala> pesquisaSalaSemReserva(Long id, Date inicio, Date fim, List<DiaDaSemana> dias, String periodo, Session session) throws HibernateException {
+        List idsSalasOcupadas;
+        if (id == null) {
+            idsSalasOcupadas = pesquisaSalaComReserva(inicio, fim, dias, periodo, session);
+        } else {
+            idsSalasOcupadas = pesquisaSalaComReserva(id, inicio, fim, dias, periodo, session);
+        }
         if (idsSalasOcupadas.isEmpty()) {
             return listaTodos(session);
         }
@@ -84,7 +115,11 @@ public class SalaDaoImpl extends BaseDaoImpl<Sala, Long> implements SalaDao {
     public List<Sala> pesquisaSalaSemReserva(List<Reserva> reservas, Session session) throws HibernateException {
         List idsSalasOcupadas = new ArrayList();
         for (Reserva reserva : reservas) {
-            idsSalasOcupadas.addAll(pesquisaSalaComReserva(reserva.getInicio(), reserva.getFim(), reserva.getDiasDaSemana(), reserva.getPeriodo(), session));
+            if (reserva.getId() == null) {
+                idsSalasOcupadas.addAll(pesquisaSalaComReserva(reserva.getInicio(), reserva.getFim(), reserva.getDiasDaSemana(), reserva.getPeriodo(), session));
+            } else {
+                idsSalasOcupadas.addAll(pesquisaSalaComReserva(reserva.getId(), reserva.getInicio(), reserva.getFim(), reserva.getDiasDaSemana(), reserva.getPeriodo(), session));
+            }
         }
         if (idsSalasOcupadas.isEmpty()) {
             return listaTodos(session);

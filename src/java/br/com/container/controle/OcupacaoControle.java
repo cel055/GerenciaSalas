@@ -204,10 +204,10 @@ public class OcupacaoControle implements Serializable {
         reserva.setUsuario(new UsuarioLogado().usuarioLogadoSpring(session));
     }
 
-    public void pesquisaSalaParaSalvar() {
+    public String pesquisaSalaParaSalvar() {
         if (reserva.getInicio() == null || reserva.getFim() == null || reserva.getDiasDaSemana().isEmpty() || periodos.isEmpty()) {
             salasParaPesquisa = new ArrayList<>();
-            return;
+            return "ocupacao";
         }
         System.out.println("Pesq");
         if (session == null || !session.isOpen()) {
@@ -221,21 +221,23 @@ public class OcupacaoControle implements Serializable {
             List<Reserva> reservas = new ArrayList<>();
             Reserva r;
             for (String periodo : periodos) {
-                r = new Reserva(null, reserva.getInformacao(), reserva.getInicio(), reserva.getFim(), reserva.getUsuario(), null, periodo, reserva.getDiasDaSemana());
+                r = new Reserva(reserva.getId(), reserva.getInformacao(), reserva.getInicio(), reserva.getFim(), reserva.getUsuario(), null, periodo, reserva.getDiasDaSemana());
                 reservas.add(r);
             }
             salasParaPesquisa = salaDao.pesquisaSalaSemReserva(reservas, session);
         }
+        session.close();
+        return "ocupacao";
     }
 
-    public void salvar() {
+    public String salvar() {
         if (reserva.getSala() == null) {
             Mensagem.mensagemError("Selecione uma sala");
-            return;
+            return "";
         }
         if (reserva.getInicio().compareTo(reserva.getFim()) > 0) {
             Mensagem.mensagemError("Data do final da reserva foi antes do início");
-            return;
+            return "";
         }
         reservaDao = new ReservaDaoImpl();
         if (session == null || !session.isOpen()) {
@@ -254,7 +256,9 @@ public class OcupacaoControle implements Serializable {
         }
         session.close();
         iniciaSalvamento();
+        pesquisa();
 //        inicializar();
+        return "ocupacao";
     }
 
     //Metodo de selecionar um elemento na timeline
@@ -306,7 +310,7 @@ public class OcupacaoControle implements Serializable {
         }
         List<DiaDaSemana> dias = dao.pesquisaPelaReserserva(id, session);
         session.close();
-        
+
         for (int i = 0; i < dias.size(); i++) {
             switch (dias.get(i).getNumeroDoDia()) {
                 case 1:
@@ -337,8 +341,8 @@ public class OcupacaoControle implements Serializable {
         }
         return diasDaSemana;
     }
-    
-    public String deletarReserva(String idReserva){
+
+    public String deletarReserva(String idReserva) {
         Long id = Long.parseLong(idReserva);
 
         reservaDao = new ReservaDaoImpl();
@@ -349,6 +353,23 @@ public class OcupacaoControle implements Serializable {
         reservaDao.remover(reservaExclusao, session);
         session.close();
         pesquisa();
+        return "ocupacao";
+    }
+
+    public String alterarReserva(String idReserva) {
+        Long id = Long.parseLong(idReserva);
+
+        if(session == null || !session.isOpen()){
+            session = HibernateUtil.abreSessao();
+        }
+        reserva = reservaDao.pesquisaEntidadeId(id, session);
+
+        periodos = new ArrayList<>();
+        periodos.add(reserva.getPeriodo());
+        pesquisaSalaParaSalvar();
+        if(session.isOpen()){
+            session.close();
+        }
         return "ocupacao";
     }
 
