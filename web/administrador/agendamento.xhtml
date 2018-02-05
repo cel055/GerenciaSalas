@@ -53,7 +53,8 @@
             <h:form id="form_calendario">
                 <p:messages id="msg" showDetail="true" />
                 <p:schedule id="schEvento" value="#{eventoControle.eventoModel}" widgetVar="meuCalendario"
-                            timeZone="America/Sao_Paulo" locale="pt" >
+                            timeZone="America/Noronha" locale="pt" >
+                            <!--timeZone="America/Sao_Paulo" locale="pt" >-->
 
                     <p:ajax event="eventSelect" listener="#{eventoControle.selecionado}" update="eventoDetalhe" 
                             oncomplete="PF('caixaDialogo').show();" />

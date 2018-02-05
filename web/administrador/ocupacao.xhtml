@@ -40,6 +40,11 @@
         </h:form>
 
         <h:form id="form_timeline">
+            <div id="legenda" style="margin-bottom: 5px">
+                <p:graphicImage name="matutinoLegenda2.png" library="imagem"/>
+                <p:graphicImage name="vespertinoLegenda2.png" library="imagem"/>
+                <p:graphicImage name="noturnoLegenda.png" library="imagem"/>
+            </div>
             <p:timeline id="timelineTodasSalas" value="#{ocupacaoControle.timeline}" 
                         start="#{ocupacaoControle.inicioTimeline}" end="#{ocupacaoControle.fimTimeline}" 
                         zoomMin="#{ocupacaoControle.zoomMin}" zoomMax="#{ocupacaoControle.zoomMax}" 
