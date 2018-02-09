@@ -15,8 +15,10 @@ import java.util.TimerTask;
  */
 public class TimerEnviaEmails extends TimerTask{
 
+    //este é o método que será executado quando a data correta chegar
     @Override
     public void run() {
+        //Verifica se é domingo, se for não faz nada
         if(new GregorianCalendar().get(Calendar.DAY_OF_WEEK) == 1){
             return;
         }

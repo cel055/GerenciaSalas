@@ -34,12 +34,14 @@ public class InicializadorProjeto implements ServletContextListener {
         Session sessao = HibernateUtil.abreSessao();
         DiaDaSemanaDao dao = new DiaDaSemanaDaoImpl();
         
-        Calendar dataAtual = new GregorianCalendar();
-        dataAtual.add(Calendar.DATE, 1);
-        dataAtual.set(Calendar.HOUR_OF_DAY, 7);
-        dataAtual.set(Calendar.MINUTE, 0);
-        dataAtual.set(Calendar.SECOND, 0);
-        dataAtual.set(Calendar.MILLISECOND, 0);
+        //Data em que será executada a primeira vez, 
+        //neste caso no dia seguinte de levantar o projeto as 7 horas da manha
+        Calendar primeiraExecucao = new GregorianCalendar();
+        primeiraExecucao.add(Calendar.DATE, 1);
+        primeiraExecucao.set(Calendar.HOUR_OF_DAY, 7);
+        primeiraExecucao.set(Calendar.MINUTE, 0);
+        primeiraExecucao.set(Calendar.SECOND, 0);
+        primeiraExecucao.set(Calendar.MILLISECOND, 0);
         
         
         try {
@@ -47,8 +49,13 @@ public class InicializadorProjeto implements ServletContextListener {
                 salvaDiasDaSemana(dao, sessao);
             }
             
+            //Aqui é criada a thread propriamente dito
+            //os 3 parametros são: 
+            //1->a classe que extende a TimerTask e que contem o método run (que sera o método executado)
+            //2->a data da primeira execução neste caso no dia seguinte do projeto ser posto no ar as 7 horas da manhã
+            //3->o intervalo de tempo para a próxima execução, neste caso a cada 24 horas
             timerEmails = new Timer();
-            timerEmails.schedule(new TimerEnviaEmails(), dataAtual.getTime(), 24*60*60*1000);
+            timerEmails.schedule(new TimerEnviaEmails(), primeiraExecucao.getTime(), 24*60*60*1000);
             
         } catch (HibernateException e) {
             System.out.println("Erro ao salvar Dias Da Semana " + e.getMessage());
@@ -80,6 +87,7 @@ public class InicializadorProjeto implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        //aqui é só pra garantir que a thread seja encerrada
         if(timerEmails != null){
             timerEmails.cancel();
         }
