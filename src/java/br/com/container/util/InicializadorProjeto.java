@@ -9,6 +9,10 @@ import br.com.container.dao.DiaDaSemanaDao;
 import br.com.container.dao.DiaDaSemanaDaoImpl;
 import br.com.container.dao.HibernateUtil;
 import br.com.container.modelo.DiaDaSemana;
+import br.com.container.threads.TimerEnviaEmails;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Timer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -22,20 +26,34 @@ import org.hibernate.Session;
 public class InicializadorProjeto implements ServletContextListener {
 
     private ServletContext context;
+    private Timer timerEmails;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         this.context = sce.getServletContext();
         Session sessao = HibernateUtil.abreSessao();
         DiaDaSemanaDao dao = new DiaDaSemanaDaoImpl();
+        
+        Calendar dataAtual = new GregorianCalendar();
+        dataAtual.add(Calendar.DATE, 1);
+        dataAtual.set(Calendar.HOUR_OF_DAY, 7);
+        dataAtual.set(Calendar.MINUTE, 0);
+        dataAtual.set(Calendar.SECOND, 0);
+        dataAtual.set(Calendar.MILLISECOND, 0);
+        
+        
         try {
             if (dao.listaTodos(sessao).isEmpty()) {
                 salvaDiasDaSemana(dao, sessao);
             }
+            
+            timerEmails = new Timer();
+            timerEmails.schedule(new TimerEnviaEmails(), dataAtual.getTime(), 24*60*60*1000);
+            
         } catch (HibernateException e) {
             System.out.println("Erro ao salvar Dias Da Semana " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro ao salvar Dias Da Semana " + e.getMessage());
+            System.err.println("/n/nErro ao iniciar projeto " + e.getMessage() + "/n/n");
         } finally {
             sessao.close();
         }
@@ -62,6 +80,9 @@ public class InicializadorProjeto implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        if(timerEmails != null){
+            timerEmails.cancel();
+        }
         context = null;
     }
 
