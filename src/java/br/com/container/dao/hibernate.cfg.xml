@@ -8,8 +8,8 @@
 <!--   servidor local-->
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/senac_neb?autoReconnect=true</property>
     <property name="hibernate.connection.username">root</property>
-    <!--<property name="hibernate.connection.password"></property>-->
-    <property name="hibernate.connection.password">root</property>
+    <property name="hibernate.connection.password"></property>
+    <!--<property name="hibernate.connection.password">root</property>-->
     
     <!--servidor web-->
 <!--    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/containe_system?autoReconnect=true</property>

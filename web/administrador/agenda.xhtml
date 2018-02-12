@@ -21,8 +21,8 @@
 
                     <p:ajax event="eventSelect" listener="#{agendaControle.selecionado}" update="eventoDetalhe" 
                             oncomplete="PF('caixaDialogo').show();" />
-                    -->                    <p:ajax event="dateSelect" listener="#{agendaControle.novo}" update="eventoDetalhe" 
-                                                   oncomplete="PF('caixaDialogo').show();" />
+                    <p:ajax event="dateSelect" listener="#{agendaControle.novo}" update="eventoDetalhe" 
+                            oncomplete="PF('caixaDialogo').show();" />
                     <!-- <p:ajax event="eventMove" listener="# {agendaControle.movido}" update="schEvento" />
                     <p:ajax event="eventResize" listener="# {agendaControle.redirecionado}" update="schEvento" />-->
                 </p:schedule>

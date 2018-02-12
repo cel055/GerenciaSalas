@@ -3,3 +3,6 @@
 /nbproject/
 /build/
 /lib/
+/src/conf/
+/hibernate.cfg.xml
+/applicationContext.xml

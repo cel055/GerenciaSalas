@@ -104,12 +104,18 @@
 
                         <p:outputLabel for="inicio" value="Ínicio" />
                         <p:calendar id="inicio" value="#{ocupacaoControle.reserva.inicio}" pattern="dd/MM/yyyy">
-                            <p:ajax event="dateSelect" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" update="listaDeClassesDisponiveis"/>
+                            <p:ajax event="dateSelect" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" 
+                                    update="listaDeClassesDisponiveis"/>
+                            <p:ajax event="blur" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" 
+                                    update="listaDeClassesDisponiveis"/>
                         </p:calendar>
 
                         <p:outputLabel for="fim" value="Fim" />
                         <p:calendar id="fim" value="#{ocupacaoControle.reserva.fim}" pattern="dd/MM/yyyy">
-                            <p:ajax event="dateSelect" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" update="listaDeClassesDisponiveis"/>
+                            <p:ajax event="dateSelect" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}"
+                                    update="listaDeClassesDisponiveis"/>
+                            <p:ajax event="blur" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" 
+                                    update="listaDeClassesDisponiveis"/>
                         </p:calendar>
 
                         <p:outputLabel for="periodo" value="Período:" />
