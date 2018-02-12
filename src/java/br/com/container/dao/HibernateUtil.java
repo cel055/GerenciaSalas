@@ -5,6 +5,7 @@
  */
 package br.com.container.dao;
 
+import br.com.container.modelo.Agenda;
 import br.com.container.modelo.DiaDaSemana;
 import br.com.container.modelo.Funcao;
 import br.com.container.modelo.Funcionario;
@@ -35,6 +36,7 @@ public class HibernateUtil {
             cfg.addAnnotatedClass(Reserva.class);
             cfg.addAnnotatedClass(Funcao.class);
             cfg.addAnnotatedClass(Funcionario.class);
+            cfg.addAnnotatedClass(Agenda.class);
 
             cfg.configure("/br/com/container/dao/hibernate.cfg.xml");
 
