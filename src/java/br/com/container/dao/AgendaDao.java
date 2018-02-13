@@ -6,6 +6,7 @@
 package br.com.container.dao;
 
 import br.com.container.modelo.Agenda;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -17,4 +18,5 @@ import org.hibernate.Session;
 public interface AgendaDao extends BaseDao<Agenda, Long>{
     
     List<Agenda> procuraAgendaUsuario(Session session, Long idUsuario) throws HibernateException;
+    List<Agenda> procuraAgendaDoDia(Session session, Date dia) throws HibernateException;
 }

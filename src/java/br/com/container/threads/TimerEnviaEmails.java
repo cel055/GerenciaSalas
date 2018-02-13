@@ -5,9 +5,18 @@
  */
 package br.com.container.threads;
 
+import br.com.container.dao.AgendaDao;
+import br.com.container.dao.AgendaDaoImpl;
+import br.com.container.dao.HibernateUtil;
+import br.com.container.modelo.Agenda;
+import br.com.container.util.EnviaEmail;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.TimerTask;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 /**
  *
@@ -18,11 +27,29 @@ public class TimerEnviaEmails extends TimerTask{
     //este é o método que será executado quando a data correta chegar
     @Override
     public void run() {
-        //Verifica se é domingo, se for não faz nada
-        if(new GregorianCalendar().get(Calendar.DAY_OF_WEEK) == 1){
-            return;
-        }
+        Calendar hoje = new GregorianCalendar();
+        Session session = null;
+        AgendaDao dao;
+        List<Agenda> agendas;
         
+        try{
+            
+            dao = new AgendaDaoImpl();
+            session = HibernateUtil.abreSessao();
+            agendas = dao.procuraAgendaDoDia(session, hoje.getTime());
+            for (Agenda agenda : agendas) {
+                EnviaEmail.enviaLembreteEmail(agenda);
+            }
+            
+        }catch(HibernateException e){
+            System.out.println("/nErro hibernate lista emails do dia classe TimerEnviaEmails/n" + e.getMessage());
+        }catch(Exception e){
+            System.out.println("/nErro generico classe TimerEnviaEmails/n" + e.getMessage());
+        }finally{
+            if(session != null && session.isOpen()){
+                session.close();
+            }
+        }
     }
     
 }
