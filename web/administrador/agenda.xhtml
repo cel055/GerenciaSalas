@@ -23,13 +23,11 @@
                             oncomplete="PF('caixaDialogo').show();" />
                     <p:ajax event="dateSelect" listener="#{agendaControle.novo}" update="eventoDetalhe" 
                             oncomplete="PF('caixaDialogo').show();" />
-                    <!-- <p:ajax event="eventMove" listener="# {agendaControle.movido}" update="schEvento" />
-                    <p:ajax event="eventResize" listener="# {agendaControle.redirecionado}" update="schEvento" />-->
                 </p:schedule>
 
                 <p:dialog id="dialogo" widgetVar="caixaDialogo"  header="Evento" resizable="false" modal="true"
                           showEffect="clip">
-                    <p:outputPanel id="eventoDetalhe">
+                    <p:panel id="eventoDetalhe">
                         <p:panelGrid columns="2">  
                             <p:outputLabel for="assunto"  value="Assunto" />
                             <p:inputText id="assunto" value="#{agendaControle.agenda.assunto}" required="true"
@@ -40,19 +38,40 @@
                             <p:outputLabel  value="Descrição" />
                             <p:inputTextarea value="#{agendaControle.agenda.descricao}" rows="10" cols="50" autoResize="false"/>
                             <p:outputLabel for="inicio" value="Data" />
-                            <p:calendar id="inicio" value="#{agendaControle.agenda.dia_evento}" pattern="dd/MM/yyyy HH:mm" />
+                            <p:calendar id="inicio" value="#{agendaControle.agenda.dia_evento}" pattern="dd/MM/yyyy HH:mm" >
+                                <p:ajax event="blur" listener="#{agendaControle.validarData}" update="segundo terceiro" />
+                            </p:calendar>
                             <p:outputLabel for="segundo" value="2º E-mail" />
-                            <p:calendar id="segundo" value="#{agendaControle.agenda.email2}" pattern="dd/MM/yyyy" />
+                            <p:calendar id="segundo" value="#{agendaControle.agenda.email2}" mindate="#{agendaControle.diaAnterior}"
+                                        pattern="dd/MM/yyyy" maxdate="#{agendaControle.dataMaxima}" />
                             <p:outputLabel for="terceiro" value="3º E-mail" />
-                            <p:calendar id="terceiro" value="#{agendaControle.agenda.email3}" pattern="dd/MM/yyyy" />
+                            <p:calendar id="terceiro" value="#{agendaControle.agenda.email3}"
+                                        mindate="#{agendaControle.diaAnterior}" pattern="dd/MM/yyyy" 
+                                         maxdate="#{agendaControle.dataMaxima}"/>
 
+                            <p:commandButton icon="fa fa-save" value="Salvar"
+                                             actionListener="#{agendaControle.salvar()}" update="msg schEvento"
+                                             oncomplete="PF('caixaDialogo').hide();" rendered="#{agendaControle.agenda.id == null }" />
+                            <p:commandButton icon="fa fa-edit" value="Alterar"
+                                             actionListener="#{agendaControle.salvar()}" update="msg schEvento"
+                                             oncomplete="PF('caixaDialogo').hide();" rendered="#{agendaControle.agenda.id != null }" />
 
+                            <p:commandButton icon="ui-icon-trash" actionListener="#{agendaControle.deletarDataAgendanda()}"
+                                             update="form_calendario" title="Excluir" value="Deletar">
+                                <p:confirm header="Confirmação" message="Tem certeza exclusão?" 
+                                           icon="ui-icon-alert" />
+                            </p:commandButton>
                         </p:panelGrid>
                         <p:separator />
-                        <p:commandButton value="Salvar" actionListener="#{agendaControle.salvar()}" update="msg schEvento"
-                                         oncomplete="PF('caixaDialogo').hide();" />
-                    </p:outputPanel>
+
+                    </p:panel>
                 </p:dialog>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" 
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" 
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
             </h:form>
         </div> 
 

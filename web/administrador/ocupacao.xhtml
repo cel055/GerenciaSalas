@@ -71,10 +71,12 @@
                             <h:outputText value="Info: " />
                             <h:outputText value="#{reserva.informacao}" />
                             
-                            <p:commandButton icon="fa fa-edit" actionListener="#{ocupacaoControle.alterarReserva(reserva.id)}" oncomplete="PF('caixaDialogo').show();"
+                            <p:commandButton icon="fa fa-edit" actionListener="#{ocupacaoControle.alterarReserva(reserva.id)}"
+                                             oncomplete="PF('caixaDialogo').show();"
                                              update="form_timeline, form_salvar" title="Alterar" value="Alterar"/>
                             
-                            <p:commandButton icon="ui-icon-trash" actionListener="#{ocupacaoControle.deletarReserva(reserva.id)}"
+                            <p:commandButton icon="ui-icon-trash" 
+                                             actionListener="#{ocupacaoControle.deletarReserva(reserva.id)}"
                                              update="form_timeline" title="Excluir" value="Deletar">
                                 <p:confirm header="Confirmação" message="Tem certeza exclusão?" 
                                            icon="ui-icon-alert" />
@@ -142,7 +144,9 @@
                         </p:selectOneMenu>
                     </p:panelGrid>
                     <p:separator />
-                    <p:commandButton id="btSalvarReserva" value="#{ocupacaoControle.reserva.id == null ? 'Salvar' : 'Alterar'}" actionListener="#{ocupacaoControle.salvar()}" update="form_salvar:msgParaSalvar, form_salvar:eventoDetalhe, form_timeline" />
+                    <p:commandButton id="btSalvarReserva" value="#{ocupacaoControle.reserva.id == null ? 'Salvar' : 'Alterar'}"
+                                     actionListener="#{ocupacaoControle.salvar()}"
+                                     update="form_salvar:msgParaSalvar, form_salvar:eventoDetalhe, form_timeline" />
                 </p:outputPanel>
             </p:dialog>
         </h:form>

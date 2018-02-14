@@ -24,8 +24,7 @@ import org.apache.commons.mail.HtmlEmail;
 public class EnviaEmail implements Serializable {
 
     public static void enviaConfirmacaoEmail(Agenda agenda) {
-
-        List<String> emailsParaEnvio = new ArrayList<>(Arrays.asList(agenda.getConvidado().split(";")));
+        List<String> emailsParaEnvio = listaContatos(agenda);
         emailsParaEnvio.add(agenda.getUsuario().getLogin());
 
         String assunto = "Evento Senac Palhoça";
@@ -39,6 +38,16 @@ public class EnviaEmail implements Serializable {
         enviaEmail(assunto, corpoEmail, emailsParaEnvio);
     }
 
+    private static List<String> listaContatos(Agenda agenda) {
+        List<String> emailsParaEnvio;
+        if (!agenda.getConvidado().isEmpty()) {
+            emailsParaEnvio = new ArrayList<>(Arrays.asList(agenda.getConvidado().split(";")));
+        } else {
+            emailsParaEnvio = new ArrayList<>();
+        }
+        return emailsParaEnvio;
+    }
+
     /**
      *
      * @param agenda Esse método é para enviar os e-mails de lembrete, que seram
@@ -47,7 +56,7 @@ public class EnviaEmail implements Serializable {
      */
     public static void enviaLembreteEmail(Agenda agenda) {
 
-        List<String> emailsParaEnvio = new ArrayList<>(Arrays.asList(agenda.getConvidado().split(";")));
+        List<String> emailsParaEnvio = listaContatos(agenda);
         emailsParaEnvio.add(agenda.getUsuario().getLogin());
 
         String assunto = "Lembrete de Evento Senac Palhoça";
@@ -61,24 +70,66 @@ public class EnviaEmail implements Serializable {
         enviaEmail(assunto, corpoEmail, emailsParaEnvio);
     }
 
+    /**
+     *
+     * @param agenda Esse método é para enviar os e-mails de cancelamento de
+     * evento
+     */
+    public static void enviaCancelamentoEventoEmail(Agenda agenda) {
+
+        List<String> emailsParaEnvio = listaContatos(agenda);
+        emailsParaEnvio.add(agenda.getUsuario().getLogin());
+
+        String assunto = "Cancelamento de Evento Senac Palhoça";
+
+        StringBuilder builderCorpoEmail = new StringBuilder();
+        builderCorpoEmail.append("<h1>.:Senac Palhoça - Evento Cancelado:.</h1>");
+        builderCorpoEmail.append(montaCorpoParaAgenda(agenda));
+
+        String corpoEmail = builderCorpoEmail.toString();
+
+        enviaEmail(assunto, corpoEmail, emailsParaEnvio);
+    }
+
+    /**
+     *
+     * @param agenda Esse método é para enviar os e-mails de alteração de evento
+     * (eventos editados na interface gráfica)
+     */
+    public static void enviaAlteracaoEventoEmail(Agenda agenda) {
+
+        List<String> emailsParaEnvio = listaContatos(agenda);
+        emailsParaEnvio.add(agenda.getUsuario().getLogin());
+
+        String assunto = "Alteração de Evento Senac Palhoça";
+
+        StringBuilder builderCorpoEmail = new StringBuilder();
+        builderCorpoEmail.append("<h1>.:Senac Palhoça - Evento Alterado:.</h1>");
+        builderCorpoEmail.append(montaCorpoParaAgenda(agenda));
+
+        String corpoEmail = builderCorpoEmail.toString();
+
+        enviaEmail(assunto, corpoEmail, emailsParaEnvio);
+    }
+
     private static StringBuilder montaCorpoParaAgenda(Agenda agenda) {
         StringBuilder builderCorpoEmail = new StringBuilder();
         builderCorpoEmail.append("<p class=\"p_topo\" style=\"margin-top: 20px\">Olá!!</p>");
-        
+
         builderCorpoEmail.append("<br/>");
-        
+
         builderCorpoEmail.append("<p>Você possui evento ");
         builderCorpoEmail.append(agenda.getAssunto());
         builderCorpoEmail.append(", dia <b>");
         builderCorpoEmail.append(formataData(agenda.getDia_evento()));
         builderCorpoEmail.append("</b></p>");
-        
+
         builderCorpoEmail.append("<p>");
         builderCorpoEmail.append(agenda.getDescricao());
         builderCorpoEmail.append("</p>");
-        
+
         builderCorpoEmail.append("<br />");
-        
+
         builderCorpoEmail.append("<p>Atenciosamente;<br/>");
         builderCorpoEmail.append(agenda.getUsuario().getNome());
         builderCorpoEmail.append("<br/>Senac Palhoça<br/>");
@@ -93,8 +144,8 @@ public class EnviaEmail implements Serializable {
     }
 
     private static void enviaEmail(String assunto, String corpo, List<String> e_mails) {
-        String emailDeEnvio = "cel055.web@gmail.com";
-        String senha = "nemvemquenaotem";
+        String emailDeEnvio = "tjunior103@gmail.com";
+        String senha = "10SP_junior";
 
         HtmlEmail email = new HtmlEmail();
         email.setHostName("smtp.gmail.com");
