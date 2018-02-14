@@ -9,6 +9,7 @@ package br.com.container.util;
 import br.com.container.modelo.Agenda;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +25,7 @@ public class EnviaEmail implements Serializable {
 
     public static void enviaConfirmacaoEmail(Agenda agenda) {
 
-        List<String> emailsParaEnvio = Arrays.asList(agenda.getConvidado().split(";"));
+        List<String> emailsParaEnvio = new ArrayList<>(Arrays.asList(agenda.getConvidado().split(";")));
         emailsParaEnvio.add(agenda.getUsuario().getLogin());
 
         String assunto = "Evento Senac Palhoça";
@@ -46,7 +47,7 @@ public class EnviaEmail implements Serializable {
      */
     public static void enviaLembreteEmail(Agenda agenda) {
 
-        List<String> emailsParaEnvio = Arrays.asList(agenda.getConvidado().split(";"));
+        List<String> emailsParaEnvio = new ArrayList<>(Arrays.asList(agenda.getConvidado().split(";")));
         emailsParaEnvio.add(agenda.getUsuario().getLogin());
 
         String assunto = "Lembrete de Evento Senac Palhoça";
