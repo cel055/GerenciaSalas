@@ -10,6 +10,7 @@ import br.com.container.dao.AgendaDaoImpl;
 import br.com.container.dao.HibernateUtil;
 import br.com.container.modelo.Agenda;
 import br.com.container.util.EnviaEmail;
+import br.com.container.util.Estaticos;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -27,7 +28,7 @@ public class TimerEnviaEmails extends TimerTask{
     //este é o método que será executado quando a data correta chegar
     @Override
     public void run() {
-        Calendar hoje = new GregorianCalendar();
+        Calendar hoje = new GregorianCalendar(Estaticos.horaProj);
         Session session = null;
         AgendaDao dao;
         List<Agenda> agendas;

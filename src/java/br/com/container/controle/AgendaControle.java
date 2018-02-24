@@ -13,6 +13,7 @@ import br.com.container.modelo.Agenda;
 import br.com.container.modelo.Reserva;
 import br.com.container.modelo.Usuario;
 import br.com.container.util.EnviaEmail;
+import br.com.container.util.Estaticos;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -88,7 +89,7 @@ public class AgendaControle implements Serializable {
     }
     
     public void validarData() {
-        Calendar mais = Calendar.getInstance();
+        Calendar mais = Calendar.getInstance(Estaticos.horaProj);
         mais.add(Calendar.DAY_OF_MONTH, 1);
         diaAnterior = mais.getTime();
     }

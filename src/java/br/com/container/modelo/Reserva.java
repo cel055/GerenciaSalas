@@ -26,10 +26,6 @@ import javax.persistence.Temporal;
 @Entity
 @Table(name = "reserva")
 public class Reserva implements Serializable {
-    //Criei estas para que não ocorra erro de digitação já qu isto será usado na pesquisa do banco
-    public static final String MANHA = "Matutino";
-    public static final String TARDE = "Vespertino";
-    public static final String NOITE = "Noturno";
     
     private static final long serialVersionUID = 1L;
     @Id

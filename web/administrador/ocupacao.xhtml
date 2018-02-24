@@ -54,10 +54,10 @@
                         <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" >
 
                             <h:outputText value="Inicio:" />
-                            <h:outputText value="#{reserva.inicio}" />
+                            <h:outputText value="#{ocupacaoControle.formataData(reserva.inicio)}" />
 
                             <h:outputText value="Fim" />
-                            <h:outputText value="#{reserva.fim}"/>
+                            <h:outputText value="#{ocupacaoControle.formataData(reserva.fim)}"/>
 
                             <h:outputText value="Periodo" />
                             <h:outputText value="#{reserva.periodo}" />
@@ -107,17 +107,17 @@
                         <p:outputLabel for="inicio" value="Ínicio" />
                         <p:calendar id="inicio" value="#{ocupacaoControle.reserva.inicio}" pattern="dd/MM/yyyy">
                             <p:ajax event="dateSelect" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" 
-                                    update="listaDeClassesDisponiveis"/>
+                                    update="listaDeClassesDisponiveis, diaSemana, fim"/>
                             <p:ajax event="blur" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" 
-                                    update="listaDeClassesDisponiveis"/>
+                                    update="listaDeClassesDisponiveis, diaSemana, fim"/>
                         </p:calendar>
 
                         <p:outputLabel for="fim" value="Fim" />
-                        <p:calendar id="fim" value="#{ocupacaoControle.reserva.fim}" pattern="dd/MM/yyyy">
+                        <p:calendar id="fim" value="#{ocupacaoControle.reserva.fim}" pattern="dd/MM/yyyy" mindate="#{ocupacaoControle.reserva.inicio}">
                             <p:ajax event="dateSelect" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}"
-                                    update="listaDeClassesDisponiveis"/>
+                                    update="listaDeClassesDisponiveis, diaSemana"/>
                             <p:ajax event="blur" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" 
-                                    update="listaDeClassesDisponiveis"/>
+                                    update="listaDeClassesDisponiveis, diaSemana"/>
                         </p:calendar>
 
                         <p:outputLabel for="periodo" value="Período:" />
@@ -130,7 +130,7 @@
 
                         <p:outputLabel  value="Persistir em:" />
                         <p:selectManyCheckbox id="diaSemana" value="#{ocupacaoControle.reserva.diasDaSemana}" layout="responsive" converter="conversorDiaDaSemana"
-                                              columns="3">
+                                              columns="3" disabled="#{ocupacaoControle.diaUnico}">
                             <f:selectItems value="#{ocupacaoControle.diasDaSemana}" var="semana" itemLabel="#{semana.nomeDoDia}" itemValue="#{semana}" />
                             <p:ajax event="change" listener="#{ocupacaoControle.pesquisaSalaParaSalvar}" update="listaDeClassesDisponiveis"/>
                         </p:selectManyCheckbox>

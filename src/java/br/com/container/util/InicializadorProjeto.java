@@ -36,7 +36,7 @@ public class InicializadorProjeto implements ServletContextListener {
         
         //Data em que será executada a primeira vez, 
         //neste caso no dia seguinte de levantar o projeto as 7 horas da manha
-        Calendar primeiraExecucao = new GregorianCalendar();
+        Calendar primeiraExecucao = new GregorianCalendar(Estaticos.horaProj);
         primeiraExecucao.add(Calendar.DATE, 1);
         primeiraExecucao.set(Calendar.HOUR_OF_DAY, 7);
         primeiraExecucao.set(Calendar.MINUTE, 0);

@@ -6,6 +6,7 @@
 package br.com.container.dao;
 
 import br.com.container.modelo.Agenda;
+import br.com.container.util.Estaticos;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,7 +55,7 @@ public class AgendaDaoImpl extends BaseDaoImpl<Agenda, Long> implements AgendaDa
 
     public static void main(String[] args) {
         AgendaDao dao = new AgendaDaoImpl();
-        Calendar data = new GregorianCalendar();
+        Calendar data = new GregorianCalendar(Estaticos.horaProj);
         data.set(2018, 01, 22);
         Session session = null;
         try {

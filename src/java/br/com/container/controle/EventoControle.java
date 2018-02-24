@@ -16,6 +16,7 @@ import br.com.container.modelo.DiaDaSemana;
 import br.com.container.modelo.Reserva;
 import br.com.container.modelo.Sala;
 import br.com.container.modelo.Usuario;
+import br.com.container.util.Estaticos;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -118,7 +119,7 @@ public class EventoControle implements Serializable {
 //
 //        }
 
-            Calendar calendarAtual = new GregorianCalendar();
+            Calendar calendarAtual = new GregorianCalendar(Estaticos.horaProj);
             if (eventos == null || eventos.isEmpty()) {
                 return;
             }
@@ -329,7 +330,7 @@ public class EventoControle implements Serializable {
     }
 
     private void acrescentaDiaDataEvento(Reserva evento, int dia) {
-        Calendar c = Calendar.getInstance();
+        Calendar c = Calendar.getInstance(Estaticos.horaProj);
         c.setTime(evento.getInicio());
         c.add(Calendar.DATE, +dia);
         // Obtemos a data alterada

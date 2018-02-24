@@ -15,6 +15,7 @@ import br.com.container.dao.SalaDaoImpl;
 import br.com.container.modelo.DiaDaSemana;
 import br.com.container.modelo.Reserva;
 import br.com.container.modelo.Sala;
+import br.com.container.util.Estaticos;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,6 +57,7 @@ public class OcupacaoControle implements Serializable {
     private List<Sala> salasSelecionadas;
     private List<DiaDaSemana> diasDaSemana;
     private List<String> periodos;
+    private boolean diaUnico = false;
 
     private Date dataInicioPesquisa;
     private Date dataFimPesquisa;
@@ -82,11 +84,19 @@ public class OcupacaoControle implements Serializable {
         }
     }
 
+    public String formataData(Date data) {
+        return Estaticos.formataData(data);
+    }
+
+    public String formataData(String data) {
+        return Estaticos.formataData(data);
+    }
+
     //métodos da pesquisa inicial
     public void iniciaTimeline() {
         timeline = new TimelineModel();
         //este é a data inicial e final vista na timeline na primeira vez, depois o usuario pode mudar
-        Calendar calendario = new GregorianCalendar();
+        Calendar calendario = new GregorianCalendar(Estaticos.horaProj);
         calendario.add(Calendar.DAY_OF_YEAR, -5);
         inicioTimeline = calendario.getTime();
         calendario.add(Calendar.DAY_OF_YEAR, 30);
@@ -136,7 +146,7 @@ public class OcupacaoControle implements Serializable {
         boolean tarde = false;
         boolean noite = false;
 
-        Calendar calendarAtual = new GregorianCalendar();
+        Calendar calendarAtual = new GregorianCalendar(Estaticos.horaProj);
 
         do {
             idsReserva = "";
@@ -153,13 +163,13 @@ public class OcupacaoControle implements Serializable {
                             }
                             idsReserva += r.getId().toString() + ",";
                             switch (r.getPeriodo()) {
-                                case Reserva.MANHA:
+                                case Estaticos.MANHA:
                                     manha = true;
                                     break;
-                                case Reserva.TARDE:
+                                case Estaticos.TARDE:
                                     tarde = true;
                                     break;
-                                case Reserva.NOITE:
+                                case Estaticos.NOITE:
                                     noite = true;
                                     break;
                             }
@@ -209,10 +219,10 @@ public class OcupacaoControle implements Serializable {
     }
 
     public String pesquisaSalaParaSalvar() {
-        if (reserva.getInicio() == null || reserva.getFim() == null || reserva.getDiasDaSemana().isEmpty() || periodos.isEmpty()) {
-            salasParaPesquisa = new ArrayList<>();
+        if(!verificaDadosParaPesquisaDeSala()){
             return "ocupacao";
         }
+
         System.out.println("Pesq");
         if (session == null || !session.isOpen()) {
             session = HibernateUtil.abreSessao();
@@ -232,6 +242,32 @@ public class OcupacaoControle implements Serializable {
         }
         session.close();
         return "ocupacao";
+    }
+    
+    private boolean verificaDadosParaPesquisaDeSala(){
+        if (reserva.getInicio() == null || reserva.getFim() == null) {
+            salasParaPesquisa = new ArrayList<>();
+            return false;
+        } else if (reserva.getInicio().compareTo(reserva.getFim()) == 0) {
+            diaUnico = true;
+            Calendar diaDaAula = new GregorianCalendar(Estaticos.horaProj);
+            diaDaAula.setTime(reserva.getInicio());
+            for (DiaDaSemana diaDaSemana : diasDaSemana) {
+                if (diaDaSemana.getNumeroDoDia() == diaDaAula.get(Calendar.DAY_OF_WEEK)) {
+                    reserva.setDiasDaSemana(new ArrayList<>());
+                    reserva.getDiasDaSemana().add(diaDaSemana);
+                    break;
+                }
+            }
+        } else {
+            diaUnico = false;
+        }
+        
+        if (reserva.getDiasDaSemana().isEmpty() || periodos.isEmpty()) {
+            salasParaPesquisa = new ArrayList<>();
+            return false;
+        }
+        return true;
     }
 
     public String salvar() {
@@ -254,14 +290,14 @@ public class OcupacaoControle implements Serializable {
         } else {
             Reserva r;
             if (reserva.getId() == null) {
-                
+
                 for (String periodo : periodos) {
                     r = new Reserva(null, reserva.getInformacao(), reserva.getInicio(), reserva.getFim(), reserva.getUsuario(), reserva.getSala(), periodo, new ArrayList<>(reserva.getDiasDaSemana()));
                     reservaDao.salvarOuAlterar(r, session);
                 }
-                
+
             } else {
-                
+
                 if (periodos.contains(reserva.getPeriodo())) {
                     for (String periodo : periodos) {
                         if (reserva.getPeriodo().equals(periodo)) {
@@ -280,7 +316,7 @@ public class OcupacaoControle implements Serializable {
                         reservaDao.salvarOuAlterar(r, session);
                     }
                 }
-                
+
             }
         }
         session.close();
@@ -503,6 +539,14 @@ public class OcupacaoControle implements Serializable {
 
     public void setReservasSelecionadas(List<Reserva> reservasSelecionadas) {
         this.reservasSelecionadas = reservasSelecionadas;
+    }
+
+    public boolean isDiaUnico() {
+        return diaUnico;
+    }
+
+    public void setDiaUnico(boolean diaUnico) {
+        this.diaUnico = diaUnico;
     }
 
 }
