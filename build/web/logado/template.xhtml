@@ -25,7 +25,174 @@
             <h:outputScript target="body" library="js" name="relogio.js"/>
 
         </f:facet>
+        <p:importConstants type="br.com.container.util.Estaticos" var="Constantes"/>
         <title>Senac-NEB</title>
+        <style>
+            .corVerde{
+                background: #90EE90;
+                color: #000 !important;
+                border: 2px solid #90EE90;
+            }
+            .corAmarela{
+                background: #F0E68C;
+                color: #000 !important;
+                border: 2px solid #F0E68C;
+            }
+            .corAzul{
+                background: #6A5ACD;
+                color: #000 !important;
+            }
+/*            Estilo para a timeline*/
+            div.timeline-frame {  
+                border-color: #5D99C3;  
+                border-radius: 5px;  
+            }  
+
+            div.timeline-axis {  
+                border-color: #5D99C3;  
+                background-color: #5D99C3;  
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5D99C3', endColorstr='#3A6DA0') alpha(opacity = 100);  
+                background: -webkit-gradient(linear, left top, left bottom, from(#5D99C3), to(#3A6DA0));  
+                background: -moz-linear-gradient(top,  #5D99C3,  #3A6DA0);  
+                -khtml-opacity: 1;  
+                -moz-opacity: 1;  
+                opacity: 1;  
+            }  
+
+            div.timeline-groups-axis {  
+                border-color: #5D99C3;
+/*                margin-top: 5px !important; 
+                margin-bottom: 5px !important; */
+            }  
+
+            div.timeline-groups-axis-onleft {  
+                border-style: none solid none none;  
+            }  
+
+            div.timeline-axis-text {  
+                color: white;  
+            }  
+
+            div.timeline-event {  
+                color: black !important;  
+                border-radius: 5px !important;  
+            }  
+
+            div.timeline-event-content {  
+                padding: 5px;  
+                text-shadow: none;  
+            }  
+
+            div.timeline-event-selected {  
+                background: #BECEFE none !important;  
+                border-color: #97B0F8 !important;  
+            }  
+
+            div.manha {  
+                background: #00FFFF none !important;
+                border: none !important;
+                border-radius: 0px !important;
+            }  
+
+            div.tarde {  
+                background: #FF8500 none !important; 
+                border: none !important; 
+                border-radius: 0px !important;
+            }  
+
+            div.noite {  
+                background: #0000FF none !important;
+                border: none !important; 
+                border-radius: 0px !important;
+            }
+
+            div.manhaTarde {  
+                background: #00ffff; /* Old browsers */
+                background: -moz-linear-gradient(top, #00ffff 49%, #ff8500 51%) !important; /* FF3.6-15 */
+                background: -webkit-linear-gradient(top, #00ffff 49%,#ff8500 51%) !important; /* Chrome10-25,Safari5.1-6 */
+                background: linear-gradient(to bottom, #00ffff 49%,#ff8500 51%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffff', endColorstr='#ff8500',GradientType=0 ) !important; /* IE6-9 */ 
+                border: none !important;
+                border-radius: 0px !important;
+            }
+
+            div.manhaNoite{
+                background: #00ffff; /* Old browsers */
+                background: -moz-linear-gradient(top, #00ffff 49%, #0000ff 51%) !important; /* FF3.6-15 */
+                background: -webkit-linear-gradient(top, #00ffff 49%,#0000ff 51%) !important; /* Chrome10-25,Safari5.1-6 */
+                background: linear-gradient(to bottom, #00ffff 49%,#0000ff 51%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffff', endColorstr='#0000ff',GradientType=0 ) !important; /* IE6-9 */ 
+                border: none !important;
+                border-radius: 0px !important;
+            }
+
+            div.tardeNoite{
+                background: #ff8500; /* Old browsers */
+                background: -moz-linear-gradient(top, #ff8500 49%, #0000ff 51%) !important; /* FF3.6-15 */
+                background: -webkit-linear-gradient(top, #ff8500 49%,#0000ff 51%) !important; /* Chrome10-25,Safari5.1-6 */
+                background: linear-gradient(to bottom, #ff8500 49%,#0000ff 51%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff8500', endColorstr='#0000ff',GradientType=0 ) !important; /* IE6-9 */ 
+                border: none !important;
+                border-radius: 0px !important;
+            }
+
+            div.manhaTardeNoite{
+                background: #00ffff; /* Old browsers */
+                background: -moz-linear-gradient(top, #00ffff 32%, #ff8500 33%, #ff8500 65%, #0000ff 66%) !important; /* FF3.6-15 */
+                background: -webkit-linear-gradient(top, #00ffff 32%,#ff8500 33%,#ff8500 65%,#0000ff 66%) !important; /* Chrome10-25,Safari5.1-6 */
+                background: linear-gradient(to bottom, #00ffff 32%,#ff8500 33%,#ff8500 65%,#0000ff 66%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffff', endColorstr='#0000ff',GradientType=0 ) !important; /* IE6-9 */ 
+                border: none !important;
+                border-radius: 0px !important;
+            }
+            /*Fim do estilo da timeline*/
+            
+            
+            /*conserto checkbox*/
+            .ui-selectmanycheckbox label{
+                margin: 0 1px 0 20px;
+            }
+            
+            .ui-chkbox{
+                margin-left: 0;
+            }
+            
+            div.timeline-event.timeline-event-range{
+                margin-top: 5px;
+            }
+            
+            .ui-selectcheckboxmenu-header .ui-selectcheckboxmenu-filter-container{
+                margin-left: 25px;
+            }
+        </style>
+        <script>
+            PrimeFaces.locales['pt'] = {
+                closeText: 'Fechar',
+                prevText: 'Anterior',
+                nextText: 'Próximo',
+                currentText: 'Hoje',
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+                weekHeader: 'Semana',
+                firstDay: 0,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Só Horas',
+                timeText: 'Tempo',
+                hourText: 'Hora',
+                minuteText: 'Minuto',
+                secondText: 'Segundo',
+                ampm: false,
+                month: 'Mês',
+                week: 'Semana',
+                day: 'Dia',
+                allDayText: 'Todo o Dia'
+            };
+        </script>
     </h:head>
     <h:body>
         <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"  />
@@ -34,7 +201,7 @@
             <p:graphicImage name="aguarde.gif" library="imagem"/>
         </p:dialog>
         <header class="jr-top">
-<!--            <h:graphicImage library="imagem" name="logo.jpg" styleClass="logoTitulo"/>-->
+            <!--            <h:graphicImage library="imagem" name="logo.jpg" styleClass="logoTitulo"/>-->
             <span class="titulo">Senac-NEB</span>
             <a href="#" class="jr-toggle js-toggle" style="margin-top: 2vh;" ><i class="fa fw-fw fa-arrows-alt" onclick="toggleFullScreen()"></i></a>
             <a href="#" class="jr-toggle js-toggle" style="margin-top: 2vh;" ><i class="fa fa-bars"></i></a>
@@ -46,32 +213,49 @@
                     <li >
                         <h:link outcome="/logado/dashboard"><i class="fa fw-fw fa-home"> - Home</i></h:link>
                     </li>
-<!--                    <li>
-                        <h:link outcome="/atendente/pedido">
-                            <i class="fa fw-fw fa-file-text-o"> - Pedido</i>
-                        </h:link>
-                    </li>-->
-<!--                    <h:panelGroup rendered="# {request.isUserInRole('ROLE_CAIXA') or request.isUserInRole('ROLE_ADMIN')}" >
-                        <li>
-                            <h:link outcome="/caixa/fechamentoPedido" >
-                                <i class="fa fw-fw fa-dollar"> - Fechar Pedido</i></h:link>
-                        </li>
-                    </h:panelGroup>-->
+                    <!--                    <li>
+                                            <h:link outcome="/atendente/pedido">
+                                                <i class="fa fw-fw fa-file-text-o"> - Pedido</i>
+                                            </h:link>
+                                        </li>-->
+                    <!--                    <h:panelGroup rendered="# {request.isUserInRole('ROLE_CAIXA') or request.isUserInRole('ROLE_ADMIN')}" >
+                                            <li>
+                                                <h:link outcome="/caixa/fechamentoPedido" >
+                                                    <i class="fa fw-fw fa-dollar"> - Fechar Pedido</i></h:link>
+                                            </li>
+                                        </h:panelGroup>-->
 
                     <h:panelGroup rendered="#{request.isUserInRole('ROLE_ADMIN')}" >
                         <!--<li class="is-selected"  >-->
-                        
+
                         <li>
                             <h:link outcome="/administrador/usuario" >
                                 <i class="fa fw-fw fa-users"> - Usuários</i></h:link>
                         </li>
-                        
+
                         <li>
                             <h:link outcome="/administrador/sala" >
-                                <i class="fa fw-fw fa-users"> - Sala</i></h:link>
+                                <i class="fa fa-graduation-cap"> - Sala</i></h:link>
+                        </li>
+
+                        <li>
+                            <h:link outcome="/administrador/visualizarSala" >
+                                <i class="fa fa-book"> - Visualizar Sala</i></h:link>
+                        </li>
+                        <li>
+                            <h:link outcome="/administrador/ocupacao" >
+                                <i class="fa fa-calendar-check-o"> - Ocupar Sala</i></h:link>
+                        </li>
+                        <li>
+                            <h:link outcome="/administrador/funcionario" >
+                                <i class="fa fa-address-card-o"> - Funcionario</i></h:link>
+                        </li>
+                        <li>
+                            <h:link outcome="/administrador/funcao" >
+                                <i class="fa fa fa-shield"> - Funções</i></h:link>
                         </li>
                     </h:panelGroup>
-                    
+
                     <li>
                         <!--                        <h:link outcome="/atendente/alterausuario">
                                                     <i class="fa fw-fw fa-user"> Editar Perfil</i></h:link>-->

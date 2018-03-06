@@ -135,6 +135,7 @@ public class EnviaEmail implements Serializable {
         builderCorpoEmail.append("<br/>Senac Palhoça<br/>");
         builderCorpoEmail.append("+55(48) 3341-9100<br/>");
         builderCorpoEmail.append("palhoca@sc.senac.br | https://www.facebook.com/FaculdadeSenacPalhoca/</p>");
+        builderCorpoEmail.append("<p>" + formataData(new Date()) + "</p>");
         return builderCorpoEmail;
     }
 
