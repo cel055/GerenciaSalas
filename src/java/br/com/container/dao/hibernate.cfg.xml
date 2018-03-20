@@ -8,13 +8,13 @@
 <!--   servidor local-->
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/senac_neb?autoReconnect=true</property>
     <property name="hibernate.connection.username">root</property>
-    <property name="hibernate.connection.password"></property>
     <!--<property name="hibernate.connection.password">root</property>-->
+    <property name="hibernate.connection.password"></property>
     
     <!--servidor web-->
-<!--    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/containe_system?autoReconnect=true</property>
-    <property name="hibernate.connection.username">containe_d3nh1</property>
-    <property name="hibernate.connection.password">r2n1t4d3nh1</property>   -->
+<!--    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/silvio_neb?autoReconnect=true</property>
+    <property name="hibernate.connection.username">silvio_neb</property>
+    <property name="hibernate.connection.password">silvio_neb</property>   -->
     
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>

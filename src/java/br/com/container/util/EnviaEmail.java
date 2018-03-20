@@ -59,10 +59,10 @@ public class EnviaEmail implements Serializable {
         List<String> emailsParaEnvio = listaContatos(agenda);
         emailsParaEnvio.add(agenda.getUsuario().getLogin());
 
-        String assunto = "Lembrete de Evento Senac Palhoça";
+        String assunto = "Lembrete de Evento Senac Palhoca";
 
         StringBuilder builderCorpoEmail = new StringBuilder();
-        builderCorpoEmail.append("<h1>.:Senac Palhoça - Lembrete:.</h1>");
+        builderCorpoEmail.append("<h1>.:Senac Palhoca - Lembrete:.</h1>");
         builderCorpoEmail.append(montaCorpoParaAgenda(agenda));
 
         String corpoEmail = builderCorpoEmail.toString();
@@ -80,10 +80,10 @@ public class EnviaEmail implements Serializable {
         List<String> emailsParaEnvio = listaContatos(agenda);
         emailsParaEnvio.add(agenda.getUsuario().getLogin());
 
-        String assunto = "Cancelamento de Evento Senac Palhoça";
+        String assunto = "Cancelamento de Evento Senac Palhoca";
 
         StringBuilder builderCorpoEmail = new StringBuilder();
-        builderCorpoEmail.append("<h1>.:Senac Palhoça - Evento Cancelado:.</h1>");
+        builderCorpoEmail.append("<h1>.:Senac Palhoca - Evento Cancelado:.</h1>");
         builderCorpoEmail.append(montaCorpoParaAgenda(agenda));
 
         String corpoEmail = builderCorpoEmail.toString();
@@ -101,10 +101,10 @@ public class EnviaEmail implements Serializable {
         List<String> emailsParaEnvio = listaContatos(agenda);
         emailsParaEnvio.add(agenda.getUsuario().getLogin());
 
-        String assunto = "Alteração de Evento Senac Palhoça";
+        String assunto = "Alteracao de Evento Senac Palhoca";
 
         StringBuilder builderCorpoEmail = new StringBuilder();
-        builderCorpoEmail.append("<h1>.:Senac Palhoça - Evento Alterado:.</h1>");
+        builderCorpoEmail.append("<h1>.:Senac Palhoca - Evento Alterado:.</h1>");
         builderCorpoEmail.append(montaCorpoParaAgenda(agenda));
 
         String corpoEmail = builderCorpoEmail.toString();
@@ -118,7 +118,7 @@ public class EnviaEmail implements Serializable {
 
         builderCorpoEmail.append("<br/>");
 
-        builderCorpoEmail.append("<p>Você possui evento ");
+        builderCorpoEmail.append("<p>Voce possui evento ");
         builderCorpoEmail.append(agenda.getAssunto());
         builderCorpoEmail.append(", dia <b>");
         builderCorpoEmail.append(formataData(agenda.getDia_evento()));
@@ -132,7 +132,7 @@ public class EnviaEmail implements Serializable {
 
         builderCorpoEmail.append("<p>Atenciosamente;<br/>");
         builderCorpoEmail.append(agenda.getUsuario().getNome());
-        builderCorpoEmail.append("<br/>Senac Palhoça<br/>");
+        builderCorpoEmail.append("<br/>Senac Palhoca<br/>");
         builderCorpoEmail.append("+55(48) 3341-9100<br/>");
         builderCorpoEmail.append("palhoca@sc.senac.br | https://www.facebook.com/FaculdadeSenacPalhoca/</p>");
         builderCorpoEmail.append("<p>" + formataData(new Date()) + "</p>");
@@ -145,8 +145,8 @@ public class EnviaEmail implements Serializable {
     }
 
     private static void enviaEmail(String assunto, String corpo, List<String> e_mails) {
-        String emailDeEnvio = "tjunior103@gmail.com";
-        String senha = "10SP_junior";
+        String emailDeEnvio = "pfsensepalhoca@gmail.com";
+        String senha = "senacplc";
 
         HtmlEmail email = new HtmlEmail();
         email.setHostName("smtp.gmail.com");
@@ -157,7 +157,7 @@ public class EnviaEmail implements Serializable {
         email.setDebug(true);
 
         try {
-            email.setFrom(emailDeEnvio, "Senac Palhoça");
+            email.setFrom(emailDeEnvio, "Senac Palhoca");
 
             for (String e_mail : e_mails) {
                 email.addTo(e_mail.trim());

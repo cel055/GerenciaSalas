@@ -8,9 +8,7 @@ package br.com.container.controle;
 import br.com.container.dao.AgendaDao;
 import br.com.container.dao.AgendaDaoImpl;
 import br.com.container.dao.HibernateUtil;
-import br.com.container.dao.ReservaDaoImpl;
 import br.com.container.modelo.Agenda;
-import br.com.container.modelo.Reserva;
 import br.com.container.modelo.Usuario;
 import br.com.container.util.EnviaEmail;
 import br.com.container.util.Estaticos;
@@ -18,6 +16,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -47,6 +46,7 @@ public class AgendaControle implements Serializable {
     private Usuario usuario;
     private Session session;
     private Date diaAnterior;
+    
 
     @PostConstruct
     public void inicializar() {
@@ -81,8 +81,9 @@ public class AgendaControle implements Serializable {
     public void selecionado(SelectEvent selectEvent) {
         ScheduleEvent scheduleEvent = (ScheduleEvent) selectEvent.getObject();
         for (Agenda ev : eventos) {
-            if (ev.getId() == (Long) scheduleEvent.getData()) {
+            if (Objects.equals(ev.getId(), (Long) scheduleEvent.getData())) {
                 agenda = ev;
+//                agenda.setUsuario(usuario);
                 break;
             }
         }
@@ -115,6 +116,7 @@ public class AgendaControle implements Serializable {
     }
 
     public void novo(SelectEvent selectEvent) {
+        agenda = new Agenda();
         ScheduleEvent scheduleEvent
                 = new DefaultScheduleEvent("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
         agenda.setDia_evento(scheduleEvent.getStartDate());
@@ -181,4 +183,12 @@ public class AgendaControle implements Serializable {
         this.diaAnterior = diaAnterior;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
 }

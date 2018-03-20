@@ -42,16 +42,16 @@
         <b:property name="url" value="jdbc:mysql://localhost:3306/senac_neb" />
         <b:property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <b:property name="username" value="root" />
-        <!--<b:property name="password" value="" />-->
-        <b:property name="password" value="root" />
+        <!--<b:property name="password" value="root" />-->
+        <b:property name="password" value="" />
     </b:bean>
  
     <!--servidor web-->
 <!--    <b:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
-        <b:property name="url" value="jdbc:mysql://localhost:3306/senac_neb" />
+        <b:property name="url" value="jdbc:mysql://localhost:3306/silvio_neb" />
         <b:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <b:property name="username" value="containe_d3nh1" />
-        <b:property name="password" value="r2n1t4d3nh1" />
+        <b:property name="username" value="silvio_neb" />
+        <b:property name="password" value="silvio_neb" />
     </b:bean>-->
  
 </b:beans>

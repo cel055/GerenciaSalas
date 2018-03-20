@@ -43,7 +43,16 @@ public class AgendaDaoImpl extends BaseDaoImpl<Agenda, Long> implements AgendaDa
     public List<Agenda> procuraAgendaUsuario(Session session, Long idUsuario) throws HibernateException {
         Query consulta = session.createQuery("from Agenda a where a.usuario.id = :id");
         consulta.setParameter("id", idUsuario);
-        return consulta.list();
+        List<Agenda> todosUsuarioPorId = consulta.list();
+
+        if (!todosUsuarioPorId.isEmpty()) {
+            consulta = session.createQuery("from Agenda a where a.convidado like :login");
+            consulta.setParameter("login", "%" + todosUsuarioPorId.get(0).getUsuario().getLogin() + "%");
+            List<Agenda> todosComConvidados = consulta.list();
+            todosUsuarioPorId.addAll(todosComConvidados);
+        }
+
+        return todosUsuarioPorId;
     }
 
     @Override
@@ -52,6 +61,7 @@ public class AgendaDaoImpl extends BaseDaoImpl<Agenda, Long> implements AgendaDa
         consulta.setParameter("dia", dia);
         return consulta.list();
     }
+
 
     public static void main(String[] args) {
         AgendaDao dao = new AgendaDaoImpl();
@@ -74,4 +84,5 @@ public class AgendaDaoImpl extends BaseDaoImpl<Agenda, Long> implements AgendaDa
             }
         }
     }
+
 }

@@ -28,7 +28,13 @@
                 <p:dialog id="dialogo" widgetVar="caixaDialogo"  header="Evento" resizable="false" modal="true"
                           showEffect="clip">
                     <p:panel id="eventoDetalhe">
-                        <p:panelGrid columns="2">  
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Convite" 
+                                           rendered="#{agendaControle.usuario.id != agendaControle.agenda.usuario.id and
+                                            agendaControle.agenda.id != null}"/>
+                            <p:outputLabel value="#{agendaControle.agenda.usuario.nome}"
+                                           rendered="#{agendaControle.usuario.id != agendaControle.agenda.usuario.id and
+                                            agendaControle.agenda.id != null}"/>
                             <p:outputLabel for="assunto"  value="Assunto" />
                             <p:inputText id="assunto" value="#{agendaControle.agenda.assunto}" required="true"
                                          requiredMessage="Assunto é obrigatório" size="50"/>
@@ -47,17 +53,22 @@
                             <p:outputLabel for="terceiro" value="3º E-mail" />
                             <p:calendar id="terceiro" value="#{agendaControle.agenda.email3}"
                                         mindate="#{agendaControle.diaAnterior}" pattern="dd/MM/yyyy" 
-                                         maxdate="#{agendaControle.dataMaxima}"/>
+                                        maxdate="#{agendaControle.dataMaxima}"/>
 
                             <p:commandButton icon="fa fa-save" value="Salvar"
                                              actionListener="#{agendaControle.salvar()}" update="msg schEvento"
-                                             oncomplete="PF('caixaDialogo').hide();" rendered="#{agendaControle.agenda.id == null }" />
-                            <p:commandButton icon="fa fa-edit" value="Alterar"
+                                             oncomplete="PF('caixaDialogo').hide();" 
+                                             rendered="#{agendaControle.agenda.id == null }" />
+                            <p:commandButton icon="fa fa-edit" value="Alterar" 
                                              actionListener="#{agendaControle.salvar()}" update="msg schEvento"
-                                             oncomplete="PF('caixaDialogo').hide();" rendered="#{agendaControle.agenda.id != null }" />
+                                             oncomplete="PF('caixaDialogo').hide();" 
+                                             rendered="#{agendaControle.agenda.id != null
+                                                         and agendaControle.usuario.id == agendaControle.agenda.usuario.id}" />
 
                             <p:commandButton icon="ui-icon-trash" actionListener="#{agendaControle.deletarDataAgendanda()}"
-                                             update="form_calendario" title="Excluir" value="Deletar">
+                                             update="form_calendario" title="Excluir" value="Deletar"
+                                             rendered="#{agendaControle.agenda.id != null
+                                                         and agendaControle.usuario.id == agendaControle.agenda.usuario.id}" >
                                 <p:confirm header="Confirmação" message="Tem certeza exclusão?" 
                                            icon="ui-icon-alert" />
                             </p:commandButton>

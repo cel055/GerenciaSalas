@@ -23,7 +23,6 @@
             <h:outputScript target="body" library="primefaces" name="jquery/jquery.js"/>
             <h:outputScript target="body" library="js" name="apps.js"/>
             <h:outputScript target="body" library="js" name="relogio.js"/>
-
         </f:facet>
         <p:importConstants type="br.com.container.util.Estaticos" var="Constantes"/>
         <title>Senac-NEB</title>
@@ -241,6 +240,13 @@
                         <li>
                             <h:link outcome="/administrador/visualizarSala" >
                                 <i class="fa fa-book"> - Visualizar Sala</i></h:link>
+                            <h:link outcome="/administrador/agenda" >
+                                <i class="fa fa-book"> - Agenda</i></h:link>
+                        </li>
+
+                        <li>
+                            <h:link outcome="/administrador/visualizarSala" >
+                                <i class="fa fa-calendar"> - Visualizar Sala</i></h:link>
                         </li>
                         <li>
                             <h:link outcome="/administrador/ocupacao" >
