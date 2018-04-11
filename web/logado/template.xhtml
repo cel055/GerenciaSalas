@@ -41,7 +41,7 @@
                 background: #6A5ACD;
                 color: #000 !important;
             }
-/*            Estilo para a timeline*/
+            /*            Estilo para a timeline*/
             div.timeline-frame {  
                 border-color: #5D99C3;  
                 border-radius: 5px;  
@@ -60,8 +60,8 @@
 
             div.timeline-groups-axis {  
                 border-color: #5D99C3;
-/*                margin-top: 5px !important; 
-                margin-bottom: 5px !important; */
+                /*                margin-top: 5px !important; 
+                                margin-bottom: 5px !important; */
             }  
 
             div.timeline-groups-axis-onleft {  
@@ -145,21 +145,21 @@
                 border-radius: 0px !important;
             }
             /*Fim do estilo da timeline*/
-            
-            
+
+
             /*conserto checkbox*/
             .ui-selectmanycheckbox label{
                 margin: 0 1px 0 20px;
             }
-            
+
             .ui-chkbox{
                 margin-left: 0;
             }
-            
+
             div.timeline-event.timeline-event-range{
                 margin-top: 5px;
             }
-            
+
             .ui-selectcheckboxmenu-header .ui-selectcheckboxmenu-filter-container{
                 margin-left: 25px;
             }
@@ -201,7 +201,7 @@
         </p:dialog>
         <header class="jr-top">
             <!--            <h:graphicImage library="imagem" name="logo.jpg" styleClass="logoTitulo"/>-->
-            <span class="titulo">Senac-NEB</span>
+            <span class="titulo">Senac-SI</span>
             <a href="#" class="jr-toggle js-toggle" style="margin-top: 2vh;" ><i class="fa fw-fw fa-arrows-alt" onclick="toggleFullScreen()"></i></a>
             <a href="#" class="jr-toggle js-toggle" style="margin-top: 2vh;" ><i class="fa fa-bars"></i></a>
         </header>
@@ -236,18 +236,19 @@
                             <h:link outcome="/administrador/sala" >
                                 <i class="fa fa-graduation-cap"> - Sala</i></h:link>
                         </li>
-
+                        
                         <li>
-                            <h:link outcome="/administrador/visualizarSala" >
-                                <i class="fa fa-book"> - Visualizar Sala</i></h:link>
                             <h:link outcome="/administrador/agenda" >
-                                <i class="fa fa-book"> - Agenda</i></h:link>
+                                <i class="fa fa-book"> - Agenda</i>
+                            </h:link>
                         </li>
-
+                        
                         <li>
                             <h:link outcome="/administrador/visualizarSala" >
-                                <i class="fa fa-calendar"> - Visualizar Sala</i></h:link>
+                                <i class="fa fa-book"> - Visualizar Sala</i>
+                            </h:link>
                         </li>
+                        
                         <li>
                             <h:link outcome="/administrador/ocupacao" >
                                 <i class="fa fa-calendar-check-o"> - Ocupar Sala</i></h:link>
@@ -258,13 +259,17 @@
                         </li>
                         <li>
                             <h:link outcome="/administrador/funcao" >
-                                <i class="fa fa fa-shield"> - Funções</i></h:link>
+                                <i class="fa fa fa-shield"> - Funções</i>
+                            </h:link>
                         </li>
                     </h:panelGroup>
 
                     <li>
-                        <!--                        <h:link outcome="/atendente/alterausuario">
-                                                    <i class="fa fw-fw fa-user"> Editar Perfil</i></h:link>-->
+                        <li>
+                            <h:link outcome="/logado/salaLimpeza" >
+                                <i class="fa fa fa-shield"> - Salas em Uso</i>
+                            </h:link>
+                        </li>
                         <h:form>
                             <h:commandLink action="#{usuarioLogadoC.chamaEdicaoPerfil}" >
                                 <i class="fa fw-fw fa-user"> - Editar Perfil</i></h:commandLink>

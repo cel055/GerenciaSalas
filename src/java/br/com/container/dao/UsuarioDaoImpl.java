@@ -41,5 +41,10 @@ public class UsuarioDaoImpl extends BaseDaoImpl<Usuario, Long> implements Usuari
         consulta.setParameter("login", login);
         return (Usuario) consulta.uniqueResult();
     }
-    
+
+    @Override
+    public List<String> pesquisaPorLogin(Session session) throws HibernateException {
+        Query consulta = session.createQuery("Select u.login from Usuario u");
+        return consulta.list();
+    }    
 }

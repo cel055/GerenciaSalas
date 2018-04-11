@@ -16,16 +16,6 @@
         <!--<logout logout-success-url="/login.faces" logout-url="/logout" />-->
         <logout invalidate-session="true" logout-success-url="/login.faces" logout-url="/j_spring_security_logout" delete-cookies="JSESSIONID"/>
         
-        <!--Controle de sessão Numero de sessoes abertas pelo mesmo user - Rodrigo M. 01/09/2016 --> 
-<!--         <session-management invalid-session-url="/login.faces?ulogado=true"> 
-        <session-management invalid-session-url="/login.faces" session-fixation-protection="migrateSession"> 
-            <concurrency-control max-sessions="1" expired-url="/login.faces" error-if-maximum-exceeded="true" /> 
-       </session-management>
-        <session-management> 
-            <concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
-        </session-management>
-         ......  .-->
-        
     </http>
      
     <authentication-manager>

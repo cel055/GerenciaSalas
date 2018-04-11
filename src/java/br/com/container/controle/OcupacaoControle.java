@@ -115,6 +115,11 @@ public class OcupacaoControle implements Serializable {
         iniciaTimeline();
         montaTimeLine();
     }
+    
+    private void atualizaTimeLine(){
+        iniciaTimeline();
+        montaTimeLine();
+    }
 
     private void montaTimeLine() {
         RequestContext context = RequestContext.getCurrentInstance();
@@ -321,7 +326,7 @@ public class OcupacaoControle implements Serializable {
         }
         session.close();
         iniciaSalvamento();
-        pesquisa();
+        atualizaTimeLine();
 //        inicializar();
         return "ocupacao";
     }

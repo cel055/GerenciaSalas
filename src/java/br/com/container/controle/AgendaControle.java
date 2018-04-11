@@ -8,6 +8,8 @@ package br.com.container.controle;
 import br.com.container.dao.AgendaDao;
 import br.com.container.dao.AgendaDaoImpl;
 import br.com.container.dao.HibernateUtil;
+import br.com.container.dao.UsuarioDao;
+import br.com.container.dao.UsuarioDaoImpl;
 import br.com.container.modelo.Agenda;
 import br.com.container.modelo.Usuario;
 import br.com.container.util.EnviaEmail;
@@ -41,16 +43,25 @@ public class AgendaControle implements Serializable {
     private Agenda agenda;
     private ScheduleModel eventoModel;
     private List<Agenda> eventos;
+    private List<String> convidados;
     private AgendaDao agendaDao;
     private UsuarioLogado usuarioLogado;
     private Usuario usuario;
     private Session session;
     private Date diaAnterior;
-    
+    private String auxiliar;
+
+    private void abreSessao() {
+        if (session == null) {
+            session = HibernateUtil.abreSessao();
+        } else if (!session.isOpen()) {
+            session = HibernateUtil.abreSessao();
+        }
+    }
 
     @PostConstruct
     public void inicializar() {
-        session = HibernateUtil.abreSessao();
+        abreSessao();
         eventoModel = new DefaultScheduleModel();
         agendaDao = new AgendaDaoImpl();
         try {
@@ -88,24 +99,21 @@ public class AgendaControle implements Serializable {
             }
         }
     }
-    
+
     public void validarData() {
         Calendar mais = Calendar.getInstance(Estaticos.horaProj);
         mais.add(Calendar.DAY_OF_MONTH, 1);
         diaAnterior = mais.getTime();
     }
-    
-    public Date getDataMaxima(){
+
+    public Date getDataMaxima() {
         return agenda.getDia_evento();
     }
-    
-    
+
     public String deletarDataAgendanda() {
 
         agendaDao = new AgendaDaoImpl();
-        if (session == null || !session.isOpen()) {
-            session = HibernateUtil.abreSessao();
-        }
+        abreSessao();
         Agenda agendaExclusao = agendaDao.pesquisaEntidadeId(agenda.getId(), session);
         agendaDao.remover(agendaExclusao, session);
         EnviaEmail.enviaCancelamentoEventoEmail(agenda);
@@ -123,15 +131,29 @@ public class AgendaControle implements Serializable {
         agenda.setCadastroEvento(new Date());
     }
 
+    public List<String> pesquisaConvidado(String query) {
+        if (convidados == null) {
+            abreSessao();
+            UsuarioDao usuarioDao = new UsuarioDaoImpl();
+            convidados = usuarioDao.pesquisaPorLogin(session);
+            session.close();
+        }
+        return convidados;
+    }
+
+    public void preencheConvidado() {
+        System.out.println(agenda.getConvidado());
+    }
+
     public void salvar() {
-        session = HibernateUtil.abreSessao();
+        abreSessao();
         Long id = agenda.getId();
         try {
             agenda.setUsuario(usuario);
             agendaDao.salvarOuAlterar(agenda, session);
-            if(id == null){
+            if (id == null) {
                 EnviaEmail.enviaConfirmacaoEmail(agenda);
-            }else{
+            } else {
                 EnviaEmail.enviaAlteracaoEventoEmail(agenda);
             }
             FacesContext.getCurrentInstance().addMessage(null,
@@ -145,7 +167,6 @@ public class AgendaControle implements Serializable {
         }
 
     }
-
 
     //Getters e Setters
     public Agenda getAgenda() {
@@ -190,5 +211,19 @@ public class AgendaControle implements Serializable {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-    
+
+    public String getAuxiliar() {
+        return auxiliar;
+    }
+
+    public void setAuxiliar(String auxiliar) {
+        if (auxiliar.length() > 5) {
+            if(agenda.getConvidado() != null){
+                agenda.setConvidado(agenda.getConvidado() + auxiliar);
+            }else{
+                 agenda.setConvidado("" + auxiliar);
+            }
+            
+        }
+    }
 }

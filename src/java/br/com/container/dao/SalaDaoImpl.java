@@ -8,6 +8,8 @@ package br.com.container.dao;
 import br.com.container.modelo.DiaDaSemana;
 import br.com.container.modelo.Reserva;
 import br.com.container.modelo.Sala;
+import br.com.container.modelo.SalaLimpeza;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +21,7 @@ import org.hibernate.Session;
  *
  * @author Silvio
  */
-public class SalaDaoImpl extends BaseDaoImpl<Sala, Long> implements SalaDao {
+public class SalaDaoImpl extends BaseDaoImpl<Sala, Long> implements SalaDao, Serializable {
 
     @Override
     public Sala pesquisaEntidadeId(Long id, Session session) throws HibernateException {
@@ -135,6 +137,48 @@ public class SalaDaoImpl extends BaseDaoImpl<Sala, Long> implements SalaDao {
     public Long totalSala(Session session) throws HibernateException {
         Query consulta = session.createQuery("Select count(id) from Sala");
         return (Long) consulta.uniqueResult();
+    }
+
+    @Override
+    public List<SalaLimpeza> todasSalaLimpezaDoDia(Session session) throws HibernateException {
+        Query consulta = session.createSQLQuery("SELECT nomeDoDia, nome as sala, informacao, observacao,"
+                + " periodo FROM reserva_dias_da_semana rs "
+                + " join reserva r on rs.reserva_id = r.id"
+                + " join dia_da_semana ds on rs.dia_da_semana_id = ds.id"
+                + " join sala s on r.idSala = s.id"
+                + " where (curdate()  between inicio and fim) and ds.numeroDoDia = DAYOFWEEK(now()) order by nome");
+        List objeto = consulta.list();
+        return carregaSalaLimpeza(objeto);
+    }
+
+    @Override
+    public List<SalaLimpeza> todasSalaLimpezaDiaAnterior(Session session) throws HibernateException {
+        Query consulta = session.createSQLQuery("SELECT nomeDoDia, nome as sala, informacao, observacao,"
+                + " periodo FROM reserva_dias_da_semana rs "
+                + " join reserva r on rs.reserva_id = r.id"
+                + " join dia_da_semana ds on rs.dia_da_semana_id = ds.id"
+                + " join sala s on r.idSala = s.id"
+                + " where (DATE_SUB(CONCAT(CURDATE(), ' 00:00:00'), INTERVAL 1 DAY)  between inicio and fim)\n"
+                + " and ds.numeroDoDia = DAYOFWEEK(now()) -1 order by nome");
+        List objeto = consulta.list();
+        return carregaSalaLimpeza(objeto);
+    }
+
+    private List<SalaLimpeza> carregaSalaLimpeza(List objeto) {
+        Object[] item;
+        List<SalaLimpeza> salas = new ArrayList<>();
+
+        for (Object objeto1 : objeto) {
+            SalaLimpeza sala = new SalaLimpeza();
+            item = (Object[]) objeto1;
+            sala.setDia(item[0].toString());
+            sala.setSala(item[1].toString());
+            sala.setInformação(item[2].toString());
+            sala.setObservacao(item[3].toString());
+            sala.setPeriodo(item[4].toString());
+            salas.add(sala);
+        }
+        return salas;
     }
 
 }

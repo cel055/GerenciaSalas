@@ -28,7 +28,7 @@
                 <p:dialog id="dialogo" widgetVar="caixaDialogo"  header="Evento" resizable="false" modal="true"
                           showEffect="clip">
                     <p:panel id="eventoDetalhe">
-                        <p:panelGrid columns="2">
+                        <h:panelGrid columns="2">
                             <p:outputLabel value="Convite" 
                                            rendered="#{agendaControle.usuario.id != agendaControle.agenda.usuario.id and
                                             agendaControle.agenda.id != null}"/>
@@ -39,10 +39,16 @@
                             <p:inputText id="assunto" value="#{agendaControle.agenda.assunto}" required="true"
                                          requiredMessage="Assunto é obrigatório" size="50"/>
                             <p:outputLabel for="emails"  value="Convidar" />
-                            <p:inputTextarea id="emails" value="#{agendaControle.agenda.convidado}" rows="1" cols="50" 
-                                             placeholder="separe os e-mail usando ' ; '" autoResize="false" scrollHeight="3"/>
+                            <p:autoComplete id="emails" value="#{agendaControle.auxiliar}" 
+                                            completeMethod="#{agendaControle.pesquisaConvidado}" 
+                                            placeholder="separe os e-mail usando ' ; '" size="50" minQueryLength="3"
+                                            >
+                                <p:ajax event="blur" update="convidado" />
+                            </p:autoComplete>
+                            <p:outputLabel for="convidado"  value="Convidado" />
+                            <p:inputTextarea id="convidado" value="#{agendaControle.agenda.convidado}" rows="2" cols="50" autoResize="false"/>
                             <p:outputLabel  value="Descrição" />
-                            <p:inputTextarea value="#{agendaControle.agenda.descricao}" rows="10" cols="50" autoResize="false"/>
+                            <p:inputTextarea value="#{agendaControle.agenda.descricao}" rows="6" cols="50" autoResize="false"/>
                             <p:outputLabel for="inicio" value="Data" />
                             <p:calendar id="inicio" value="#{agendaControle.agenda.dia_evento}" pattern="dd/MM/yyyy HH:mm" >
                                 <p:ajax event="blur" listener="#{agendaControle.validarData}" update="segundo terceiro" />
@@ -72,7 +78,7 @@
                                 <p:confirm header="Confirmação" message="Tem certeza exclusão?" 
                                            icon="ui-icon-alert" />
                             </p:commandButton>
-                        </p:panelGrid>
+                        </h:panelGrid>
                         <p:separator />
 
                     </p:panel>

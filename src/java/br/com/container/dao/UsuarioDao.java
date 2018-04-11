@@ -6,6 +6,7 @@
 package br.com.container.dao;
 
 import br.com.container.modelo.Usuario;
+import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -16,5 +17,7 @@ import org.hibernate.Session;
 public interface UsuarioDao extends BaseDao<Usuario, Long>{
 
     public Usuario pesquisaPorLogin(String login, Session session) throws HibernateException;
+    
+    public List<String> pesquisaPorLogin(Session session) throws HibernateException;
     
 }

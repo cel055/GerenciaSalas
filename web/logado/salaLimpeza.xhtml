@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../logado/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="conteudo">
+        <h1 class="jr-titulo1">Salas em uso</h1>
+
+        <h:form id="form_pesquisa">
+
+            <!--mostra a toolbar se mostra_toolbar == true-->
+            <p:toolbar styleClass="toolbar" >
+                <p:toolbarGroup align="left"  >                    
+                    <p:commandButton value="Hoje" update="dadosAdicional totalSala" actionListener="#{limpezaSalaControle.limpezaDiaAtual()}" />
+                    <p:commandButton value="Ontem" update="dadosAdicional totalSala" actionListener="#{limpezaSalaControle.limpezaDiaAnterior()}" />
+                </p:toolbarGroup>
+                <p:toolbarGroup align="right" style="padding-top: 7px;"  >
+                    <h:outputText id="totalSala" value="Total Sala #{limpezaSalaControle.totalSala} " 
+                                  style="padding-right:25px" />
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <p:dataTable id="dadosAdicional" value="#{limpezaSalaControle.dataModel}" var="limpeza" reflow="true" paginator="true"
+                         style="margin-top: 20px;"  emptyMessage="Nenhum adicional encontrado" rows="10" paginatorPosition="bottom"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="[ {currentPage} de {totalPages}  ]"
+                         rowsPerPageTemplate="5,10,15">
+                <p:column headerText="Sala">
+                    <h:outputText value="#{limpeza.sala} - #{limpeza.periodo}" />
+                </p:column>
+                <p:column headerText="Informação">
+                    <h:outputText value="#{limpeza.informação}" />
+                </p:column>
+                <p:column headerText="Observação">
+                    <h:outputText value="#{limpeza.observacao}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

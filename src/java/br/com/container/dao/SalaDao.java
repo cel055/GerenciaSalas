@@ -8,6 +8,7 @@ package br.com.container.dao;
 import br.com.container.modelo.DiaDaSemana;
 import br.com.container.modelo.Reserva;
 import br.com.container.modelo.Sala;
+import br.com.container.modelo.SalaLimpeza;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.HibernateException;
@@ -31,5 +32,9 @@ public interface SalaDao extends BaseDao<Sala, Long> {
 
     List<Sala> pesquisaSalaSemReserva(List<Reserva> reservas, Session session) throws HibernateException;
     
+    List<SalaLimpeza> todasSalaLimpezaDoDia(Session session) throws HibernateException;
+    
     Long totalSala(Session session) throws HibernateException;
+    
+    List<SalaLimpeza> todasSalaLimpezaDiaAnterior(Session session) throws HibernateException;
 }

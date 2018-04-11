@@ -118,7 +118,7 @@ public class EnviaEmail implements Serializable {
 
         builderCorpoEmail.append("<br/>");
 
-        builderCorpoEmail.append("<p>Voce possui evento ");
+        builderCorpoEmail.append("<p>Você possui evento ");
         builderCorpoEmail.append(agenda.getAssunto());
         builderCorpoEmail.append(", dia <b>");
         builderCorpoEmail.append(formataData(agenda.getDia_evento()));
@@ -135,7 +135,7 @@ public class EnviaEmail implements Serializable {
         builderCorpoEmail.append("<br/>Senac Palhoca<br/>");
         builderCorpoEmail.append("+55(48) 3341-9100<br/>");
         builderCorpoEmail.append("palhoca@sc.senac.br | https://www.facebook.com/FaculdadeSenacPalhoca/</p>");
-        builderCorpoEmail.append("<p>" + formataData(new Date()) + "</p>");
+        builderCorpoEmail.append("<p>").append(formataData(new Date())).append("</p>");
         return builderCorpoEmail;
     }
 
