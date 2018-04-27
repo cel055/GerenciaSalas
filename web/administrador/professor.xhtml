@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../logado/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="conteudo">
+        <h1 class="jr-titulo1">Professor</h1>
+
+        <h:form id="form_pesquisa">
+
+            <p:toolbar id="toolbar_pesquisa" styleClass="toolbar" rendered="#{!profC.mostraToolbar}"  >
+                <p:toolbarGroup  >
+                    <p:commandButton value="Pesquisar" actionListener="#{profC.pesquisar}"
+                                     update="dadosProf" process="@this panelGridPesq" />
+                    <p:separator></p:separator>
+                    <p:commandButton value="Novo" actionListener="#{profC.mudaToolbar}" update="@form" global="false"  />
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <p:toolbar id="toolbar_salvar" styleClass="toolbar" rendered="#{profC.mostraToolbar}">
+                <p:toolbarGroup  >
+                    <p:commandButton value="Salvar" action="#{profC.salvar()}" update="aba_alterar" />
+                    <p:separator></p:separator>
+                    <p:commandButton value="Cancelar" actionListener="#{profC.mudaToolbar}" immediate="true"
+                                     update="@form" global="false" />
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <p:messages id="mens"  autoUpdate="true" />
+
+            <h:panelGroup id="aba_pesquisa" rendered="#{!profC.mostraToolbar}" >
+                <p:panelGrid id="panelGridPesq" columns="2" layout="grid" columnClasses="ui-grid-col-1, ui-grid-col-8" styleClass="painel_grid_noborder" >
+
+                    <p:outputLabel for="pesqNome" value="Nome Professor:"/>
+                    <p:inputText id="pesqNome" value="#{profC.pesqNome}" style="margin-left: 5px"/>
+<!--                    <p:outputLabel for="pesqDisc" value="Disciplina:" />
+                    <p:inputText id="pesqDisc" value="# {profC.pesqDisciplina}" style="margin-left: 5px"/>-->
+                    <p:spacer />
+
+                </p:panelGrid>
+
+                <p:dataTable id="dadosProf" value="#{profC.modelProfs}" var="prof" reflow="true" paginator="true"
+                             style="margin-top: 20px;"  emptyMessage="Nenhum professor encontrado" rows="10" paginatorPosition="bottom"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="[ {currentPage} de {totalPages}  ]"
+                             rowsPerPageTemplate="5,10,15">
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{prof.nome}" />
+                    </p:column>
+                    <p:column headerText="Email">
+                        <h:outputText value="#{prof.email}" />
+                    </p:column>
+                    <p:column headerText="Fone">
+                        <h:outputText value="#{prof.foneMovel}" />
+                    </p:column>
+                    <p:column headerText="Whatsapp">
+                        <p:selectBooleanButton value="#{prof.whatsapp}" disabled="true" onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close"/>
+                    </p:column>
+
+
+                    <p:column headerText="Alterar" class="centralizado tabela_botao_usuario"  >
+                        <p:commandButton icon="ui-icon-pencil" title="Alterar"
+                                         process="@this" update="@form" actionListener="#{profC.alterarProf}">
+                            <f:setPropertyActionListener target="#{profC.prof}" value="#{prof}"/>          
+                        </p:commandButton>
+
+                        <p:commandButton icon="ui-icon-trash" actionListener="#{profC.excluir()}"
+                                         update="dadosProf" title="Excluir">
+                            <p:confirm header="Confirmação" message="Tem certeza exclusão?" 
+                                       icon="ui-icon-alert" />
+                            <f:setPropertyActionListener target="#{profC.prof}" value="#{prof}"   />
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGroup> 
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" 
+                                 icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" 
+                                 icon="ui-icon-close" />
+            </p:confirmDialog>
+
+            <h:panelGroup id="aba_alterar" rendered="#{profC.mostraToolbar}">
+                <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-4" 
+                             styleClass="painel_grid_noborder" >
+                    <p:outputLabel for="nome" value="Nome :" />
+                    <p:inputText id="nome" value="#{profC.prof.nome}" required="true" size="40" style="width: 100%; max-width: 600px;"/>
+
+                    <p:outputLabel for="foneMovel" value="Fone Móvel" />
+                    <p:inputMask  id="foneMovel" value="#{profC.prof.foneMovel}" required="true" mask="(99) 99999-9999" style="width: 100%; max-width: 600px;"/>
+                    <p:outputLabel for="btWhats" value="Móvel tem Whatsapp"/>
+                    <p:selectBooleanButton id="btWhats" value="#{profC.prof.whatsapp}" onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close"/>
+
+                    <p:outputLabel for="foneFixo" value="Fone fixo:" />
+                    <p:inputMask id="foneFixo" value="#{profC.prof.foneFixo}" required="false" mask="(99) 99999-9999" style="width: 100%; max-width: 600px;"/>
+
+                    <p:outputLabel for="email" value="Email:" />
+                    <p:inputText id="email" value="#{profC.prof.email}" style="width: 100%; max-width: 600px;"/>
+
+                    <p:outputLabel for="endereco" value="Endereço :" />
+                    <p:inputTextarea id="endereco" value="#{profC.prof.endereco}"  cols="40" style="width: 100%; max-width: 600px;"/>
+
+                    <p:commandButton id="btAddDisc" value="Adicionar Disciplina" actionListener="#{profC.adicionarDisciplina()}" update="@form" />
+                </p:panelGrid>
+                <p:panelGrid id="painelDisciplinas" columns="1" layout="grid" styleClass="painel_grid_noborder" >
+                    <ui:repeat value="#{profC.disciplinas}" var="disciplina" varStatus="status">
+                        <p:panelGrid columns="3" layout="grid" styleClass="painel_grid_noborder" >
+                            <h:outputText value="Nome Disciplina"/>
+                            <p:inputText value="#{profC.disciplinas[status.index]}" />
+                            <p:commandButton id="btRemDisc" value="Remover" actionListener="#{profC.removerDisciplina(status.index)}" update="@form"/>
+                        </p:panelGrid>
+                    </ui:repeat>
+                </p:panelGrid>
+            </h:panelGroup>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
