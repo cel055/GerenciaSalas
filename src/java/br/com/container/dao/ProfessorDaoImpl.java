@@ -36,9 +36,16 @@ public class ProfessorDaoImpl extends BaseDaoImpl<Professor, Long> implements Pr
 
     @Override
     public List<Professor> pesqPorDisciplina(String disciplina, Session session) throws HibernateException {
-        Query consulta = session.createQuery("from Professor p where p.disciplina like :disciplina");
-        consulta.setParameter("disciplina", ";%" + disciplina + "%;");
+        Query consulta = session.createQuery("from Professor p where p.disciplinas like :disciplinas");
+        consulta.setParameter("disciplinas", ";%" + disciplina + "%;");
         return consulta.list();
     }
-    
+
+    @Override
+    public List<Professor> pesqPorNomeEDisciplina(String nome, String disciplina, Session session) throws HibernateException {
+        Query consulta = session.createQuery("from Professor p where p.nome like :nome and p.disciplinas like :disciplinas");
+        consulta.setParameter("nome", "%" + nome + "%");
+        consulta.setParameter("disciplinas", ";%" + disciplina + "%;");
+        return consulta.list();
+    }
 }

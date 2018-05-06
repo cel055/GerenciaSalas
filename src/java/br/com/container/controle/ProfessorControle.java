@@ -20,7 +20,6 @@ import javax.faces.model.ListDataModel;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
-
 /**
  *
  * @author cel05
@@ -62,11 +61,15 @@ public class ProfessorControle implements Serializable {
         try {
             abreSessao();
 
-//            if (!pesqNome.equals("")) {
+            if (!pesqNome.equals("") && !pesqDisciplina.equals("")) {
+                profs = dao.pesqPorNomeEDisciplina(pesqNome, pesqDisciplina, session);
+            } else if (!pesqDisciplina.equals("")) {
+                profs = dao.pesqPorDisciplina(pesqDisciplina, session);
+            } else if (!pesqNome.equals("")) {
                 profs = dao.pesquisaPorNome(pesqNome, session);
-//            } else {
-//                profs = dao.pesqPorDisciplina(pesqDisciplina, session);
-//            }
+            } else {
+                profs = dao.listaTodos(session);
+            }
 
             modelProfs = new ListDataModel(profs);
         } catch (HibernateException ex) {
@@ -93,8 +96,8 @@ public class ProfessorControle implements Serializable {
             session.close();
         }
     }
-    
-    public void alterarProf(){
+
+    public void alterarProf() {
         mostraToolbar = !mostraToolbar;
         prof = modelProfs.getRowData();
         parseDisciplinas(prof.getDisciplinas());
@@ -102,8 +105,9 @@ public class ProfessorControle implements Serializable {
 
     private String parseDisciplinas() {
         StringBuilder builder = new StringBuilder();
+        builder.append(";");
         for (String disciplina : disciplinas) {
-            if(disciplina.equals("")){
+            if (disciplina.equals("")) {
                 continue;
             }
             builder.append(disciplina);
@@ -111,30 +115,31 @@ public class ProfessorControle implements Serializable {
         }
         return builder.toString();
     }
-    
+
     private void parseDisciplinas(String disciplinas) {
         this.disciplinas = new ArrayList(Arrays.asList(disciplinas.split(";")));
+        this.disciplinas.remove(0);
     }
-    
-    public void adicionarDisciplina(){
+
+    public void adicionarDisciplina() {
         disciplinas.add("");
     }
-    
-    public void removerDisciplina(int index){
+
+    public void removerDisciplina(int index) {
         disciplinas.remove(index);
     }
-    
-    public void excluir(){
+
+    public void excluir() {
         prof = modelProfs.getRowData();
         dao = new ProfessorDaoImpl();
-        try{
+        try {
             abreSessao();
             dao.remover(prof, session);
             Mensagem.excluir("Professor " + prof.getNome());
             prof = new Professor();
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.err.println("Erro ao excluir professor:\n" + ex.getMessage());
-        }finally{
+        } finally {
             session.close();
         }
     }
@@ -173,7 +178,7 @@ public class ProfessorControle implements Serializable {
     }
 
     public Professor getProf() {
-        if(prof == null){
+        if (prof == null) {
             prof = new Professor();
             prof.setWhatsapp(true);
         }
@@ -185,7 +190,7 @@ public class ProfessorControle implements Serializable {
     }
 
     public List<Professor> getProfs() {
-        if(profs == null){
+        if (profs == null) {
             profs = new ArrayList();
         }
         return profs;
@@ -204,7 +209,7 @@ public class ProfessorControle implements Serializable {
     }
 
     public List<String> getDisciplinas() {
-        if(disciplinas == null){
+        if (disciplinas == null) {
             disciplinas = new ArrayList();
         }
         return disciplinas;
